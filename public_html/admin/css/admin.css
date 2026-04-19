@@ -1,0 +1,40 @@
+/* SIDE BAR */
+.sidebar-menu li.nav-item ul.nav.nav-treeview {
+  display: none;
+}
+.sidebar-menu li.nav-item.menu-open ul.nav.nav-treeview {
+  display: block;
+}
+/* END SIDE BAR */
+
+/* TABLE LIST */
+table tr th.sorting i {
+  display: none;
+}
+table tr th.sorting.sorting_asc i.asc {
+  display: inline;
+}
+table tr th.sorting.sorting_desc i.desc {
+  display: inline;
+}
+table tr {
+  background: transparent;
+}
+/*.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, .0);
+}
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, .05);
+}*/
+table thead th.sorting a.page-list-sorter {
+  text-decoration: none;
+  color: var(--bs-gray-700);
+}
+table thead th.sorting.sorting_asc a.page-list-sorter,
+table thead th.sorting.sorting_desc a.page-list-sorter {
+  color: var(--bs-gray-900);
+}
+table tfoot th {
+  color: var(--bs-gray-700) !important;
+}
+/* END TABLE LIST */

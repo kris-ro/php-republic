@@ -1,0 +1,42 @@
+<IfModule mod_headers.c>
+  # Definim politica Content-Security-Policy
+  Header set Content-Security-Policy "default-src 'self'; \
+  script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://ssl.google-analytics.com https://connect.facebook.net https://platform.linkedin.com https://www.tiktok.com https://cdn.jsdelivr.net; \
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; \
+  img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://px.ads.linkedin.com https://www.linkedin.com https://analytics.tiktok.com; \
+  font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; \
+  frame-src 'self' https://www.facebook.com https://web.facebook.com https://www.tiktok.com https://platform.linkedin.com; \
+  connect-src 'self' https://www.google-analytics.com https://stats.g.doubleclick.net https://connect.facebook.net https://analytics.tiktok.com;"
+</IfModule>
+
+RewriteEngine on
+
+Options -MultiViews
+
+# redirect non www to www
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule (.*) https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+RewriteBase /
+
+RewriteCond %{REQUEST_URI} ^/api
+RewriteCond %{REQUEST_URI} !^/api/index.php
+RewriteRule ^(.*)$ /api/index.php?route=$1 [L,QSA,B]
+
+RewriteCond %{REQUEST_URI} ^/admin
+RewriteCond %{REQUEST_URI} !^/admin/css/
+RewriteCond %{REQUEST_URI} !^/admin/js/
+RewriteCond %{REQUEST_URI} !^/admin/img/
+RewriteCond %{REQUEST_URI} !^/admin/bower_components/
+RewriteCond %{REQUEST_URI} !^/admin/plugins/
+RewriteCond %{REQUEST_URI} !^/admin/dist/
+RewriteCond %{REQUEST_URI} !^/admin/index.php
+RewriteRule ^(.*)$ /admin/index.php?route=$1 [L,QSA,B]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ /index.php?route=$1 [L,QSA,B]
