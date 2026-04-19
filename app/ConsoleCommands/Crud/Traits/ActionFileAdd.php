@@ -3,7 +3,6 @@
 namespace App\ConsoleCommands\Crud\Traits;
 
 use KrisRo\PhpRepublic\Strings;
-use KrisRo\PhpRepublic\Session;
 
 trait ActionFileAdd {
 
@@ -19,12 +18,12 @@ trait ActionFileAdd {
 
     file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_add.css', '');
 
-    $adminViewPath = APP_ROOT 
-                    . DS . 'app' 
-                    . DS . 'views' 
-                    . DS . 'admin' 
-                    . DS . 'en' // always 'en' 
-                    . DS . $lowerCaseControllerName 
+    $adminViewPath = APP_ROOT
+                    . DS . 'app'
+                    . DS . 'views'
+                    . DS . 'admin'
+                    . DS . 'en' // always 'en'
+                    . DS . $lowerCaseControllerName
                     . DS . 'add.php';
 
     if (!file_exists($adminViewPath)) {
@@ -59,6 +58,44 @@ trait ActionFileAdd {
   }
 
   private function createAddActionTemplateFileContent(string $lowerCaseControllerName): string {
-    return 'test';
+    return '<?php'
+                     . PHP_EOL
+                     . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
+                     . '?>' . PHP_EOL
+                     . '<!--begin::App Content Header-->' . PHP_EOL
+                     . '<div class="app-content-header">' . PHP_EOL
+                     . '  <!--begin::Container-->' . PHP_EOL
+                     . '  <div class="container-fluid">' . PHP_EOL
+                     . '    <!--begin::Row-->' . PHP_EOL
+                     . '    <div class="row">' . PHP_EOL
+                     . '      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; ' . Strings::prettify($this->modelName) . ' &raquo; Add</h3></div>' . PHP_EOL
+                     . '    </div>' . PHP_EOL
+                     . '    <!--end::Row-->' . PHP_EOL
+                     . '  </div>' . PHP_EOL
+                     . '  <!--end::Container-->' . PHP_EOL
+                     . '</div>' . PHP_EOL
+                     . '<!--end::App Content Header-->' . PHP_EOL . PHP_EOL
+                     . '<!--begin::App Content-->' . PHP_EOL
+                     . '<div class="app-content">' . PHP_EOL
+                     . '  <!--begin::Container-->' . PHP_EOL
+                     . '  <div class="container-fluid">' . PHP_EOL
+                     . '    <!--begin::Row-->' . PHP_EOL
+                     . '    <div class="row">' . PHP_EOL
+                     . '      <!--begin::Col-->' . PHP_EOL
+                     . '      <div class="col-sm-12">' . PHP_EOL
+                     . '        <div class="card card-primary card-outline mb-4">' . PHP_EOL
+                     . '          <!--begin::Header-->' . PHP_EOL
+                     . '          <div class="card-header"><div class="card-title">Add ' . Strings::prettify($this->modelName) . '</div></div>' . PHP_EOL
+                     . '          <!--end::Header-->' . PHP_EOL
+                     . '          <!--begin::Form-->' . PHP_EOL
+                     . '          <form action="/admin/' . $lowerCaseControllerName . '/add" method="POST">' . PHP_EOL
+                     . '            <?php echo self::getFormToken(\'add' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
+                     . '            <!--begin::Body-->' . PHP_EOL
+                     . '            <div class="card-body">' . PHP_EOL
+                     .                $this->formElements(14, $this->autoIncrement) . PHP_EOL
+                     . '            </div>' . PHP_EOL
+                     . '          </form>' . PHP_EOL
+                     . '        </div>' . PHP_EOL
+    ;
   }
 }

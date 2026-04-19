@@ -37,7 +37,11 @@ trait ConsoleIO {
    * @return void
    */
   public function run(): void {
-    Container::service('_console_' . $this->action);
+    try {
+      Container::service('_console_' . $this->action);
+    } catch (\Exception $e) {
+      self::echoError($e->getMessage());
+    }
   }
 
   /**

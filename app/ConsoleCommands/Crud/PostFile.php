@@ -113,7 +113,7 @@ class PostFile {
         return $this->buildLongBlobValidationRule($field);
     }
 
-    return '--';
+    throw new \Exception('Unknown field type');
   }
 
   private function buildIntegerValidationRule(array $field) {

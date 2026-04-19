@@ -75,8 +75,4 @@ class ModelFile {
 
     return implode(PHP_EOL, $fields);
   }
-
-  private function prettyfiName($name) {
-
-  }
 }

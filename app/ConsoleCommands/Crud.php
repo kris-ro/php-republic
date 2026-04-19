@@ -27,7 +27,11 @@ class Crud {
     $this->setModel($model);
   }
 
-  public function setModel(string $model) {
+  public function setModel(string|null $model = null) {
+    if (!$model) {
+      throw new \Exception('Invalid model supplied in console crud command');
+    }
+
     $validName = (new Validator(Config::get('app/validation_rules')))
       ->value($model)
       ->addValidationRule('model_name')
@@ -51,7 +55,7 @@ class Crud {
     $this->createModel();
     $this->createController();
     $this->createPost();
-   $this->createAction();
+    $this->createAction();
 
     return $this;
   }
