@@ -9,6 +9,7 @@ use App\ConsoleCommands\Crud\MysqlDataTypeMap;
 use App\ConsoleCommands\Crud\ModelFile;
 use App\ConsoleCommands\Crud\ControllerFile;
 use App\ConsoleCommands\Crud\PostFile;
+use App\ConsoleCommands\Crud\ActionFile;
 
 class Crud {
 
@@ -50,7 +51,7 @@ class Crud {
     $this->createModel();
     $this->createController();
     $this->createPost();
-//    $this->createAction();
+   $this->createAction();
 
     return $this;
   }
@@ -59,9 +60,9 @@ class Crud {
     try {
       $model = new MysqlDataTypeMap('crud_test');
       $this->fields = $model->getFieldsData();
-//      echo '<pre>';
-//      var_dump($this->fields);
-//      die(__LINE__ . ' :: ' . __FILE__);
+      // echo '<pre>';
+      // var_dump($this->fields);
+      // die(__LINE__ . ' :: ' . __FILE__);
       $this->unique = $model->getUniqueFields();
       $this->autoIncrement = $model->getAutoIncrementFields();
 
@@ -92,10 +93,17 @@ class Crud {
   }
 
   public function createController() {
+    if (!$this->valid) {
+      return;
+    }
     $this->controllerName = (new ControllerFile($this->modelName))->buildController();
   }
 
   public function createPost() {
+    if (!$this->valid) {
+      return;
+    }
+
     (new PostFile(
       $this->modelName,
       $this->controllerName,
@@ -103,5 +111,19 @@ class Crud {
       $this->unique,
       $this->autoIncrement)
     )->buildPost();
+  }
+
+  public function createAction() {
+    if (!$this->valid) {
+      return;
+    }
+
+    (new ActionFile(
+      $this->modelName,
+      $this->controllerName,
+      $this->fields,
+      $this->unique,
+      $this->autoIncrement)
+    )->buildAction();
   }
 }

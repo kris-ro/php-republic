@@ -18,6 +18,11 @@ class Console implements \KrisRo\PhpRepublic\Interfaces\Console {
    * Execute command
    */
   public function __construct() {
-    $this->getAction();
+    try {
+      $this->getAction();
+
+    } catch(\Exception $e) {
+      self::echoError($e->getMessage());
+    }
   }
 }

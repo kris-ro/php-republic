@@ -31,7 +31,7 @@ class Strings {
 		return $clean;
 	}
 
-  public static function toCamelCase($name) {
+  public static function toCamelCase(string $name) {
     return preg_replace_callback(
       '/(_[a-z]{1})/i',
       function ($string) {

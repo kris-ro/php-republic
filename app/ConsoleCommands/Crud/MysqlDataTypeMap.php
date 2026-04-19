@@ -26,7 +26,6 @@ class MysqlDataTypeMap {
       $field = $row['Field'];
       $type = $row['Type'];           // e.g. "smallint(5) unsigned"
       $key = $row['Key'];           // e.g. "smallint(5) unsigned"
-
       $this->fieldsData[] = $this->parseMySqlColumnType($row);
     }
   }
@@ -53,6 +52,9 @@ class MysqlDataTypeMap {
    * @return array
    */
   private function parseMySqlColumnType(array $fieldData): array {
+    // echo '<pre>';
+    // var_dump($fieldData);
+    // die(__LINE__ . ' :: ' . __FILE__);
     $columnName = $fieldData['Field'];
     $mysqlType = $fieldData['Type'];
 
@@ -249,6 +251,7 @@ class MysqlDataTypeMap {
 
     $result['is_optional'] = $isOptional;
     $result['primary_key'] = $isPrimaryKey;
+    $result['key'] = ($fieldData['Key'] ?? null) ? true : false;
 
     // original for debugging
     // $result['raw_type'] = $rawType;

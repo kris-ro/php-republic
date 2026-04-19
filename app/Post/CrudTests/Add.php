@@ -46,7 +46,7 @@ class Add implements PostDataProcessor {
                 'long_blob_field' => [[['App\\Post\\CrudTests\\Add', 'validLongBlobField']]],
                 'long_text_field' => ['is_string', ['maxLength' => 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => ['is_string', [['App\\Post\\CrudTests\\Add', 'validUuidField']]],
+                'uuid_field' => --
                 'default_null_value' => ['is_string', ['maxLength' => 255], 'isOptional'],
               ])
               ->processPost();
@@ -80,16 +80,6 @@ class Add implements PostDataProcessor {
 
   private function validLongBlobField($value, $post) {
     return !mb_check_encoding($value, 'UTF-8');
-  }
-
-  private function validUuidField($value, $post) {
-    $uuidPattern = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
-
-    if (preg_match($uuidPattern, $value)) {
-      return true;
-    }
-
-    return false;
   }
 }
 
