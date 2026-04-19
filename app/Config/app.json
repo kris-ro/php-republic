@@ -1,0 +1,71 @@
+{
+  "app": {
+    "paths" : {
+      "logs" : "app/logs/",
+      "views" : "app/views",
+      "templates" : "app/views/templates",
+      "translations" : "app/Config/translations"
+    },
+    "database" : {
+      "host" : "",
+      "database" : "",
+      "username" : "",
+      "password" : ""
+    },
+    "message_templates" : ["info", "warning", "success", "error"],
+    "default_message_template" : "error",
+    "json_sections" : ["api"],
+    "languages" : ["en"],
+    "datetime" : {
+      "time_format" : "H:i:s",
+      "date_format" : "Y-m-d",
+      "time_zone" : "Europe/Bucharest"
+    },
+    "default_language" : "en",
+    "api_folder_language" : "en",
+    "api_formats" : {
+      "json" : "application/json",
+      "xml" : "application/xml"
+    },
+    "requestFormat" : "application/json",
+    "validator" : "KrisRo\\Validator\\Validator",
+    "validation_rules": {
+      "model_name" : "/^[a-z](_?[a-z0-9]+)+$/i"
+    },
+    "default_routes" : {
+      "guest" : "/",
+      "customer" : "/",
+      "company" : "/admin",
+      "app" : "/app"
+    },
+    "pagination" : {
+      "default" : {
+        "size" : 25,
+        "sort" : "asc",
+        "page" : 1
+      },
+      "url_params" : ["sort", "page", "size", "order-by"]
+    },
+    "default_api_respons_format": {
+      "success": false,
+      "data": null,
+      "error": null,
+      "messages": null,
+      "metadata": {
+        "timestamp": null
+      }
+    }
+  },
+  "mail" : {
+    "test" : "",
+    "support" : "",
+    "system" : "awork@awork.ro",
+    "contact" : "",
+    "signature" : ""
+  },
+  "crypto" : {
+    "cipher" : "",
+    "key" : "",
+    "iv" : ""
+  }
+}

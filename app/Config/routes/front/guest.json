@@ -1,0 +1,16 @@
+{
+  "routes" : {
+    "front" : {
+      "index" : "App\\Actions\\HomePage\\Home",
+
+      "signin" : "App\\Actions\\Users\\Signin",
+      "signup" : "App\\Actions\\Users\\Signup",
+
+      "validate-user-email" : "App\\Actions\\Users\\ValidateEmail",
+      "validate-user-phone" : "App\\Actions\\Users\\ValidatePhone",
+
+      "forgot-password" : "App\\Actions\\Users\\ForgotPassword",
+      "forgot-password-reset" : "App\\Actions\\Users\\ForgotPasswordReset"
+    }
+  }
+}

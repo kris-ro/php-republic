@@ -1,0 +1,23 @@
+{
+  "app": {
+    "database" : {
+      "creator": "\\KrisRo\\PhpDatabaseModel\\Model",
+      "host" : "localhost",
+      "database" : "php_republic",
+      "username" : "k",
+      "password" : "123456"
+    }
+  },
+  "mail" : {
+    "test" : "misterradu@gmail.com",
+    "support" : "support@php-bootstrap-framework.k",
+    "system" : "system@php-bootstrap-framework.k",
+    "contact" : "contact@php-bootstrap-framework.k",
+    "signature" : "Echipa php-bootstrap-framework.k"
+  },
+  "crypto" : {
+    "cipher" : "AES-256-GCM",
+    "key" : "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFrL01nT0oydGFLTkZUaExsbndvaApSR2RNeDZDQnR4M05QUTdSVmJvcit2d1hFZFRabTd5SmRTcWdHNGpJK2tpakkyMmVGMEU5dUttdHRHcE1VaE9MCjdBaHhBL0dDeU1MTktORFV3QjRsNmZmV1Q0UG5vYUxDS3JIYWhqNjF0Vk44dGNDZ0Y1NnJ5djNja0pPYTd2WVcKNGVBVFFobE1lOENnQjRWWWRVY1VYR1BYaWF0WFJKMFdKRUh3U2ZYUmFYQXVJa2xSZjJ5K1dFMzVISk9oMzQ1SgphZ2pTWDlvaWN3aVhGSGE4Z3dSTUQwL095cW9mR1dzUENiNG85UGV3dHhyaFJDcVlIWFF3TzlkVWIvekZpOU5FCkVFdnp5WXRlaU1ublBxbHcvWGYvRWdJV3p0dG1HbUVJSkVFUXUyRGRlVlVYQ2RPU3dyZEJCcUYvaEVOOE92WVIKZHdJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==",
+    "iv" : "5e86f069f2501578dee2822e"
+  }
+}

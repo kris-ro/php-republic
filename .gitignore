@@ -1,0 +1,6 @@
+/nbproject/
+/vendor/
+.env
+/src/Config/local.json
+/mail/
+canvas.*

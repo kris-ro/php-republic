@@ -1,0 +1,7 @@
+{
+  "routes" : {
+    "api" : {
+      "account/user" : "App\\Actions\\Users\\Profile"
+    }
+  }
+}

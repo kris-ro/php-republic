@@ -1,0 +1,21 @@
+CREATE TABLE `users` (
+  -- Ids and authentication
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL, -- Length 255 for compatibility with password_hash()
+
+  -- Status and Security
+  `is_active` TINYINT(1) NOT NULL DEFAULT 0,
+  `role` ENUM('guest', 'customer', 'company', 'app') NOT NULL DEFAULT 'company',
+
+  -- Audit (Time)
+  `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_login` DATETIME DEFAULT NULL,
+
+  -- Indexes
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_email` (`email`),
+  UNIQUE KEY `idx_username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

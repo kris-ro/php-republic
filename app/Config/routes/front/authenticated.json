@@ -1,0 +1,8 @@
+{
+  "routes" : {
+    "front" : {
+      "index" : "App\\Actions\\HomePage\\Home",
+      "logout" : "App\\Actions\\Users\\Logout"
+    }
+  }
+}
