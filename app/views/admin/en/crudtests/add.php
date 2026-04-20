@@ -7,7 +7,7 @@ use KrisRo\PhpRepublic\Request;
   <div class="container-fluid">
     <!--begin::Row-->
     <div class="row">
-      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; crud test &raquo; Add</h3></div>
+      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; Crud Test &raquo; Add</h3></div>
     </div>
     <!--end::Row-->
   </div>
@@ -25,36 +25,84 @@ use KrisRo\PhpRepublic\Request;
       <div class="col-sm-12">
         <div class="card card-primary card-outline mb-4">
           <!--begin::Header-->
-          <div class="card-header"><div class="card-title">Add crud test</div></div>
+          <div class="card-header"><div class="card-title">Add Crud Test</div></div>
           <!--end::Header-->
           <!--begin::Form-->
           <form action="/admin/crudtests/add" method="POST">
             <?php echo self::getFormToken('addcrud_test') // self is instance of KrisRo\PhpRepublic\Template ?>
             <!--begin::Body-->
             <div class="card-body">
-<>
-<>
-<>
-<>
-<>
               <div class="mb-3">
-                <label for="-id" class="form-label"></label>
-                <select class="form-select" id="-id" aria-label="">
-                  <option value="">Open this select menu</option>
-                  <option value="aaa">aaa</option>
-                  <option value="bbb">bbb</option>
-                  <option value="ccc">ccc</option>
+                <label for="email-id" class="form-label">Email</label>
+                <input type="text" class="form-control" name="email" id="email-id" value="<?php echo Request::post('email') ?: ($data['email'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="price-id" class="form-label">Price</label>
+                <input type="text" class="form-control" name="price" id="price-id" value="<?php echo Request::post('price') ?: ($data['price'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="timestamp_time-id" class="form-label">Timestamp Time</label>
+                <input type="datetime-local" class="form-control" name="timestamp_time" id="timestamp_time-id" value="<?php echo Request::post('timestamp_time') ?: ($data['timestamp_time'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="date_time_field-id" class="form-label">Date Time Field</label>
+                <input type="datetime-local" class="form-control" name="date_time_field" id="date_time_field-id" value="<?php echo Request::post('date_time_field') ?: ($data['date_time_field'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="date_field-id" class="form-label">Date Field</label>
+                <input type="date" class="form-control" name="date_field" id="date_field-id" value="<?php echo Request::post('date_field') ?: ($data['date_field'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="enum_field-id" class="form-label">Enum Field</label>
+                <select class="form-select" name="enum_field" id="enum_field-id" aria-label="Enum Field">
+                  <option value=""> -- </option>
+                  <?php foreach ($data[enum_field] as $value => $label) { ?>
+                    <option value="<?php echo $value ?>" <?php echo $value == (Request::post('enum_field') ?: ($data['enum_field'] ?? null)) ? 'selected' : '' ?>><?php echo $label ?></option>
+                  <?php } ?>
                 </select>
               </div>
-<>
-<>
+
               <div class="mb-3">
-                <label for="-id" class="form-label"></label>
-                <textarea class="form-control" id="-id" rows="3"></textarea>
+                <label for="boolean_field-id" class="form-label">Boolean Field</label>
+                <select class="form-select" name="boolean_field" id="boolean_field-id" aria-label="Boolean Field">
+                  <option value=""> -- </option>
+                  <?php foreach ($data[boolean_field] as $value => $label) { ?>
+                    <option value="<?php echo $value ?>" <?php echo $value == (Request::post('boolean_field') ?: ($data['boolean_field'] ?? null)) ? 'selected' : '' ?>><?php echo $label ?></option>
+                  <?php } ?>
+                </select>
               </div>
-<>
-<>
-<>
+
+              <div class="mb-3">
+                <label for="long_blob_field-id" class="form-label">Long Blob Field</label>
+                <input type="file" class="form-control" name="long_blob_field" id="long_blob_field-id">
+              </div>
+
+              <div class="mb-3">
+                <label for="long_text_field-id" class="form-label">Long Text Field</label>
+                <textarea class="form-control" name="long_text_field" id="long_text_field-id" rows="3"><?php echo Request::post('long_text_field') ?: ($data['long_text_field'] ?? '') ?>
+                </textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="small_int_field-id" class="form-label">Small Int Field</label>
+                <input type="text" class="form-control" name="small_int_field" id="small_int_field-id" value="<?php echo Request::post('small_int_field') ?: ($data['small_int_field'] ?? '') ?>">
+              </div>
+
+              <div class="mb-3">
+                <label for="uuid_field-id" class="form-label">Uuid Field</label>
+                <input type="file" class="form-control" name="uuid_field" id="uuid_field-id">
+              </div>
+
+              <div class="mb-3">
+                <label for="default_null_value-id" class="form-label">Default Null Value</label>
+                <input type="text" class="form-control" name="default_null_value" id="default_null_value-id" value="<?php echo Request::post('default_null_value') ?: ($data['default_null_value'] ?? '') ?>">
+              </div>
+
             </div>
           </form>
         </div>

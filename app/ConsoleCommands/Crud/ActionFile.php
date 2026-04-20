@@ -61,10 +61,36 @@ class ActionFile {
         return $this->buildTextareaElement($field, $spaceIndent);
       case 'ENUM':
         return $this->buildSelectElement($field, $spaceIndent);
+      case 'DATE':
+        return $this->buildDateElement($field, $spaceIndent);
+      case 'DATETIME':
+      case 'TIMESTAMP':
+        return $this->buildDateTimeElement($field, $spaceIndent);
+      case 'TIME':
+        return $this->buildTimeElement($field, $spaceIndent);
+      case 'TINYINT':
+        return $this->buildSelectElement($field, $spaceIndent, true);
+      case 'SMALLINT':
+      case 'MEDIUMINT':
+      case 'INT':
+      case 'INTEGER':
+      case 'BIGINT':
+      case 'FLOAT':
+      case 'DOUBLE':
+      case 'DECIMAL':
+      case 'NUMERIC':
+      case 'CHAR':
+      case 'VARCHAR':
+      case 'TINYTEXT':
+      case 'UUID':
+        return $this->buildTextElement($field, $spaceIndent);
+      case 'BINARY':
+      case 'BLOB':
+      case 'LONGBLOB':
+        return $this->buildFileElement($field, $spaceIndent);
     }
 
-    return '<>';
-//    return throw new \Exception('Unknown field type');
+    return throw new \Exception('Unknown field type: ' . $field['type']);
   }
 
   private function buildTextareaElement(array $field, int $spaceIndent): string {
@@ -72,15 +98,18 @@ class ActionFile {
       'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
       'name' => $field['name'],
       'label' => Strings::prettify($field['name']),
-      'value' => '<?php echo Request::post(\'' . $field['name'] . '\') ?>',
     ]);
   }
 
-  private function buildSelectElement(array $field, int $spaceIndent): string {
-    $values = [];
-
-    foreach ($field['enum_values'] as $value) {
-      $values[$value] = Strings::prettify($value);
+  private function buildSelectElement(array $field, int $spaceIndent, bool $boolean = false): string {
+    if ($boolean) {
+      $values = ['1' => 'Yes', '0' => 'No'];
+    
+    } else {
+      $values = [];
+      foreach ($field['enum_values'] as $value) {
+        $values[$value] = Strings::prettify($value);
+      }
     }
 
     return Template::load($this->htmlPath . 'select.php', [
@@ -89,6 +118,46 @@ class ActionFile {
       'label' => Strings::prettify($field['name']),
       'values' => $values,
       'selected' => '<?php echo Request::post(\'' . $field['name'] . '\') ?>',
+    ]);
+  }
+
+  private function buildDateElement(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'date.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function buildDateTimeElement(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'datetime.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function buildTimeElement(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'time.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function buildTextElement(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'text.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function buildFileElement(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'file.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
     ]);
   }
 }

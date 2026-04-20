@@ -109,11 +109,13 @@ class PostFile {
         return $this->buildTimeValidationRule($field);
       case 'UUID':
         return $this->buildUuidValidationRule($field);
+      case 'BINARY':
+      case 'BLOB':
       case 'LONGBLOB':
         return $this->buildLongBlobValidationRule($field);
     }
 
-    throw new \Exception('Unknown field type');
+   throw new \Exception('Unknown field type');
   }
 
   private function buildIntegerValidationRule(array $field) {

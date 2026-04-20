@@ -42,6 +42,6 @@ class Strings {
   }
 
   public static function prettify(string $name = '') {
-    return strtolower(str_replace('_', ' ', $name));
+    return ucwords(strtolower(str_replace('_', ' ', $name)));
   }
 }
