@@ -3,4 +3,5 @@
 .env
 /src/Config/local.json
 /mail/
+/app/logs/
 canvas.*
