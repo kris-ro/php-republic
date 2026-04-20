@@ -5,14 +5,14 @@ namespace App\ConsoleCommands\Crud;
 use KrisRo\PhpRepublic\Strings;
 use KrisRo\PhpRepublic\Template;
 use App\ConsoleCommands\Crud\Traits\ActionFileAdd;
-// use App\ConsoleCommands\Crud\Traits\ActionFileUpdate;
-// use App\ConsoleCommands\Crud\Traits\ActionFileDelete;
+use App\ConsoleCommands\Crud\Traits\ActionFileUpdate;
+use App\ConsoleCommands\Crud\Traits\ActionFileDelete;
 
 class ActionFile {
 
   use ActionFileAdd;
-  // use ActionFileUpdate;
-  // use ActionFileDelete;
+  use ActionFileUpdate;
+  use ActionFileDelete;
 
   private $modelName;
   private $controllerName;
@@ -20,6 +20,7 @@ class ActionFile {
   private $unique;
   private $autoIncrement;
   private $primaryKey;
+  private $primaryKeyDefinition;
 
   private $htmlPath;
 
@@ -35,11 +36,30 @@ class ActionFile {
 
   public function buildAction() {
     $this->buildAdd();
-    // $this->buildUpdate();
-    // $this->buildDelete();
+    $this->buildUpdate();
+    $this->buildDelete();
   }
 
   public function formElements(int $spaceIndent, array|null $excludedFields = []) {
+    $fields = [];
+
+    foreach ($this->fields as $field) {
+      if (!$this->primaryKey && $field['primary_key'] == true) {
+        $this->primaryKey = $field['name'];
+        $this->primaryKeyDefinition = $field;
+      }
+
+      if (in_array($field['name'], $excludedFields)) {
+        continue;
+      }
+
+      $fields[] = $this->mapDbTypeToHtmlField($field, $spaceIndent);
+    }
+
+    return implode(PHP_EOL, $fields);
+  }
+
+  public function detailItems(int $spaceIndent, array|null $excludedFields = []) {
     $fields = [];
 
     foreach ($this->fields as $field) {
@@ -47,7 +67,7 @@ class ActionFile {
         continue;
       }
 
-      $fields[] = $this->mapDbTypeToHtmlField($field, $spaceIndent);
+      $fields[] = $this->mapDbTypeToDetailItem($field, $spaceIndent);
     }
 
     return implode(PHP_EOL, $fields);
@@ -93,6 +113,41 @@ class ActionFile {
     return throw new \Exception('Unknown field type: ' . $field['type']);
   }
 
+  private function mapDbTypeToDetailItem(array $field, int $spaceIndent): string {
+    switch (strtoupper($field['type'])) {
+      case 'TEXT':
+      case 'MEDIUMTEXT':
+      case 'LONGTEXT':
+      case 'ENUM':
+      case 'DATE':
+      case 'DATETIME':
+      case 'TIMESTAMP':
+      case 'TIME':
+      case 'SMALLINT':
+      case 'MEDIUMINT':
+      case 'INT':
+      case 'INTEGER':
+      case 'BIGINT':
+      case 'FLOAT':
+      case 'DOUBLE':
+      case 'DECIMAL':
+      case 'NUMERIC':
+      case 'CHAR':
+      case 'VARCHAR':
+      case 'TINYTEXT':
+      case 'UUID':
+        return $this->displayText($field, $spaceIndent);
+      case 'TINYINT':
+        return $this->displayBoolean($field, $spaceIndent);
+      case 'BINARY':
+      case 'BLOB':
+      case 'LONGBLOB':
+        return $this->displayDownload($field, $spaceIndent);
+    }
+
+    return throw new \Exception('Unknown field type: ' . $field['type']);
+  }
+
   private function buildTextareaElement(array $field, int $spaceIndent): string {
     return Template::load($this->htmlPath . 'textarea.php', [
       'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
@@ -104,7 +159,7 @@ class ActionFile {
   private function buildSelectElement(array $field, int $spaceIndent, bool $boolean = false): string {
     if ($boolean) {
       $values = ['1' => 'Yes', '0' => 'No'];
-    
+
     } else {
       $values = [];
       foreach ($field['enum_values'] as $value) {
@@ -155,6 +210,30 @@ class ActionFile {
 
   private function buildFileElement(array $field, int $spaceIndent): string {
     return Template::load($this->htmlPath . 'file.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function displayText(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'display_text.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function displayBoolean(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'display_boolean.php', [
+      'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
+      'name' => $field['name'],
+      'label' => Strings::prettify($field['name']),
+    ]);
+  }
+
+  private function displayDownload(array $field, int $spaceIndent): string {
+    return Template::load($this->htmlPath . 'display_binary.php', [
       'indent' => str_pad('', $spaceIndent, ' ', STR_PAD_LEFT),
       'name' => $field['name'],
       'label' => Strings::prettify($field['name']),

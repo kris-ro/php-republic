@@ -7,6 +7,7 @@ use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpRepublic\Translate;
 use KrisRo\PhpRepublic\Messages;
 use KrisRo\PhpRepublic\Session;
+use KrisRo\PhpRepublic\Files;
 use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;
 use KrisRo\PhpRepublic\Traits\CSRF;
@@ -48,7 +49,7 @@ class Update implements PostDataProcessor {
                 'long_blob_field' => [[['App\\Post\\CrudTests\\Add', 'validLongBlobField']]],
                 'long_text_field' => ['is_string', ['maxLength' => 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => [[['App\\Post\\CrudTests\\Add', 'validUuidField']]],
+                'uuid_field' => ['is_string', [['App\\Post\\CrudTests\\Add', 'validUuidField']]],
                 'default_null_value' => ['is_string', ['maxLength' => 255], 'isOptional'],
               ])
               ->processPost();
@@ -81,11 +82,42 @@ class Update implements PostDataProcessor {
   }
 
   private function validLongBlobField($value, $post) {
-    return !mb_check_encoding($value, 'UTF-8');
+    if (empty($_FILES) && empty($_POST)) {
+      Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]);
+      return false;
+    }
+
+    if ($_FILES['long_blob_field']['tmp_name'] ?? null) {
+      Translate::files('No file was uploaded');
+      return false;
+    }
+
+    if (!isset($_FILES['long_blob_field']['error'])) {
+      Translate::files('Unknown upload error');
+      return false;
+    }
+
+    if (!isset($_FILES['long_blob_field']['error']) || $_FILES['long_blob_field']['error'] != UPLOAD_ERR_OK) {
+      Translate::files('Error: @UPLOAD_ERROR', ['@UPLOAD_ERROR' => Files::errorMessage($_FILES['long_blob_field']['error'])]);
+      return false;
+    }
+
+    if (isset($_FILES['long_blob_field']['size']) && $_FILES['long_blob_field']['size'] == 0) {
+      Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]);
+      return false;
+    }
+
+    return false;
   }
 
   private function validUuidField($value, $post) {
-    return !mb_check_encoding($value, 'UTF-8');
+    $uuidPattern = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+
+    if (preg_match($uuidPattern, $value)) {
+      return true;
+    }
+
+    return false;
   }
 }
 

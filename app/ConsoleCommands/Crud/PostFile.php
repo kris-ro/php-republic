@@ -216,7 +216,27 @@ class PostFile {
 
     $this->validationMethods[] = PHP_EOL
       . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
-      . '    return !mb_check_encoding($value, \'UTF-8\');' . PHP_EOL
+      . '    if (empty($_FILES) && empty($_POST)) {' . PHP_EOL
+      . '      Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]);' . PHP_EOL
+      . '      return false;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    if ($_FILES[\'' . $field['name'] . '\'][\'tmp_name\'] ?? null) {' . PHP_EOL
+      . '      Translate::files(\'No file was uploaded\');' . PHP_EOL
+      . '      return false;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\'])) {' . PHP_EOL
+      . '      Translate::files(\'Unknown upload error\');' . PHP_EOL
+      . '      return false;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\']) || $_FILES[\'' . $field['name'] . '\'][\'error\'] != UPLOAD_ERR_OK) {' . PHP_EOL
+      . '      Translate::files(\'Error: @UPLOAD_ERROR\', [\'@UPLOAD_ERROR\' => Files::errorMessage($_FILES[\'' . $field['name'] . '\'][\'error\'])]);' . PHP_EOL
+      . '      return false;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    if (isset($_FILES[\'' . $field['name'] . '\'][\'size\']) && $_FILES[\'' . $field['name'] . '\'][\'size\'] == 0) {' . PHP_EOL
+      . '      Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]);' . PHP_EOL
+      . '      return false;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    return false;' . PHP_EOL
       . '  }';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';

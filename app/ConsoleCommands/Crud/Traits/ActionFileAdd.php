@@ -26,7 +26,7 @@ trait ActionFileAdd {
                     . DS . $lowerCaseControllerName
                     . DS . 'add.php';
 
-    if (!file_exists($adminViewPath)) {
+    if (!file_exists(dirname($adminViewPath))) {
       mkdir(dirname($adminViewPath));
       chmod(dirname($adminViewPath), 0755);
     }
@@ -94,8 +94,24 @@ trait ActionFileAdd {
                      . '            <div class="card-body">' . PHP_EOL
                      .                $this->formElements(14, $this->autoIncrement) . PHP_EOL
                      . '            </div>' . PHP_EOL
+                     . '            <!--end::Body-->' . PHP_EOL
+                     . '            <!--begin::Footer-->' . PHP_EOL
+                     . '            <div class="card-footer">' . PHP_EOL
+                     . '              <button type="submit" class="btn btn-primary">Submit</button>' . PHP_EOL
+                     . '            </div>' . PHP_EOL
+                     . '            <!--end::Footer-->' . PHP_EOL
                      . '          </form>' . PHP_EOL
+                     . '          <!--end::Form-->' . PHP_EOL
                      . '        </div>' . PHP_EOL
+                     . '        <!--end::Card-->' . PHP_EOL
+                     . '      </div>' . PHP_EOL
+                     . '      <!--end::Col-->' . PHP_EOL
+                     . '    </div>' . PHP_EOL
+                     . '    <!--end::Row-->' . PHP_EOL
+                     . '  </div>' . PHP_EOL
+                     . '  <!--end::Container-->' . PHP_EOL
+                     . '</div>' . PHP_EOL
+                     . '<!--end::App Content-->' . PHP_EOL
     ;
   }
 }

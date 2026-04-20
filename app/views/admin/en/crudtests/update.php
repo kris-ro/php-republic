@@ -7,7 +7,7 @@ use KrisRo\PhpRepublic\Request;
   <div class="container-fluid">
     <!--begin::Row-->
     <div class="row">
-      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; Crud Test &raquo; Add</h3></div>
+      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; Crud Test &raquo; Update</h3></div>
     </div>
     <!--end::Row-->
   </div>
@@ -25,13 +25,14 @@ use KrisRo\PhpRepublic\Request;
       <div class="col-sm-12">
         <div class="card card-primary card-outline mb-4">
           <!--begin::Header-->
-          <div class="card-header"><div class="card-title">Add Crud Test</div></div>
+          <div class="card-header"><div class="card-title">Update Crud Test</div></div>
           <!--end::Header-->
           <!--begin::Form-->
-          <form action="/admin/crudtests/add" method="POST">
-            <?php echo self::getFormToken('addcrud_test') // self is instance of KrisRo\PhpRepublic\Template ?>
+          <form action="/admin/crudtests/update/<?php echo $data['crud_test_id'] ?>" method="POST">
+            <?php echo self::getFormToken('updatecrud_test') // self is instance of KrisRo\PhpRepublic\Template ?>
             <!--begin::Body-->
             <div class="card-body">
+              <input type="hidden" name="crud_test_id" id="crud_test_id-id" value="<?php echo $data['crud_test_id'] ?>">
               <div class="mb-3">
                 <label for="email-id" class="form-label">Email</label>
                 <input type="text" class="form-control" name="email" id="email-id" value="<?php echo Request::post('email') ?: ($data['email'] ?? '') ?>">
