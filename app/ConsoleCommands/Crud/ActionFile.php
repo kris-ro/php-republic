@@ -7,12 +7,14 @@ use KrisRo\PhpRepublic\Template;
 use App\ConsoleCommands\Crud\Traits\ActionFileAdd;
 use App\ConsoleCommands\Crud\Traits\ActionFileUpdate;
 use App\ConsoleCommands\Crud\Traits\ActionFileDelete;
+use App\ConsoleCommands\Crud\Traits\ActionFileList;
 
 class ActionFile {
 
   use ActionFileAdd;
   use ActionFileUpdate;
   use ActionFileDelete;
+  use ActionFileList;
 
   private $modelName;
   private $controllerName;
@@ -38,6 +40,7 @@ class ActionFile {
     $this->buildAdd();
     $this->buildUpdate();
     $this->buildDelete();
+    $this->buildList();
   }
 
   public function formElements(int $spaceIndent, array|null $excludedFields = []) {
@@ -71,6 +74,80 @@ class ActionFile {
     }
 
     return implode(PHP_EOL, $fields);
+  }
+
+  public function listFilters(int $spaceIndent): string {
+    $filters = [];
+
+    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
+
+    foreach ($this->fields as $field) {
+      if (!$this->primaryKey && $field['primary_key'] == true) {
+        $this->primaryKey = $field['name'];
+        $this->primaryKeyDefinition = $field;
+      }
+
+      if (!($field['key'] ?? null)) {
+        continue;
+      }
+
+      // 'alias' => ['db.field_name', []],
+      $filters[] = $indentation . '  '
+                   . '\'' . $field['name'] . '\' => [\'' . $field['name'] . '\', []],';
+    }
+
+    return $indentation . 'private $filters = [' . PHP_EOL
+                   . implode(PHP_EOL, $filters) . PHP_EOL
+           . $indentation . '];' . PHP_EOL;
+  }
+
+  private function listingObjectFilters(int $spaceIndent): string {
+    $filters = [];
+
+    $table = strtolower($this->modelName);
+    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
+
+    foreach ($this->fields as $field) {
+      if (!($field['key'] ?? null)) {
+        continue;
+      }
+
+      $filters[] = $this->listingObjectFiltersItem($table, $field, $indentation);
+    }
+
+    return implode(PHP_EOL, $filters) . ';' . PHP_EOL;
+  }
+
+  private function listingObjectDataPrep(int $spaceIndent): string {
+    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
+
+    $items = [];
+    foreach ($this->fields as $field) {
+      $items[] = $this->listingObjectDataPrepItem($field, $indentation);
+    }
+
+    return implode(PHP_EOL, array_filter($items));
+  }
+
+  private function listingObjectFiltersItem(string $table, array $field, string $indentation): string {
+    // ->filter('user_tokens.fingerprint', 'fingerprint', 'LIKE')
+    // return $indentation . '->filter(\'' . $table . '.' . $field['name'] . '\', \'' . $field['name'] . '\')';
+    switch (strtoupper($field['type'])) {
+      case 'TEXT':
+      case 'MEDIUMTEXT':
+      case 'LONGTEXT':
+      case 'CHAR':
+      case 'VARCHAR':
+      case 'TINYTEXT':
+        return $indentation . '->filter(\'' . $table . '.' . $field['name'] . '\', \'' . $field['name'] . '\', \'LIKE\')';
+      case 'DATE':
+      case 'DATETIME':
+      case 'TIMESTAMP':
+      case 'TIME':
+        return $indentation . '->filter(\'' . $table . '.' . $field['name'] . '\', \'' . $field['name'] . '\', \'=\', \'date\')';
+    }
+
+    return $indentation . '->filter(\'' . $table . '.' . $field['name'] . '\', \'' . $field['name'] . '\')';
   }
 
   private function mapDbTypeToHtmlField(array $field, int $spaceIndent): string {
@@ -146,6 +223,20 @@ class ActionFile {
     }
 
     return throw new \Exception('Unknown field type: ' . $field['type']);
+  }
+
+  private function listingObjectDataPrepItem(array $field, string $indentation): string {
+    switch (strtoupper($field['type'])) {
+      case 'DATE':
+      case 'DATETIME':
+      case 'TIMESTAMP':
+      case 'TIME':
+        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\']),';
+      case 'TINYINT':
+        return $indentation . '\'' . $field['name'] . '\' => $item[\'' . $field['name'] . '\'] ? \'Yes\' : \'No\',';
+    }
+
+    return '';
   }
 
   private function buildTextareaElement(array $field, int $spaceIndent): string {

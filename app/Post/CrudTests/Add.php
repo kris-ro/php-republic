@@ -47,7 +47,7 @@ class Add implements PostDataProcessor {
                 'long_blob_field' => [[['App\\Post\\CrudTests\\Add', 'validLongBlobField']]],
                 'long_text_field' => ['is_string', ['maxLength' => 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => ['is_string', [['App\\Post\\CrudTests\\Add', 'validUuidField']]],
+                'uuid_field' => [[['App\\Post\\CrudTests\\Add', 'validUuidField']]],
                 'default_null_value' => ['is_string', ['maxLength' => 255], 'isOptional'],
               ])
               ->processPost();
@@ -66,7 +66,7 @@ class Add implements PostDataProcessor {
 
     Session::set('request/messages/crudtests/popup_success', Translate::crud_test('Crud test was saved'));
 
-    Request::redirect('/crudtests');
+    Request::redirect('/admin/crudtests');
   }
 
   private function validEnumField($value, $post) {
@@ -109,10 +109,29 @@ class Add implements PostDataProcessor {
   }
 
   private function validUuidField($value, $post) {
-    $uuidPattern = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+    if (empty($_FILES) && empty($_POST)) {
+      Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]);
+      return false;
+    }
 
-    if (preg_match($uuidPattern, $value)) {
-      return true;
+    if ($_FILES['uuid_field']['tmp_name'] ?? null) {
+      Translate::files('No file was uploaded');
+      return false;
+    }
+
+    if (!isset($_FILES['uuid_field']['error'])) {
+      Translate::files('Unknown upload error');
+      return false;
+    }
+
+    if (!isset($_FILES['uuid_field']['error']) || $_FILES['uuid_field']['error'] != UPLOAD_ERR_OK) {
+      Translate::files('Error: @UPLOAD_ERROR', ['@UPLOAD_ERROR' => Files::errorMessage($_FILES['uuid_field']['error'])]);
+      return false;
+    }
+
+    if (isset($_FILES['uuid_field']['size']) && $_FILES['uuid_field']['size'] == 0) {
+      Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]);
+      return false;
     }
 
     return false;

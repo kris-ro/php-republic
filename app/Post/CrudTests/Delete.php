@@ -41,7 +41,7 @@ class Delete implements PostDataProcessor {
 
     Session::set('request/messages/crudtests/popup_success', Translate::crud_test('Crud test was deleted'));
 
-    Request::redirect('/crudtests');
+    Request::redirect('/admin/crudtests');
   }
 
 }

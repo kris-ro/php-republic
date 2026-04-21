@@ -43,7 +43,7 @@ trait PostFileAdd {
                      . '    }' . PHP_EOL . PHP_EOL
                      . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->set' . Strings::toCamelCase($this->modelName) . '(Config::validator()->getPost());' . PHP_EOL . PHP_EOL
                      . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was saved\'));' . PHP_EOL . PHP_EOL
-                     . '    Request::redirect(\'/' . strtolower($this->controllerName) . '\');' . PHP_EOL
+                     . '    Request::redirect(\'/admin/' . strtolower($this->controllerName) . '\');' . PHP_EOL
                      . '  }' . PHP_EOL
                      .    implode(PHP_EOL, $this->validationMethods) . PHP_EOL
                      . '}' . PHP_EOL . PHP_EOL
