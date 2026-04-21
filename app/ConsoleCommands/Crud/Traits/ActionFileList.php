@@ -17,6 +17,21 @@ trait ActionFileList {
     file_put_contents(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName . DS . 'Index.php', $this->createListActionFileContent($lowerCaseControllerName) . PHP_EOL);
 
     file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_index.css', '');
+
+    $adminViewPath = APP_ROOT
+                    . DS . 'app'
+                    . DS . 'views'
+                    . DS . 'admin'
+                    . DS . 'en' // always 'en'
+                    . DS . $lowerCaseControllerName
+                    . DS . 'index.php';
+
+    if (!file_exists(dirname($adminViewPath))) {
+      mkdir(dirname($adminViewPath));
+      chmod(dirname($adminViewPath), 0755);
+    }
+
+    file_put_contents($adminViewPath, $this->createListActionTemplateFileContent($lowerCaseControllerName) . PHP_EOL);
   }
 
   private function createListActionFileContent(string $lowerCaseControllerName): string {
@@ -59,5 +74,41 @@ trait ActionFileList {
                      . '  }' . PHP_EOL . PHP_EOL
                      . '}' . PHP_EOL . PHP_EOL
     ;
+  }
+
+  private function createListActionTemplateFileContent(string $lowerCaseControllerName) {
+    return '<?php'
+                     . PHP_EOL
+                     . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
+                     . '?>' . PHP_EOL
+                     . '<!--begin::App Content Header-->' . PHP_EOL
+                     . '<div class="app-content-header">' . PHP_EOL
+                     . '  <!--begin::Container-->' . PHP_EOL
+                     . '  <div class="container-fluid">' . PHP_EOL
+                     . '    <!--begin::Row-->' . PHP_EOL
+                     . '    <div class="row">' . PHP_EOL
+                     . '      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; ' . Strings::prettify($this->modelName) . '</h3></div>' . PHP_EOL
+                     . '    </div>' . PHP_EOL
+                     . '    <!--end::Row-->' . PHP_EOL
+                     . '  </div>' . PHP_EOL
+                     . '  <!--end::Container-->' . PHP_EOL
+                     . '</div>' . PHP_EOL
+                     . '<!--end::App Content Header-->' . PHP_EOL . PHP_EOL
+                     . '<!--begin::App Content-->' . PHP_EOL
+                     . '<div class="app-content">' . PHP_EOL
+                     . '  <!--begin::Container-->' . PHP_EOL
+                     . '  <div class="container-fluid">' . PHP_EOL
+                     . '    <!--begin::Row-->' . PHP_EOL
+                     . '    <div class="row">' . PHP_EOL
+                     . '      <!--begin::Col-->' . PHP_EOL
+                     . '      <div class="col-sm-12 list-container" id="user-' . $lowerCaseControllerName . '-list-container" data-list-address="<?php echo self::get(\'list_address\') ?>">' . PHP_EOL
+                     . '        <div class="card mb-4 list-content" id="user-' . $lowerCaseControllerName . '-list-content">' . PHP_EOL
+                     . '          <div class="card-body">' . PHP_EOL
+                     . '            <table id="user-' . $lowerCaseControllerName . '" class="table table-bordered table-striped table-hover dataTable dtr-inline" aria-describedby="' . $lowerCaseControllerName . '_info">' . PHP_EOL
+                     . '              <thead>' . PHP_EOL
+                     . '                <tr>' . PHP_EOL
+                     .                    $this->listTableHeader() . PHP_EOL
+                     . '                </tr>' . PHP_EOL
+      ;
   }
 }
