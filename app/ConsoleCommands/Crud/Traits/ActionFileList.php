@@ -38,7 +38,7 @@ trait ActionFileList {
     $table = strtolower($this->modelName);
     return '<?php'
                      . PHP_EOL . PHP_EOL
-                     . "namespace App\Post\\{$this->controllerName};" . PHP_EOL . PHP_EOL
+                     . "namespace App\Actions\\{$this->controllerName};" . PHP_EOL . PHP_EOL
                      . "use App\Controllers\\{$this->controllerName} as {$this->controllerName}Controller;" . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Template;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
@@ -109,6 +109,34 @@ trait ActionFileList {
                      . '                <tr>' . PHP_EOL
                      .                    $this->listTableHeader() . PHP_EOL
                      . '                </tr>' . PHP_EOL
+                     . '              </thead>' . PHP_EOL
+                     . '              <tbody>' . PHP_EOL
+                     . '                <tr>' . PHP_EOL
+                     .                    $this->listTableSearch() . PHP_EOL
+                     . '                </tr>' . PHP_EOL
+                     . '                <?php foreach (self::view(\'items\') ?: [] as $item) { ?>' . PHP_EOL
+                     .                    $this->listTableItems() . PHP_EOL
+                     . '                <?php } ?>' . PHP_EOL
+                     . '              </tbody>' . PHP_EOL
+                     . '              <tfoot>' . PHP_EOL
+                     . '                <tr>' . PHP_EOL
+                     .                    $this->listTableFooter() . PHP_EOL
+                     . '                </tr>' . PHP_EOL
+                     . '              </tfoot>' . PHP_EOL
+                     . '            </table>' . PHP_EOL
+                     . '          </div>' . PHP_EOL
+                     . '          <!-- /.card-body -->' . PHP_EOL . PHP_EOL
+                     . '          <?php echo self::paginationTemplate() ?>' . PHP_EOL . PHP_EOL
+                     . '        </div>' . PHP_EOL
+                     . '        <!-- /.card -->' . PHP_EOL . PHP_EOL
+                     . '      </div>' . PHP_EOL
+                     . '      <!-- /.col.list-container -->' . PHP_EOL
+                     . '    </div>' . PHP_EOL
+                     . '    <!-- /.row -->' . PHP_EOL
+                     . '  </div>' . PHP_EOL
+                     . '  <!-- /.container-fluid -->' . PHP_EOL
+                     . '</div>' . PHP_EOL
+                     . '<!--end::App Content-->' . PHP_EOL
       ;
   }
 }
