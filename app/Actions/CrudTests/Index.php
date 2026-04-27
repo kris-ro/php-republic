@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Post\CrudTests;
+namespace App\Actions\CrudTests;
 
 use App\Controllers\CrudTests as CrudTestsController;
 use KrisRo\PhpRepublic\Template;

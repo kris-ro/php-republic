@@ -1,18 +1,22 @@
 {
-  "routes" : {
-    "admin" : {
-      "index" : "App\\Actions\\HomePage\\Dashboard",
-      "account/user" : "App\\Actions\\Users\\Profile",
-      "account/user/delete" : "App\\Actions\\Users\\Delete",
-      "account/user/tokens" : "App\\Actions\\Users\\Tokens",
-      "account/user/token/add" : "App\\Actions\\Users\\TokenAdd",
-      "account/user/token/delete" : "App\\Actions\\Users\\TokenDelete"
-    },
-    "front" : {
-      "logout" : "App\\Actions\\Users\\Logout"
-    },
-    "api" : {
-      "account/user" : "App\\Actions\\Users\\Profile"
+    "routes": {
+        "admin": {
+            "index": "App\\Actions\\HomePage\\Dashboard",
+            "account/user": "App\\Actions\\Users\\Profile",
+            "account/user/delete": "App\\Actions\\Users\\Delete",
+            "account/user/tokens": "App\\Actions\\Users\\Tokens",
+            "account/user/token/add": "App\\Actions\\Users\\TokenAdd",
+            "account/user/token/delete": "App\\Actions\\Users\\TokenDelete",
+            "crudtests": "App\\Actions\\CrudTests\\Index",
+            "crudtests/add": "App\\Actions\\CrudTests\\Add",
+            "crudtests/update": "App\\Actions\\CrudTests\\Update",
+            "crudtests/delete": "App\\Actions\\CrudTests\\Delete"
+        },
+        "front": {
+            "logout": "App\\Actions\\Users\\Logout"
+        },
+        "api": {
+            "account/user": "App\\Actions\\Users\\Profile"
+        }
     }
-  }
 }

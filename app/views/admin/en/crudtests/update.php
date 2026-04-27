@@ -62,9 +62,9 @@ use KrisRo\PhpRepublic\Request;
                 <label for="enum_field-id" class="form-label">Enum Field</label>
                 <select class="form-select" name="enum_field" id="enum_field-id" aria-label="Enum Field">
                   <option value=""> -- </option>
-                  <?php foreach ($data[enum_field] as $value => $label) { ?>
-                    <option value="<?php echo $value ?>" <?php echo $value == (Request::post('enum_field') ?: ($data['enum_field'] ?? null)) ? 'selected' : '' ?>><?php echo $label ?></option>
-                  <?php } ?>
+                    <option value="aaa" <?php echo "aaa" == Request::post('enum_field') ? 'selected' : '' ?>>Aaa</option>
+                    <option value="bbb" <?php echo "bbb" == Request::post('enum_field') ? 'selected' : '' ?>>Bbb</option>
+                    <option value="ccc" <?php echo "ccc" == Request::post('enum_field') ? 'selected' : '' ?>>Ccc</option>
                 </select>
               </div>
 
@@ -72,9 +72,8 @@ use KrisRo\PhpRepublic\Request;
                 <label for="boolean_field-id" class="form-label">Boolean Field</label>
                 <select class="form-select" name="boolean_field" id="boolean_field-id" aria-label="Boolean Field">
                   <option value=""> -- </option>
-                  <?php foreach ($data[boolean_field] as $value => $label) { ?>
-                    <option value="<?php echo $value ?>" <?php echo $value == (Request::post('boolean_field') ?: ($data['boolean_field'] ?? null)) ? 'selected' : '' ?>><?php echo $label ?></option>
-                  <?php } ?>
+                    <option value="1" <?php echo "1" == Request::post('boolean_field') ? 'selected' : '' ?>>Yes</option>
+                    <option value="0" <?php echo "0" == Request::post('boolean_field') ? 'selected' : '' ?>>No</option>
                 </select>
               </div>
 

@@ -10,6 +10,7 @@ use App\ConsoleCommands\Crud\ModelFile;
 use App\ConsoleCommands\Crud\ControllerFile;
 use App\ConsoleCommands\Crud\PostFile;
 use App\ConsoleCommands\Crud\ActionFile;
+use App\ConsoleCommands\Crud\ConfigFile;
 
 class Crud {
 
@@ -56,6 +57,7 @@ class Crud {
     $this->createController();
     $this->createPost();
     $this->createAction();
+    $this->updateRoutingAndPost();
 
     return $this;
   }
@@ -129,5 +131,19 @@ class Crud {
       $this->unique,
       $this->autoIncrement)
     )->buildAction();
+  }
+
+  public function updateRoutingAndPost() {
+    if (!$this->valid) {
+      return;
+    }
+
+    (new ConfigFile(
+      $this->modelName,
+      $this->controllerName,
+      $this->fields,
+      $this->unique,
+      $this->autoIncrement)
+    )->updateConfig();
   }
 }

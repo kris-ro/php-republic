@@ -1,14 +1,17 @@
 {
-  "post" : {
-    "front" : {
-      "signin" : "App\\Post\\Users\\Signin",
-      "signup" : "App\\Post\\Users\\Signup"
-    },
-    "admin" : {
-      "account/user" : "App\\Post\\Users\\Profile",
-      "account/user/delete" : "App\\Post\\Users\\Delete",
-      "account/user/token/add" : "App\\Post\\Users\\TokenAdd",
-      "account/user/token/delete" : "App\\Post\\Users\\TokenDelete"
+    "post": {
+        "front": {
+            "signin": "App\\Post\\Users\\Signin",
+            "signup": "App\\Post\\Users\\Signup"
+        },
+        "admin": {
+            "account/user": "App\\Post\\Users\\Profile",
+            "account/user/delete": "App\\Post\\Users\\Delete",
+            "account/user/token/add": "App\\Post\\Users\\TokenAdd",
+            "account/user/token/delete": "App\\Post\\Users\\TokenDelete",
+            "crudtests/add": "App\\Post\\CrudTests\\Add",
+            "crudtests/update": "App\\Post\\CrudTests\\Update",
+            "crudtests/delete": "App\\Post\\CrudTests\\Delete"
+        }
     }
-  }
 }

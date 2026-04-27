@@ -37,7 +37,7 @@ trait ActionFileAdd {
   private function createAddActionFileContent(string $lowerCaseControllerName): string {
     return '<?php'
                      . PHP_EOL . PHP_EOL
-                     . "namespace App\Post\\{$this->controllerName};" . PHP_EOL . PHP_EOL
+                     . "namespace App\Actions\\{$this->controllerName};" . PHP_EOL . PHP_EOL
                      . "use App\Controllers\\{$this->controllerName} as {$this->controllerName}Controller;" . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Template;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
