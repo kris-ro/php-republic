@@ -94,7 +94,7 @@ use KrisRo\PhpRepublic\Request;
 
               <div class="mb-3">
                 <label for="uuid_field-id" class="form-label">Uuid Field</label>
-                <input type="text" class="form-control" name="uuid_field" id="uuid_field-id" value="<?php echo Request::post('uuid_field') ?: ($data['uuid_field'] ?? '') ?>">
+                <input type="file" class="form-control" name="uuid_field" id="uuid_field-id">
               </div>
 
               <div class="mb-3">
