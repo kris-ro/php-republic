@@ -129,6 +129,81 @@ class ActionFile {
     return implode(PHP_EOL, array_filter($items));
   }
 
+  private function listTableHeader() {
+    $cols = [];
+
+    foreach ($this->fields as $field) {
+      $cols[] = Template::load($this->htmlPath . 'list_header.php', [
+        'name' => $field['name'],
+        'key' => $field['key'],
+        'label' => Strings::prettify($field['name']),
+      ]);
+    }
+
+    return implode(PHP_EOL, $cols);
+  }
+
+  private function listTableSearch() {
+    $cols = [];
+
+    foreach ($this->fields as $field) {
+      $type = 'TEXT';
+
+      if (in_array($field['type'], ['ENUM', 'TINYINT'])) {
+        $type = 'SELECT';
+      }
+
+      if (in_array($field['type'], ['DATE', 'DATETIME', 'TIMESTAMP'])) {
+        $type = 'DATE';
+      }
+
+      if ($field['type'] == 'TIME') {
+        $type = 'TIME';
+      }
+
+      $values = [];
+      if (in_array($field['type'], ['TINYINT'])) {
+        $values = ['1' => 'Yes', '0' => 'No'];
+      }
+
+      if ($field['type'] == 'ENUM') {
+        foreach ($field['enum_values'] as $value) {
+          $values[$value] = Strings::prettify($value);
+        }
+      }
+
+      $cols[] = Template::load($this->htmlPath . 'list_search.php', [
+        'name' => $field['name'],
+        'key' => $field['key'],
+        'label' => Strings::prettify($field['name']),
+        'type' => $type,
+        'options' => $values,
+      ]);
+    }
+
+    return implode(PHP_EOL, $cols);
+  }
+
+  private function listTableItems() {
+    return Template::load($this->htmlPath . 'list_row.php', [
+      'fields' => $this->fields,
+      'controller' => strtolower($this->controllerName),
+      'primary_key' => $this->primaryKey,
+    ]);
+  }
+
+  private function listTableFooter() {
+    $cols = [];
+
+    foreach ($this->fields as $field) {
+      $cols[] = Template::load($this->htmlPath . 'list_footer.php', [
+        'label' => Strings::prettify($field['name']),
+      ]);
+    }
+
+    return implode(PHP_EOL, $cols);
+  }
+
   private function listingObjectFiltersItem(string $table, array $field, string $indentation): string {
     // ->filter('user_tokens.fingerprint', 'fingerprint', 'LIKE')
     // return $indentation . '->filter(\'' . $table . '.' . $field['name'] . '\', \'' . $field['name'] . '\')';

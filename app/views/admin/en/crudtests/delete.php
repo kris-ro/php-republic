@@ -141,7 +141,7 @@ use KrisRo\PhpRepublic\Request;
                   Uuid Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  Binary content
+                  <?php echo $data['uuid_field'] ?>
                 </div>
               </div>
 
