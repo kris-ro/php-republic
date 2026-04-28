@@ -281,8 +281,8 @@ use KrisRo\PhpRepublic\Request;
                     <td><?php echo $item['uuid_field'] ?></td>
                     <td><?php echo $item['default_null_value'] ?></td>
                     <td>
-                      <a href="/admin/crudtests/update/crud_test_id" class="text-decoration-none" title="Delete"><i class="bi bi-x-pencil-fill me-1"></i> Edit</a>
-                      <a href="/admin/crudtests/delete/crud_test_id" class="text-decoration-none text-danger" title="Delete"><i class="bi bi-x-square-fill me-1"></i> Delete</a>
+                      <a href="/admin/crudtests/update/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none" title="Delete"><i class="bi bi-x-pencil-fill me-1"></i> Edit</a>
+                      <a href="/admin/crudtests/delete/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none text-danger" title="Delete"><i class="bi bi-x-square-fill me-1"></i> Delete</a>
                     </td>
                   </tr>
                 <?php } ?>

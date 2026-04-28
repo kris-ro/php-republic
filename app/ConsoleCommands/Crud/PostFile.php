@@ -20,6 +20,7 @@ class PostFile {
   private $autoIncrement;
   private $primaryKey;
   private $primaryKeyDefinition;
+  private $actionName;
 
   private $validationMethods = [];
 
@@ -56,7 +57,7 @@ class PostFile {
 
   private function buildFieldsValidation(int $spaceIndent, array|null $excludedFields = []) {
     $fields = [
-      str_pad('', $spaceIndent, ' ', STR_PAD_LEFT) . 'self::INPUT_ELEMENT_NAME => [[\'App\\\\Post\\\\' . $this->controllerName . '\\\\Add\', \'validFormToken\']],'
+      str_pad('', $spaceIndent, ' ', STR_PAD_LEFT) . 'self::INPUT_ELEMENT_NAME => [[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName .'\', \'validFormToken\']],'
     ];
 
     foreach ($this->fields as $field) {
@@ -132,7 +133,7 @@ class PostFile {
   private function buildFloatValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_float\'';
-    $rules[] = '[\'smallerThan\' => ' . $field['max'] . ']';
+    $rules[] = '[\'smallerThan\', ' . $field['max'] . ']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -147,7 +148,7 @@ class PostFile {
   private function buildVarcharValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[\'maxLength\' => ' . ($field['length'] ?? 255) . ']';
+    $rules[] = '[\'maxLength\', ' . ($field['length'] ?? 255) . ']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -155,7 +156,7 @@ class PostFile {
   private function buildListValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[[\'App\\\\Post\\\\' . $this->controllerName . '\\\\Add\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']]';
+    $rules[] = '[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
 
     $this->validationMethods[] = PHP_EOL
       . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
@@ -172,7 +173,7 @@ class PostFile {
   private function buildDateValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[\'isValidDate\']';
+    $rules[] = '\'isValidDate\'';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -180,7 +181,7 @@ class PostFile {
   private function buildDateTimeValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[[\'KrisRo\\\\PhpRepublic\\\\Dates\', \'isValidMySqlDateTime\']]';
+    $rules[] = '[\'KrisRo\\\\PhpRepublic\\\\Dates\', \'isValidMySqlDateTime\']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -196,7 +197,7 @@ class PostFile {
   private function buildUuidValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[[\'App\\\\Post\\\\' . $this->controllerName . '\\\\Add\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']]';
+    $rules[] = '[[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']]';
 
     $this->validationMethods[] = PHP_EOL
       . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
@@ -212,7 +213,7 @@ class PostFile {
 
   private function buildLongBlobValidationRule(array $field) {
     $rules = [];
-    $rules[] = '[[\'App\\\\Post\\\\' . $this->controllerName . '\\\\Add\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']]';
+    $rules[] = '[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
 
     $this->validationMethods[] = PHP_EOL
       . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL

@@ -29,34 +29,35 @@ class Update implements PostDataProcessor {
                 'date_time_field' => Translate::crud_test('Invalid date time field'),
                 'date_field' => Translate::crud_test('Invalid date field'),
                 'enum_field' => Translate::crud_test('Invalid enum field'),
-                'boolean_field' => Translate::crud_test('Invalid boolean field'),
-                'long_blob_field' => Translate::crud_test('Invalid long blob field'),
-                'long_text_field' => Translate::crud_test('Invalid long text field'),
-                'small_int_field' => Translate::crud_test('Invalid small int field'),
-                'uuid_field' => Translate::crud_test('Invalid uuid field'),
-                'default_null_value' => Translate::crud_test('Invalid default null value'),
+                // 'boolean_field' => Translate::crud_test('Invalid boolean field'),
+                // 'long_blob_field' => Translate::crud_test('Invalid long blob field'),
+                // 'long_text_field' => Translate::crud_test('Invalid long text field'),
+                // 'small_int_field' => Translate::crud_test('Invalid small int field'),
+                // 'uuid_field' => Translate::crud_test('Invalid uuid field'),
+                // 'default_null_value' => Translate::crud_test('Invalid default null value'),
               ])
               ->addPostValidationRules([
-                self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Add', 'validFormToken']],
+                self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Update', 'validFormToken']],
                 'crud_test_id' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 4294967295]],
-                'email' => ['is_string', ['maxLength' => 255]],
-                'price' => ['is_float', ['smallerThan' => PHP_FLOAT_MAX], 'isOptional'],
-                'timestamp_time' => ['is_string', [['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime']], 'isOptional'],
-                'date_time_field' => ['is_string', [['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime']], 'isOptional'],
-                'date_field' => ['is_string', ['isValidDate'], 'isOptional'],
-                'enum_field' => ['is_string', [['App\\Post\\CrudTests\\Add', 'validEnumField']], 'isOptional'],
-                'boolean_field' => ['integer', ['between', 'lowerLimit' => -128, 'upperLimit' => 127]],
-                'long_blob_field' => [[['App\\Post\\CrudTests\\Add', 'validLongBlobField']]],
-                'long_text_field' => ['is_string', ['maxLength' => 4294967295]],
-                'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => [[['App\\Post\\CrudTests\\Add', 'validUuidField']]],
-                'default_null_value' => ['is_string', ['maxLength' => 255], 'isOptional'],
+                'email' => ['is_string', ['maxLength', 255]],
+                'price' => ['is_float', ['smallerThan', PHP_FLOAT_MAX], 'isOptional'],
+                'timestamp_time' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
+                'date_time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
+                'date_field' => ['is_string', 'isValidDate', 'isOptional'],
+                'enum_field' => ['is_string', ['App\\Post\\CrudTests\\Update', 'validEnumField'], 'isOptional'],
+                // 'boolean_field' => ['integer', ['between', 'lowerLimit' => -128, 'upperLimit' => 127]],
+                // 'long_blob_field' => [['App\\Post\\CrudTests\\Update', 'validLongBlobField']],
+                // 'long_text_field' => ['is_string', ['maxLength', 4294967295]],
+                // 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
+                // 'uuid_field' => [['App\\Post\\CrudTests\\Update', 'validUuidField']],
+                // 'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
               ])
               ->processPost();
 
     if (!$result) {
       Messages::updatecrud_testform_error(Config::validator()->getPostValidationMessages());
     }
+    die('ccccccccccdddd');
   }
 
   public static function ProcessPostData(): void {

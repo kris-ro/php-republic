@@ -42,7 +42,7 @@ use KrisRo\PhpRepublic\Request;
                   Crud Test Id
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['crud_test_id'] ?>
+                  <?php echo self::view('item/crud_test_id') ?>
                 </div>
               </div>
 
@@ -51,7 +51,7 @@ use KrisRo\PhpRepublic\Request;
                   Email
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['email'] ?>
+                  <?php echo self::view('item/email') ?>
                 </div>
               </div>
 
@@ -60,7 +60,7 @@ use KrisRo\PhpRepublic\Request;
                   Price
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['price'] ?>
+                  <?php echo self::view('item/price') ?>
                 </div>
               </div>
 
@@ -69,7 +69,7 @@ use KrisRo\PhpRepublic\Request;
                   Timestamp Time
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['timestamp_time'] ?>
+                  <?php echo self::view('item/timestamp_time') ?>
                 </div>
               </div>
 
@@ -78,7 +78,7 @@ use KrisRo\PhpRepublic\Request;
                   Date Time Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['date_time_field'] ?>
+                  <?php echo self::view('item/date_time_field') ?>
                 </div>
               </div>
 
@@ -87,7 +87,7 @@ use KrisRo\PhpRepublic\Request;
                   Date Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['date_field'] ?>
+                  <?php echo self::view('item/date_field') ?>
                 </div>
               </div>
 
@@ -96,7 +96,7 @@ use KrisRo\PhpRepublic\Request;
                   Enum Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['enum_field'] ?>
+                  <?php echo self::view('item/enum_field') ?>
                 </div>
               </div>
 
@@ -105,7 +105,7 @@ use KrisRo\PhpRepublic\Request;
                   Boolean Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['boolean_field'] ? 'Yes' : 'No' ?>
+                  <?php echo self::view('item/boolean_field') ? 'Yes' : 'No' ?>
                 </div>
               </div>
 
@@ -123,7 +123,7 @@ use KrisRo\PhpRepublic\Request;
                   Long Text Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['long_text_field'] ?>
+                  <?php echo self::view('item/long_text_field') ?>
                 </div>
               </div>
 
@@ -132,7 +132,7 @@ use KrisRo\PhpRepublic\Request;
                   Small Int Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['small_int_field'] ?>
+                  <?php echo self::view('item/small_int_field') ?>
                 </div>
               </div>
 
@@ -150,7 +150,7 @@ use KrisRo\PhpRepublic\Request;
                   Default Null Value
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  <?php echo $data['default_null_value'] ?>
+                  <?php echo self::view('item/default_null_value') ?>
                 </div>
               </div>
 

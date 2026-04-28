@@ -37,18 +37,18 @@ class Add implements PostDataProcessor {
               ])
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Add', 'validFormToken']],
-                'email' => ['is_string', ['maxLength' => 255]],
-                'price' => ['is_float', ['smallerThan' => PHP_FLOAT_MAX], 'isOptional'],
-                'timestamp_time' => ['is_string', [['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime']], 'isOptional'],
-                'date_time_field' => ['is_string', [['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime']], 'isOptional'],
-                'date_field' => ['is_string', ['isValidDate'], 'isOptional'],
-                'enum_field' => ['is_string', [['App\\Post\\CrudTests\\Add', 'validEnumField']], 'isOptional'],
+                'email' => ['is_string', ['maxLength', 255]],
+                'price' => ['is_float', ['smallerThan', PHP_FLOAT_MAX], 'isOptional'],
+                'timestamp_time' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
+                'date_time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
+                'date_field' => ['is_string', 'isValidDate', 'isOptional'],
+                'enum_field' => ['is_string', ['App\\Post\\CrudTests\\Add', 'validEnumField'], 'isOptional'],
                 'boolean_field' => ['integer', ['between', 'lowerLimit' => -128, 'upperLimit' => 127]],
-                'long_blob_field' => [[['App\\Post\\CrudTests\\Add', 'validLongBlobField']]],
-                'long_text_field' => ['is_string', ['maxLength' => 4294967295]],
+                'long_blob_field' => [['App\\Post\\CrudTests\\Add', 'validLongBlobField']],
+                'long_text_field' => ['is_string', ['maxLength', 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => [[['App\\Post\\CrudTests\\Add', 'validUuidField']]],
-                'default_null_value' => ['is_string', ['maxLength' => 255], 'isOptional'],
+                'uuid_field' => [['App\\Post\\CrudTests\\Add', 'validUuidField']],
+                'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
               ])
               ->processPost();
 

@@ -7,6 +7,7 @@ use KrisRo\PhpRepublic\Strings;
 trait PostFileAdd {
 
   public function buildAdd() {
+    $this->actionName = 'Add';
     $this->validationMethods = [];
 
     $fileContent = '<?php'
