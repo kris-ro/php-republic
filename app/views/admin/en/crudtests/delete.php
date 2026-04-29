@@ -154,6 +154,15 @@ use KrisRo\PhpRepublic\Request;
                 </div>
               </div>
 
+              <div class="row mt-2">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                  Time Field
+                </div>
+                <div class="col-sm-12 col-md-8 col-lg-9">
+                  <?php echo self::view('item/time_field') ?>
+                </div>
+              </div>
+
             </div>
             <!--end::Body-->
             <!--begin::Footer-->

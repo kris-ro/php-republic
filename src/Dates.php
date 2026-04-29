@@ -43,7 +43,7 @@ class Dates {
    * @return bool
    */
   public static function isValidMySqlDateTime(string $dateTime): bool {
-    $format = 'Y-m-d H:i:s';
+    $format = 'Y-m-d\TH:i:s';
     $date = \DateTime::createFromFormat($format, $dateTime);
     return $date && $date->format($format) === $dateTime;
   }
@@ -56,7 +56,7 @@ class Dates {
    * @return bool
    */
   public static function isValidMySqlTime(string $time): bool {
-    $format = 'H:i:s';
+    $format = 'H:i';
     $date = \DateTime::createFromFormat($format, $time);
     return $date && $date->format($format) === $time;
   }

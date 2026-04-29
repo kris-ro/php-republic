@@ -157,6 +157,15 @@ use KrisRo\PhpRepublic\Request;
                     >
                       Default Null Value
                   </th>
+                  <th class="sorting <?php echo self::get('sort_classes/time_field') ?>"
+                      tabindex="0"
+                      aria-controls="user-tokens"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Time Field"
+                    >
+                      Time Field
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -264,6 +273,14 @@ use KrisRo\PhpRepublic\Request;
                            class="form-control table-search"
                           >
                   </td>
+                  <td data-label="Time Field:">
+                    <input type="time"
+                           name="time_field"
+                           value="<?php echo Request::param('time_field', ['time_field']) ?>"
+                           data-base_url="<?php echo self::get('list_address') ?>"
+                           class="form-control table-search"
+                          >
+                  </td>
                 </tr>
                 <?php foreach (self::view('items') ?: [] as $item) { ?>
                   <tr>
@@ -280,6 +297,7 @@ use KrisRo\PhpRepublic\Request;
                     <td><?php echo $item['small_int_field'] ?></td>
                     <td><?php echo $item['uuid_field'] ?></td>
                     <td><?php echo $item['default_null_value'] ?></td>
+                    <td><?php echo $item['time_field'] ?></td>
                     <td>
                       <a href="/admin/crudtests/update/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none" title="Delete"><i class="bi bi-x-pencil-fill me-1"></i> Edit</a>
                       <a href="/admin/crudtests/delete/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none text-danger" title="Delete"><i class="bi bi-x-square-fill me-1"></i> Delete</a>
@@ -302,6 +320,7 @@ use KrisRo\PhpRepublic\Request;
                   <th>Small Int Field</th>
                   <th>Uuid Field</th>
                   <th>Default Null Value</th>
+                  <th>Time Field</th>
                 </tr>
               </tfoot>
             </table>

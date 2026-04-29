@@ -132,7 +132,7 @@ class PostFile {
 
   private function buildFloatValidationRule(array $field) {
     $rules = [];
-    $rules[] = '\'is_float\'';
+    $rules[] = '\'float\'';
     $rules[] = '[\'smallerThan\', ' . $field['max'] . ']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
@@ -156,10 +156,10 @@ class PostFile {
   private function buildListValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
+    $rules[] = '[new ' . $this->actionName . '(), \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
 
     $this->validationMethods[] = PHP_EOL
-      . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
+      . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
       . '    $acceptedValues = [\'' . implode('\', \'', $field['enum_values']) . '\'];' . PHP_EOL . PHP_EOL
       . '    if (in_array($value, $acceptedValues)) {' . PHP_EOL
       . '      return true;' . PHP_EOL
@@ -189,7 +189,7 @@ class PostFile {
   private function buildTimeValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[[\'KrisRo\\\\PhpRepublic\\\\Dates\', \'isValidMySqlTime\']]';
+    $rules[] = '[\'KrisRo\\\\PhpRepublic\\\\Dates\', \'isValidMySqlTime\']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -197,10 +197,10 @@ class PostFile {
   private function buildUuidValidationRule(array $field) {
     $rules = [];
     $rules[] = '\'is_string\'';
-    $rules[] = '[[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']]';
+    $rules[] = '[new ' . $this->actionName . '(), \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
 
     $this->validationMethods[] = PHP_EOL
-      . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
+      . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
       . '    $uuidPattern = \'/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i\';' . PHP_EOL . PHP_EOL
       . '    if (preg_match($uuidPattern, $value)) {' . PHP_EOL
       . '      return true;' . PHP_EOL
@@ -213,31 +213,31 @@ class PostFile {
 
   private function buildLongBlobValidationRule(array $field) {
     $rules = [];
-    $rules[] = '[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName . '\', \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
+    $rules[] = '[new ' . $this->actionName . '(), \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
 
     $this->validationMethods[] = PHP_EOL
-      . '  private function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
+      . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
       . '    if (empty($_FILES) && empty($_POST)) {' . PHP_EOL
-      . '      Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]);' . PHP_EOL
+      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]));' . PHP_EOL
       . '      return false;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
-      . '    if ($_FILES[\'' . $field['name'] . '\'][\'tmp_name\'] ?? null) {' . PHP_EOL
-      . '      Translate::files(\'No file was uploaded\');' . PHP_EOL
+      . '    if (!($_FILES[\'' . $field['name'] . '\'][\'tmp_name\'] ?? null)) {' . PHP_EOL
+      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'No file was uploaded\'));' . PHP_EOL
       . '      return false;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
       . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\'])) {' . PHP_EOL
-      . '      Translate::files(\'Unknown upload error\');' . PHP_EOL
+      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'Unknown upload error\'));' . PHP_EOL
       . '      return false;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
       . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\']) || $_FILES[\'' . $field['name'] . '\'][\'error\'] != UPLOAD_ERR_OK) {' . PHP_EOL
-      . '      Translate::files(\'Error: @UPLOAD_ERROR\', [\'@UPLOAD_ERROR\' => Files::errorMessage($_FILES[\'' . $field['name'] . '\'][\'error\'])]);' . PHP_EOL
+      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'Error: @UPLOAD_ERROR\', [\'@UPLOAD_ERROR\' => Files::errorMessage($_FILES[\'' . $field['name'] . '\'][\'error\'])]));' . PHP_EOL
       . '      return false;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
       . '    if (isset($_FILES[\'' . $field['name'] . '\'][\'size\']) && $_FILES[\'' . $field['name'] . '\'][\'size\'] == 0) {' . PHP_EOL
-      . '      Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]);' . PHP_EOL
+      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]));' . PHP_EOL
       . '      return false;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
-      . '    return false;' . PHP_EOL
+      . '    return true;' . PHP_EOL
       . '  }';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';

@@ -98,7 +98,7 @@ trait ActionFileUpdate {
                      . '          <div class="card-header"><div class="card-title">Update ' . Strings::prettify($this->modelName) . '</div></div>' . PHP_EOL
                      . '          <!--end::Header-->' . PHP_EOL
                      . '          <!--begin::Form-->' . PHP_EOL
-                     . '          <form action="/admin/' . $lowerCaseControllerName . '/update/<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>" method="POST">' . PHP_EOL
+                     . '          <form action="/admin/' . $lowerCaseControllerName . '/update/<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>" method="POST" enctype="multipart/form-data">' . PHP_EOL
                      . '            <?php echo self::getFormToken(\'update' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
                      . '            <!--begin::Body-->' . PHP_EOL
                      . '            <div class="card-body">' . PHP_EOL
