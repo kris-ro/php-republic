@@ -45,10 +45,10 @@ class Add implements PostDataProcessor {
                 'date_field' => ['is_string', 'isValidDate', 'isOptional'],
                 'enum_field' => ['is_string', [new Add(), 'validEnumField'], 'isOptional'],
                 'boolean_field' => ['integer', ['between', 'lowerLimit' => -128, 'upperLimit' => 127]],
-                'long_blob_field' => [[new Add(), 'validLongBlobField']],
+                'long_blob_field' => [['validFileInput']],
                 'long_text_field' => ['is_string', ['maxLength', 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => [[new Add(), 'validUuidField']],
+                'uuid_field' => [['validFileInput']],
                 'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
                 'time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlTime'], 'isOptional'],
               ])
@@ -64,7 +64,13 @@ class Add implements PostDataProcessor {
       return;
     }
 
-    (new \App\Models\CrudTest())->setCrudTest(Config::validator()->getPost());
+    $post = Config::validator()->getPost();
+
+    foreach (['long_blob_field', 'uuid_field'] as $fileField) {
+      $post[$fileField] = $post[$fileField]['name'] ? file_get_contents($post[$fileField]['tmp_name']) : null;
+    }
+
+    (new \App\Models\CrudTest())->setCrudTest($post);
 
     Session::set('request/messages/crudtests/popup_success', Translate::crud_test('Crud test was saved'));
 
@@ -79,64 +85,6 @@ class Add implements PostDataProcessor {
     }
 
     return false;
-  }
-
-  public function validLongBlobField($value, $post) {
-    if (empty($_FILES) && empty($_POST)) {
-      Config::validator()->setPostValidationMessage('long_blob_field', Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]));
-      return false;
-    }
-
-    if (!($_FILES['long_blob_field']['tmp_name'] ?? null)) {
-      Config::validator()->setPostValidationMessage('long_blob_field', Translate::files('No file was uploaded'));
-      return false;
-    }
-
-    if (!isset($_FILES['long_blob_field']['error'])) {
-      Config::validator()->setPostValidationMessage('long_blob_field', Translate::files('Unknown upload error'));
-      return false;
-    }
-
-    if (!isset($_FILES['long_blob_field']['error']) || $_FILES['long_blob_field']['error'] != UPLOAD_ERR_OK) {
-      Config::validator()->setPostValidationMessage('long_blob_field', Translate::files('Error: @UPLOAD_ERROR', ['@UPLOAD_ERROR' => Files::errorMessage($_FILES['long_blob_field']['error'])]));
-      return false;
-    }
-
-    if (isset($_FILES['long_blob_field']['size']) && $_FILES['long_blob_field']['size'] == 0) {
-      Config::validator()->setPostValidationMessage('long_blob_field', Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]));
-      return false;
-    }
-
-    return true;
-  }
-
-  public function validUuidField($value, $post) {
-    if (empty($_FILES) && empty($_POST)) {
-      Config::validator()->setPostValidationMessage('uuid_field', Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]));
-      return false;
-    }
-
-    if (!($_FILES['uuid_field']['tmp_name'] ?? null)) {
-      Config::validator()->setPostValidationMessage('uuid_field', Translate::files('No file was uploaded'));
-      return false;
-    }
-
-    if (!isset($_FILES['uuid_field']['error'])) {
-      Config::validator()->setPostValidationMessage('uuid_field', Translate::files('Unknown upload error'));
-      return false;
-    }
-
-    if (!isset($_FILES['uuid_field']['error']) || $_FILES['uuid_field']['error'] != UPLOAD_ERR_OK) {
-      Config::validator()->setPostValidationMessage('uuid_field', Translate::files('Error: @UPLOAD_ERROR', ['@UPLOAD_ERROR' => Files::errorMessage($_FILES['uuid_field']['error'])]));
-      return false;
-    }
-
-    if (isset($_FILES['uuid_field']['size']) && $_FILES['uuid_field']['size'] == 0) {
-      Config::validator()->setPostValidationMessage('uuid_field', Translate::files('File is way to big. Max file size is @MAXFILEZISE', ['@MAXFILEZISE' => ini_get('upload_max_filesize')]));
-      return false;
-    }
-
-    return true;
   }
 }
 

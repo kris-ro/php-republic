@@ -24,6 +24,8 @@ class PostFile {
 
   private $validationMethods = [];
 
+  private $postFiles = [];
+
   public function __construct(string $tableName, string $controllerName, array $fields, array $uniqueFields, array $autoIncrementFields) {
     $this->modelName = ucfirst(strtolower($tableName));
     $this->controllerName = $controllerName;
@@ -212,33 +214,10 @@ class PostFile {
   }
 
   private function buildLongBlobValidationRule(array $field) {
-    $rules = [];
-    $rules[] = '[new ' . $this->actionName . '(), \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
+    $this->postFiles[$field['name']] = $field['name'];
 
-    $this->validationMethods[] = PHP_EOL
-      . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
-      . '    if (empty($_FILES) && empty($_POST)) {' . PHP_EOL
-      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]));' . PHP_EOL
-      . '      return false;' . PHP_EOL
-      . '    }' . PHP_EOL . PHP_EOL
-      . '    if (!($_FILES[\'' . $field['name'] . '\'][\'tmp_name\'] ?? null)) {' . PHP_EOL
-      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'No file was uploaded\'));' . PHP_EOL
-      . '      return false;' . PHP_EOL
-      . '    }' . PHP_EOL . PHP_EOL
-      . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\'])) {' . PHP_EOL
-      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'Unknown upload error\'));' . PHP_EOL
-      . '      return false;' . PHP_EOL
-      . '    }' . PHP_EOL . PHP_EOL
-      . '    if (!isset($_FILES[\'' . $field['name'] . '\'][\'error\']) || $_FILES[\'' . $field['name'] . '\'][\'error\'] != UPLOAD_ERR_OK) {' . PHP_EOL
-      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'Error: @UPLOAD_ERROR\', [\'@UPLOAD_ERROR\' => Files::errorMessage($_FILES[\'' . $field['name'] . '\'][\'error\'])]));' . PHP_EOL
-      . '      return false;' . PHP_EOL
-      . '    }' . PHP_EOL . PHP_EOL
-      . '    if (isset($_FILES[\'' . $field['name'] . '\'][\'size\']) && $_FILES[\'' . $field['name'] . '\'][\'size\'] == 0) {' . PHP_EOL
-      . '      Config::validator()->setPostValidationMessage(\'' . $field['name'] . '\', Translate::files(\'File is way to big. Max file size is @MAXFILEZISE\', [\'@MAXFILEZISE\' => ini_get(\'upload_max_filesize\')]));' . PHP_EOL
-      . '      return false;' . PHP_EOL
-      . '    }' . PHP_EOL . PHP_EOL
-      . '    return true;' . PHP_EOL
-      . '  }';
+    $rules = [];
+    $rules[] = '[\'validFileInput\']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -249,5 +228,16 @@ class PostFile {
     }
 
     return [];
+  }
+
+  private function collectfileFields() {
+    if (empty($this->postFiles)) {
+      return '';
+    }
+
+    return 
+           '    foreach ([\'' . implode('\', \'', $this->postFiles) . '\'] as $fileField) {' . PHP_EOL
+         . '      $post[$fileField] = $post[$fileField][\'name\'] ? file_get_contents($post[$fileField][\'tmp_name\']) : null;' . PHP_EOL
+         . '    }' . PHP_EOL . PHP_EOL;
   }
 }

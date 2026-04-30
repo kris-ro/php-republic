@@ -9,6 +9,7 @@ trait PostFileUpdate {
   public function buildUpdate() {
     $this->actionName = 'Update';
     $this->validationMethods = [];
+    $this->postFiles = [];
 
     $fileContent = '<?php'
                      . PHP_EOL . PHP_EOL
@@ -19,12 +20,16 @@ trait PostFileUpdate {
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Files;' . PHP_EOL
+                     . 'use KrisRo\PhpRepublic\Debug;' . PHP_EOL
                      . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Update implements PostDataProcessor {' . PHP_EOL . PHP_EOL
+
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
+
                      . '  static protected $formId = \'update' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
+
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
@@ -38,15 +43,20 @@ trait PostFileUpdate {
                      . '      Messages::update' . strtolower($this->modelName) . 'form_error(Config::validator()->getPostValidationMessages());' . PHP_EOL
                      . '    }' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
+
                      . '  public static function ProcessPostData(): void {' . PHP_EOL
                      . '    if (!empty(Config::validator()->getPostValidationMessages())) {' . PHP_EOL
                      . '      return;' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL
-                     . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->update' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '(Config::validator()->getPost());' . PHP_EOL . PHP_EOL
+                     . '    $post = Config::validator()->getPost();' . PHP_EOL . PHP_EOL
+                     .      $this->collectFileFields()
+                     . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->update' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($post);' . PHP_EOL . PHP_EOL
                      . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was saved\'));' . PHP_EOL . PHP_EOL
                      . '    Request::redirect(\'/admin/' . strtolower($this->controllerName) . '\');' . PHP_EOL
                      . '  }' . PHP_EOL
+
                      .    implode(PHP_EOL, $this->validationMethods) . PHP_EOL
+
                      . '}' . PHP_EOL . PHP_EOL
       ;
 
