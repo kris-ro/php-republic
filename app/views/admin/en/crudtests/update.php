@@ -125,7 +125,7 @@ use KrisRo\PhpRepublic\Request;
               <div class="mb-3">
                 <label for="long_text_field-id" class="form-label">Long Text Field</label>
                 <textarea class="form-control <?php echo self::view('errors/long_text_field') ? 'border-danger text-danger' : '' ?>" name="long_text_field" id="long_text_field-id" rows="3"><?php echo Request::isPost() ? Request::post('long_text_field') : (self::view('item/long_text_field') ?? '') ?>
-                </textarea>
+</textarea>
                 <?php if (self::view('errors/long_text_field')) { ?>
                   <div id="long_text_field-id" class="form-text text-danger">
                     <?php echo self::view('errors/long_text_field') ?>
@@ -145,7 +145,8 @@ use KrisRo\PhpRepublic\Request;
 
               <div class="mb-3">
                 <label for="uuid_field-id" class="form-label">Uuid Field</label>
-                <input type="file" class="form-control <?php echo self::view('errors/uuid_field') ? 'border-danger text-danger' : '' ?>" name="uuid_field" id="uuid_field-id">
+                <textarea class="form-control <?php echo self::view('errors/uuid_field') ? 'border-danger text-danger' : '' ?>" name="uuid_field" id="uuid_field-id" rows="3"><?php echo Request::isPost() ? Request::post('uuid_field') : (self::view('item/uuid_field') ?? '') ?>
+</textarea>
                 <?php if (self::view('errors/uuid_field')) { ?>
                   <div id="uuid_field-id" class="form-text text-danger">
                     <?php echo self::view('errors/uuid_field') ?>

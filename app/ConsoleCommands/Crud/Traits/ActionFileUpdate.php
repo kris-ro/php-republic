@@ -58,6 +58,7 @@ trait ActionFileUpdate {
                      . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_update.css" . PHP_EOL
                      . '     */' . PHP_EOL
                      . "    Config::set('css/{$lowerCaseControllerName}_update', '{$lowerCaseControllerName}_update.css');" . PHP_EOL . PHP_EOL
+                     .      $this->binary2hex(4, $itemName) . PHP_EOL
                      . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/update.php', [" . PHP_EOL
                      . '      \'item\' => $' . $itemName . ',' . PHP_EOL
                      . '      \'errors\' => Messages::update' . strtolower($this->modelName) . 'form_error(),' . PHP_EOL
@@ -65,6 +66,21 @@ trait ActionFileUpdate {
                      . '  }' . PHP_EOL . PHP_EOL
                      . '}' . PHP_EOL . PHP_EOL
     ;
+  }
+
+  private function binary2hex(int $spaceIndent, string $itemName) {
+    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
+
+    if (empty($this->binaryFields)) {
+      return '';
+    }
+
+    $content = '';
+    foreach ($this->binaryFields as $field) {
+      $content .= $indentation . '$' . $itemName . '[\'' . $field . '\'] = bin2hex($' . $itemName . '[\'' . $field . '\']);' . PHP_EOL;
+    }
+
+    return $content;
   }
 
   private function createUpdateActionTemplateFileContent(string $lowerCaseControllerName): string {

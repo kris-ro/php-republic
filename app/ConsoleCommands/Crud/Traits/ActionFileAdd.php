@@ -88,7 +88,7 @@ trait ActionFileAdd {
                      . '          <div class="card-header"><div class="card-title">Add ' . Strings::prettify($this->modelName) . '</div></div>' . PHP_EOL
                      . '          <!--end::Header-->' . PHP_EOL
                      . '          <!--begin::Form-->' . PHP_EOL
-                     . '          <form action="/admin/' . $lowerCaseControllerName . '/add" method="POST">' . PHP_EOL
+                     . '          <form action="/admin/' . $lowerCaseControllerName . '/add" method="POST" enctype="multipart/form-data">' . PHP_EOL
                      . '            <?php echo self::getFormToken(\'add' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
                      . '            <!--begin::Body-->' . PHP_EOL
                      . '            <div class="card-body">' . PHP_EOL

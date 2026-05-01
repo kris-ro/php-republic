@@ -28,6 +28,8 @@ class MysqlDataTypeMap {
       $key = $row['Key'];           // e.g. "smallint(5) unsigned"
       $this->fieldsData[] = $this->parseMySqlColumnType($row);
     }
+
+    // \KrisRo\PhpRepublic\Debug::dump($this->fieldsData);
   }
 
   public function getFieldsData() {
@@ -83,7 +85,7 @@ class MysqlDataTypeMap {
     $max = null;            // numeric max (for integers/floats)
     $min = null;            // numeric min (for integers/floats)
     $precision = null;      // for DECIMAL / FLOAT / DOUBLE
-    $lengthField = null;    // for strings
+    $lengthField = null;    // for strings and binary
     $enumValues = null;
     $extra = [];
 
@@ -214,6 +216,12 @@ class MysqlDataTypeMap {
         break;
       case 'TIMESTAMP':
         $normalizedType = 'TIMESTAMP';
+        break;
+
+      case 'BINARY':
+      case 'VARBINARY':
+        $lengthField = $length ?? 255;
+        $normalizedType = $baseType;
         break;
 
       default:

@@ -23,6 +23,7 @@ class ActionFile {
   private $autoIncrement;
   private $primaryKey;
   private $primaryKeyDefinition;
+  private $binaryFields;
 
   private $htmlPath;
 
@@ -32,6 +33,7 @@ class ActionFile {
     $this->fields = $fields;
     $this->unique = $uniqueFields;
     $this->autoIncrement = $autoIncrementFields;
+    $this->binaryFields = [];
 
     $this->htmlPath = APP_ROOT . DS . 'app' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
   }
@@ -257,6 +259,8 @@ class ActionFile {
       case 'UUID':
         return $this->buildTextElement($field, $spaceIndent);
       case 'BINARY':
+        $this->binaryFields[$field['name']] = $field['name'];
+        return $this->buildTextareaElement($field, $spaceIndent);
       case 'BLOB':
       case 'LONGBLOB':
         return $this->buildFileElement($field, $spaceIndent);
@@ -305,10 +309,14 @@ class ActionFile {
       case 'DATE':
       case 'DATETIME':
       case 'TIMESTAMP':
-      case 'TIME':
         return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\']),';
+      case 'TIME':
+        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\'], \'H:i:s\'),';
       case 'TINYINT':
         return $indentation . '\'' . $field['name'] . '\' => $item[\'' . $field['name'] . '\'] ? \'Yes\' : \'No\',';
+      case 'BINARY':
+      case 'VARBINARY':
+        return $indentation . '\'' . $field['name'] . '\' => bin2hex($item[\'' . $field['name'] . '\']),';
     }
 
     return '';

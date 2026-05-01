@@ -48,7 +48,7 @@ class Add implements PostDataProcessor {
                 'long_blob_field' => [['validFileInput']],
                 'long_text_field' => ['is_string', ['maxLength', 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
-                'uuid_field' => [['validFileInput']],
+                'uuid_field' => ['is_string', ['maxLength', 32]],
                 'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
                 'time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlTime'], 'isOptional'],
               ])
@@ -66,9 +66,8 @@ class Add implements PostDataProcessor {
 
     $post = Config::validator()->getPost();
 
-    foreach (['long_blob_field', 'uuid_field'] as $fileField) {
-      $post[$fileField] = $post[$fileField]['name'] ? file_get_contents($post[$fileField]['tmp_name']) : null;
-    }
+    $post['long_blob_field'] = $post['long_blob_field']['name'] ? file_get_contents($post['long_blob_field']['tmp_name']) : null;
+    $post['uuid_field'] = hex2bin($post['uuid_field']);
 
     (new \App\Models\CrudTest())->setCrudTest($post);
 

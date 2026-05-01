@@ -25,6 +25,8 @@ class Update extends CrudTestsController {
      */
     Config::set('css/crudtests_update', 'crudtests_update.css');
 
+    $crudTest['uuid_field'] = bin2hex($crudTest['uuid_field']);
+
     return Template::renderView('/admin/' . Session::language() . '/crudtests/update.php', [
       'item' => $crudTest,
       'errors' => Messages::updatecrud_testform_error(),

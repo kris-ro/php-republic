@@ -45,7 +45,8 @@ class Index extends CrudTestsController {
         'date_time_field' => Dates::format($item['date_time_field']),
         'date_field' => Dates::format($item['date_field']),
         'boolean_field' => $item['boolean_field'] ? 'Yes' : 'No',
-        'time_field' => Dates::format($item['time_field']),
+        'uuid_field' => bin2hex($item['uuid_field']),
+        'time_field' => Dates::format($item['time_field'], 'H:i:s'),
       ] + $item;
     }
 

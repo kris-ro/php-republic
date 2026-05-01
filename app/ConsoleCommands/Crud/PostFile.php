@@ -21,6 +21,7 @@ class PostFile {
   private $primaryKey;
   private $primaryKeyDefinition;
   private $actionName;
+  private $binaryFields;
 
   private $validationMethods = [];
 
@@ -32,6 +33,7 @@ class PostFile {
     $this->fields = $fields;
     $this->unique = $uniqueFields;
     $this->autoIncrement = $autoIncrementFields;
+    $this->binaryFields = [];
   }
 
   public function buildPost() {
@@ -113,6 +115,8 @@ class PostFile {
       case 'UUID':
         return $this->buildUuidValidationRule($field);
       case 'BINARY':
+        $this->binaryFields[$field['name']] = $field['name'];
+        return $this->buildBinaryValidationRule($field);
       case 'BLOB':
       case 'LONGBLOB':
         return $this->buildLongBlobValidationRule($field);
@@ -151,6 +155,14 @@ class PostFile {
     $rules = [];
     $rules[] = '\'is_string\'';
     $rules[] = '[\'maxLength\', ' . ($field['length'] ?? 255) . ']';
+
+    return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
+  }
+
+  private function buildBinaryValidationRule(array $field) {
+    $rules = [];
+    $rules[] = '\'is_string\'';
+    $rules[] = '[\'maxLength\', ' . (($field['length'] ?? 255) * 2) . ']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -230,14 +242,21 @@ class PostFile {
     return [];
   }
 
-  private function collectfileFields() {
+  private function collectFileFields() {
     if (empty($this->postFiles)) {
       return '';
     }
 
-    return 
-           '    foreach ([\'' . implode('\', \'', $this->postFiles) . '\'] as $fileField) {' . PHP_EOL
-         . '      $post[$fileField] = $post[$fileField][\'name\'] ? file_get_contents($post[$fileField][\'tmp_name\']) : null;' . PHP_EOL
-         . '    }' . PHP_EOL . PHP_EOL;
+    $content = '';
+
+    foreach ($this->postFiles as $fileField) {
+      $content .= '    $post[\'' . $fileField . '\'] = $post[\'' . $fileField . '\'][\'name\'] ? file_get_contents($post[\'' . $fileField . '\'][\'tmp_name\']) : null;' . PHP_EOL;
+    }
+
+    foreach ($this->binaryFields as $binaryField) {
+      $content .= '    $post[\'' . $binaryField . '\'] = hex2bin($post[\'' . $binaryField .'\']);' . PHP_EOL;
+    }
+
+    return $content . PHP_EOL;
   }
 }

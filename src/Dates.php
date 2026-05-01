@@ -44,8 +44,14 @@ class Dates {
    */
   public static function isValidMySqlDateTime(string $dateTime): bool {
     $format = 'Y-m-d\TH:i:s';
-    $date = \DateTime::createFromFormat($format, $dateTime);
-    return $date && $date->format($format) === $dateTime;
+    $sufix = '';
+
+    if (!($date = \DateTime::createFromFormat($format, $dateTime))) {
+      $sufix = ':00';
+      $date = \DateTime::createFromFormat($format, $dateTime . $sufix);
+    }
+
+    return $date && $date->format($format) === $dateTime . $sufix;
   }
 
   /**
@@ -56,8 +62,14 @@ class Dates {
    * @return bool
    */
   public static function isValidMySqlTime(string $time): bool {
-    $format = 'H:i';
-    $date = \DateTime::createFromFormat($format, $time);
-    return $date && $date->format($format) === $time;
+    $format = 'H:i:s';
+    $sufix = '';
+
+    if (!($date = \DateTime::createFromFormat($format, $time))) {
+      $sufix = ':00';
+      $date = \DateTime::createFromFormat($format, $time . $sufix);
+    }
+
+    return $date && $date->format($format) === $time . $sufix;
   }
 }
