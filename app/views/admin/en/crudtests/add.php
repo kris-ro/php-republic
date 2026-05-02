@@ -173,6 +173,16 @@ use KrisRo\PhpRepublic\Request;
                 <?php } ?>
               </div>
 
+              <div class="mb-3">
+                <label for="default_empty_string-id" class="form-label">Default Empty String</label>
+                <input type="text" class="form-control <?php echo self::view('errors/default_empty_string') ? 'border-danger text-danger' : '' ?>" name="default_empty_string" id="default_empty_string-id" value="<?php echo Request::isPost() ? Request::post('default_empty_string') : (self::view('item/default_empty_string') ?? '') ?>">
+                <?php if (self::view('errors/default_empty_string')) { ?>
+                  <div id="default_empty_string-id" class="form-text text-danger">
+                    <?php echo self::view('errors/default_empty_string') ?>
+                  </div>
+                <?php } ?>
+              </div>
+
             </div>
             <!--end::Body-->
             <!--begin::Footer-->

@@ -20,9 +20,11 @@ class Delete implements PostDataProcessor {
   public static function ValidatePostData(): void {
     $result = Config::validator()
               ->addPostValidationMessages([
+                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),
                 'crud_test_id' => Translate::crud_test('Invalid crud test id'),
               ])
               ->addPostValidationRules([
+                 self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Delete', 'validFormToken']],
                 'crud_test_id' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 4294967295]],
               ])
               ->processPost();

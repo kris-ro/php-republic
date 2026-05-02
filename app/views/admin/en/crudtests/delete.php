@@ -32,11 +32,11 @@ use KrisRo\PhpRepublic\Request;
             You're deleting Crud Test item. You won't be able to undo this.
           </div>
           <!--begin::Form-->
-          <form action="/admin/crudtests/delete/<?php echo $data['crud_test_id'] ?>" method="POST">
+          <form action="/admin/crudtests/delete/<?php echo self::view('item/crud_test_id') ?>" method="POST">
             <?php echo self::getFormToken('deletecrud_test') // self is instance of KrisRo\PhpRepublic\Template ?>
             <!--begin::Body-->
             <div class="card-body">
-              <input type="hidden" name="crud_test_id" id="crud_test_id-id" value="<?php echo $data['crud_test_id'] ?>">
+              <input type="hidden" name="crud_test_id" id="crud_test_id-id" value="<?php echo self::view('item/crud_test_id') ?>">
               <div class="row mt-2">
                 <div class="col-sm-12 col-md-4 col-lg-3">
                   Crud Test Id
@@ -141,7 +141,7 @@ use KrisRo\PhpRepublic\Request;
                   Uuid Field
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                  Binary content
+                  <?php echo self::view('item/uuid_field') ?>
                 </div>
               </div>
 
@@ -160,6 +160,15 @@ use KrisRo\PhpRepublic\Request;
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-9">
                   <?php echo self::view('item/time_field') ?>
+                </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                  Default Empty String
+                </div>
+                <div class="col-sm-12 col-md-8 col-lg-9">
+                  <?php echo self::view('item/default_empty_string') ?>
                 </div>
               </div>
 

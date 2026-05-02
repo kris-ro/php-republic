@@ -44,6 +44,7 @@ trait ActionFileDelete {
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
+                     . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use App\Models\\' . Strings::toCamelCase($this->modelName) . ';' . PHP_EOL
                      . 'use KrisRo\PhpConfig\Config;' . PHP_EOL . PHP_EOL
                      . "class Delete extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
@@ -51,13 +52,15 @@ trait ActionFileDelete {
                      . '    $' . $itemName . 'Id = Request::nth(4);' . PHP_EOL
                      . '    if (!(Config::validator() ?? (new Validator()))->positiveInteger($' . $itemName . 'Id) || !($' . $itemName . ' = (new ' . Strings::toCamelCase($this->modelName) . '())->get' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($' . $itemName . 'Id))) {' . PHP_EOL
                      . '      Messages::send_popup(\'Invalid ' . Strings::prettify($this->primaryKey) . ' ID\');' . PHP_EOL
-                     . '      Request::redirect(\'/admin/' . $lowerCaseControllerName . ');' . PHP_EOL
+                     . '      Request::redirect(\'/admin/' . $lowerCaseControllerName . '\');' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL
                      . '    /**' . PHP_EOL
                      . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_delete.css" . PHP_EOL
                      . '     */' . PHP_EOL
                      . "    Config::set('css/{$lowerCaseControllerName}_delete', '{$lowerCaseControllerName}_delete.css');" . PHP_EOL . PHP_EOL
+                     .      $this->binary2hex(4, $itemName) . PHP_EOL
                      . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/delete.php', [" . PHP_EOL
+                     . '      \'item\' => $' . $itemName . ',' . PHP_EOL
                      . '      \'errors\' => Messages::delete' . strtolower($this->modelName) . 'form_error(),' . PHP_EOL
                      . '    ]);' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
@@ -100,11 +103,11 @@ trait ActionFileDelete {
                      . '            You\'re deleting ' . Strings::prettify($this->modelName) . ' item. You won\'t be able to undo this.' . PHP_EOL
                      . '          </div>' . PHP_EOL
                      . '          <!--begin::Form-->' . PHP_EOL
-                     . '          <form action="/admin/' . $lowerCaseControllerName . '/delete/<?php echo $data[\'' . $this->primaryKey . '\'] ?>" method="POST">' . PHP_EOL
+                     . '          <form action="/admin/' . $lowerCaseControllerName . '/delete/<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>" method="POST">' . PHP_EOL
                      . '            <?php echo self::getFormToken(\'delete' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
                      . '            <!--begin::Body-->' . PHP_EOL
                      . '            <div class="card-body">' . PHP_EOL
-                     . '              <input type="hidden" name="' . $this->primaryKey . '" id="' . $this->primaryKey . '-id" value="<?php echo $data[\'' . $this->primaryKey . '\'] ?>">' . PHP_EOL
+                     . '              <input type="hidden" name="' . $this->primaryKey . '" id="' . $this->primaryKey . '-id" value="<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>">' . PHP_EOL
                      .                $this->detailItems(14) . PHP_EOL
                      . '            </div>' . PHP_EOL
                      . '            <!--end::Body-->' . PHP_EOL

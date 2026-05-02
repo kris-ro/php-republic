@@ -31,8 +31,7 @@ class Dates {
       $timeZone = Config::get('app/datetime/time_zone');
     }
 
-    return (new \DateTime($dateTime))->setTimezone(new \DateTimeZone($timeZone))
-                              ->format($format);
+    return (new \DateTime($dateTime))->setTimezone(new \DateTimeZone($timeZone))->format($format);
   }
 
   /**

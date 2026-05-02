@@ -35,6 +35,7 @@ class Add implements PostDataProcessor {
                 'uuid_field' => Translate::crud_test('Invalid uuid field'),
                 'default_null_value' => Translate::crud_test('Invalid default null value'),
                 'time_field' => Translate::crud_test('Invalid time field'),
+                'default_empty_string' => Translate::crud_test('Invalid default empty string'),
               ])
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Add', 'validFormToken']],
@@ -51,6 +52,7 @@ class Add implements PostDataProcessor {
                 'uuid_field' => ['is_string', ['maxLength', 32]],
                 'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
                 'time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlTime'], 'isOptional'],
+                'default_empty_string' => ['is_string', ['maxLength', 255], 'isOptional'],
               ])
               ->processPost();
 

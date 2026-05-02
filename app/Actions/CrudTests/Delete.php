@@ -7,6 +7,7 @@ use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Messages;
 use KrisRo\PhpRepublic\Request;
+use KrisRo\Validator\Validator;
 use App\Models\CrudTest;
 use KrisRo\PhpConfig\Config;
 
@@ -16,7 +17,7 @@ class Delete extends CrudTestsController {
     $crudTestId = Request::nth(4);
     if (!(Config::validator() ?? (new Validator()))->positiveInteger($crudTestId) || !($crudTest = (new CrudTest())->getCrudTestByCrudTestId($crudTestId))) {
       Messages::send_popup('Invalid Crud Test Id ID');
-      Request::redirect('/admin/crudtests);
+      Request::redirect('/admin/crudtests');
     }
 
     /**
@@ -24,7 +25,10 @@ class Delete extends CrudTestsController {
      */
     Config::set('css/crudtests_delete', 'crudtests_delete.css');
 
+    $crudTest['uuid_field'] = bin2hex($crudTest['uuid_field']);
+
     return Template::renderView('/admin/' . Session::language() . '/crudtests/delete.php', [
+      'item' => $crudTest,
       'errors' => Messages::deletecrud_testform_error(),
     ]);
   }

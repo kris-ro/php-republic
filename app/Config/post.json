@@ -11,7 +11,10 @@
             "account/user/token/delete": "App\\Post\\Users\\TokenDelete",
             "crudtests/add": "App\\Post\\CrudTests\\Add",
             "crudtests/update": "App\\Post\\CrudTests\\Update",
-            "crudtests/delete": "App\\Post\\CrudTests\\Delete"
+            "crudtests/delete": "App\\Post\\CrudTests\\Delete",
+            "/add": "App\\Post\\\\Add",
+            "/update": "App\\Post\\\\Update",
+            "/delete": "App\\Post\\\\Delete"
         }
     }
 }

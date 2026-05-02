@@ -7,6 +7,7 @@ use KrisRo\PhpRepublic\Strings;
 trait PostFileDelete {
 
   public function buildDelete() {
+    $this->actionName = 'Delete';
     $this->validationMethods = [];
 
     $fileContent = '<?php'
@@ -21,14 +22,19 @@ trait PostFileDelete {
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Delete implements PostDataProcessor {' . PHP_EOL . PHP_EOL
+
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
+
                      . '  static protected $formId = \'delete' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
+
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
+                     . '                 self::INPUT_ELEMENT_NAME => Translate::csrf(\'Invalid Form\'),' . PHP_EOL
                      . '                \'' . $this->primaryKey . '\' => Translate::' . strtolower($this->modelName) . '(\'Invalid ' . strtolower(str_replace('_', ' ', $this->primaryKey)) . '\'),' . PHP_EOL
                      . '              ])' . PHP_EOL
                      . '              ->addPostValidationRules([' . PHP_EOL
+                     . '                 self::INPUT_ELEMENT_NAME => [[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName .'\', \'validFormToken\']],' . PHP_EOL
                      . '                \'' . $this->primaryKey . '\' => ' . $this->mapDbTypeToValidationRule($this->primaryKeyDefinition) . PHP_EOL
                      . '              ])' . PHP_EOL
                      . '              ->processPost();' . PHP_EOL . PHP_EOL
@@ -36,6 +42,7 @@ trait PostFileDelete {
                      . '      Messages::delete' . strtolower($this->modelName) . 'form_error(Config::validator()->getPostValidationMessages());' . PHP_EOL
                      . '    }' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
+
                      . '  public static function ProcessPostData(): void {' . PHP_EOL
                      . '    if (!empty(Config::validator()->getPostValidationMessages())) {' . PHP_EOL
                      . '      return;' . PHP_EOL
@@ -44,7 +51,9 @@ trait PostFileDelete {
                      . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was deleted\'));' . PHP_EOL . PHP_EOL
                      . '    Request::redirect(\'/admin/' . strtolower($this->controllerName) . '\');' . PHP_EOL
                      . '  }' . PHP_EOL
+
                      .    implode(PHP_EOL, $this->validationMethods) . PHP_EOL
+
                      . '}' . PHP_EOL . PHP_EOL
       ;
 

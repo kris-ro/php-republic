@@ -10,12 +10,18 @@ class ModelFile {
   private $fields;
   private $unique;
   private $autoIncrement;
+  private $primaryKey;
+  private $primaryKeyDefinition;
+  private $binaryFields;
 
-  public function __construct(string $tableName, array $fields, array $uniqueFields, array $autoIncrementFields) {
-    $this->modelName = ucfirst(strtolower($tableName));
-    $this->fields = $fields;
-    $this->unique = $uniqueFields;
-    $this->autoIncrement = $autoIncrementFields;
+  public function __construct(\App\ConsoleCommands\Crud $crud) {
+    $this->modelName = ucfirst(strtolower($crud->modelName));
+    $this->fields = $crud->fields;
+    $this->unique = $crud->unique;
+    $this->autoIncrement = $crud->autoIncrement;
+    $this->primaryKey = $crud->primaryKey;
+    $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
+    $this->binaryFields = $crud->binaryFields;
   }
 
   public function buildModel() {

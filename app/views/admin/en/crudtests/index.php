@@ -166,6 +166,15 @@ use KrisRo\PhpRepublic\Request;
                     >
                       Time Field
                   </th>
+                  <th class="sorting <?php echo self::get('sort_classes/default_empty_string') ?>"
+                      tabindex="0"
+                      aria-controls="user-tokens"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Default Empty String"
+                    >
+                      Default Empty String
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -281,6 +290,14 @@ use KrisRo\PhpRepublic\Request;
                            class="form-control table-search"
                           >
                   </td>
+                  <td data-label="Default Empty String:">
+                    <input type="text"
+                           name="default_empty_string"
+                           value="<?php echo Request::param('default_empty_string', ['default_empty_string']) ?>"
+                           data-base_url="<?php echo self::get('list_address') ?>"
+                           class="form-control table-search"
+                          >
+                  </td>
                 </tr>
                 <?php foreach (self::view('items') ?: [] as $item) { ?>
                   <tr>
@@ -298,6 +315,7 @@ use KrisRo\PhpRepublic\Request;
                     <td><?php echo $item['uuid_field'] ?></td>
                     <td><?php echo $item['default_null_value'] ?></td>
                     <td><?php echo $item['time_field'] ?></td>
+                    <td><?php echo $item['default_empty_string'] ?></td>
                     <td>
                       <a href="/admin/crudtests/update/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none" title="Delete"><i class="bi bi-pencil-square me-1"></i> Edit</a>
                       <a href="/admin/crudtests/delete/<?php echo $item['crud_test_id'] ?>" class="text-decoration-none text-danger" title="Delete"><i class="bi bi-x-square-fill me-1"></i> Delete</a>
@@ -321,6 +339,7 @@ use KrisRo\PhpRepublic\Request;
                   <th>Uuid Field</th>
                   <th>Default Null Value</th>
                   <th>Time Field</th>
+                  <th>Default Empty String</th>
                 </tr>
               </tfoot>
             </table>

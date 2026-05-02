@@ -68,21 +68,6 @@ trait ActionFileUpdate {
     ;
   }
 
-  private function binary2hex(int $spaceIndent, string $itemName) {
-    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
-
-    if (empty($this->binaryFields)) {
-      return '';
-    }
-
-    $content = '';
-    foreach ($this->binaryFields as $field) {
-      $content .= $indentation . '$' . $itemName . '[\'' . $field . '\'] = bin2hex($' . $itemName . '[\'' . $field . '\']);' . PHP_EOL;
-    }
-
-    return $content;
-  }
-
   private function createUpdateActionTemplateFileContent(string $lowerCaseControllerName): string {
     return '<?php'
                      . PHP_EOL

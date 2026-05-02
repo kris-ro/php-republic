@@ -22,6 +22,7 @@ class CrudTest extends \KrisRo\PhpRepublic\Model {
       'uuid_field' =>  $data['uuid_field'],
       'default_null_value' =>  $data['default_null_value'],
       'time_field' =>  $data['time_field'],
+      'default_empty_string' =>  $data['default_empty_string'],
     ]);
   }
 
@@ -43,6 +44,7 @@ class CrudTest extends \KrisRo\PhpRepublic\Model {
         'uuid_field' =>  $data['uuid_field'],
         'default_null_value' =>  $data['default_null_value'],
         'time_field' =>  $data['time_field'],
+        'default_empty_string' =>  $data['default_empty_string'],
       ],
     ];
 
@@ -66,6 +68,7 @@ class CrudTest extends \KrisRo\PhpRepublic\Model {
         'small_int_field' =>  $data['small_int_field'],
         'default_null_value' =>  $data['default_null_value'],
         'time_field' =>  $data['time_field'],
+        'default_empty_string' =>  $data['default_empty_string'],
       ],
     ];
 

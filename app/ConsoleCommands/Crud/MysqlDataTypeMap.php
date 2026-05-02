@@ -3,12 +3,16 @@
 namespace App\ConsoleCommands\Crud;
 
 use KrisRo\PhpConfig\Config;
+use KrisRo\PhpRepublic\Debug;
 
 class MysqlDataTypeMap {
 
   private $fieldsData = [];
   private $uniqueFields = [];
   private $autoIncrementFields = [];
+  private $primaryKey;
+  public $primaryKeyDefinition;
+  public $binaryFields;
 
   /**
    * Get all columns and build the JSON array
@@ -44,6 +48,18 @@ class MysqlDataTypeMap {
     return $this->autoIncrementFields;
   }
 
+  public function getPrimaryKey() {
+    return $this->primaryKey;
+  }
+
+  public function getPrimaryKeyDefinition() {
+    return $this->primaryKeyDefinition;
+  }
+
+  public function getBinaryFields() {
+    return $this->binaryFields;
+  }
+
   /**
    * Maps a MySQL column type string (e.g. "smallint(5) unsigned", "int", "varchar(255)")
    * to a normalized structure: ["name" => "...", "type" => "SMALLINT", "max" => 32767]
@@ -54,6 +70,7 @@ class MysqlDataTypeMap {
    * @return array
    */
   private function parseMySqlColumnType(array $fieldData): array {
+    Debug::log($fieldData);
     // echo '<pre>';
     // var_dump($fieldData);
     // die(__LINE__ . ' :: ' . __FILE__);
@@ -64,8 +81,10 @@ class MysqlDataTypeMap {
     $upperType = strtoupper($rawType);
 
     $isOptional = false;
-    if (($fieldData['Default'] ?? null) || strtoupper($fieldData['Null']) == 'YES') {
+    $defaultValue = false;
+    if (($fieldData['Default'] ?? null) !== null || strtoupper($fieldData['Null']) == 'YES') {
       $isOptional = true;
+      $defaultValue = $fieldData['Default'] ?? null;
     }
 
     // Extract base type and parameters
@@ -94,6 +113,7 @@ class MysqlDataTypeMap {
       $this->uniqueFields[] = $columnName;
       if ($fieldData['Key'] == 'PRI') {
         $isPrimaryKey = true;
+        $this->primaryKey = $columnName;
       }
     }
 
@@ -221,7 +241,7 @@ class MysqlDataTypeMap {
       case 'BINARY':
       case 'VARBINARY':
         $lengthField = $length ?? 255;
-        $normalizedType = $baseType;
+        $normalizedType = 'BINARY';
         break;
 
       default:
@@ -258,8 +278,18 @@ class MysqlDataTypeMap {
     }
 
     $result['is_optional'] = $isOptional;
+    $result['default_value'] = $defaultValue;
     $result['primary_key'] = $isPrimaryKey;
     $result['key'] = ($fieldData['Key'] ?? null) ? true : false;
+
+
+    if ($isPrimaryKey) {
+      $this->primaryKeyDefinition = $result;
+    }
+
+    if ($normalizedType == 'BINARY') {
+      $this->binaryFields[] = $result['name'];
+    }
 
     // original for debugging
     // $result['raw_type'] = $rawType;

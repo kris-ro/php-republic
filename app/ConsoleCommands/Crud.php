@@ -5,6 +5,8 @@ namespace App\ConsoleCommands;
 use KrisRo\Validator\Validator;
 use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;
+use KrisRo\PhpRepublic\Debug;
+use KrisRo\PhpRepublic\Strings;
 use App\ConsoleCommands\Crud\MysqlDataTypeMap;
 use App\ConsoleCommands\Crud\ModelFile;
 use App\ConsoleCommands\Crud\ControllerFile;
@@ -16,13 +18,20 @@ class Crud {
 
   use ConsoleIO;
 
-  private $modelName;
-  private $controllerName;
-  private $fields = [];
-  private $unique = [];
-  private $autoIncrement = [];
+  public $model;
+  public $modelName;
+  public $controllerName;
+  public $actionName;
+  public $fields = [];
+  public $unique = [];
+  public $autoIncrement = [];
+  public $primaryKey;
+  public $primaryKeyDefinition;
+  public $binaryFields;
 
   private $valid = true;
+
+  public $htmlPath = APP_ROOT . DS . 'app' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
 
   public function __construct(string|null $model = null) {
     $this->setModel($model);
@@ -42,7 +51,8 @@ class Crud {
       self::echoError('Invalid name for a table. It needs to start with a letter, not end with an underscore and contain only letters, numbers and underscore');
       $this->valid = false;
     } else {
-      $this->modelName = $model;
+      $this->model = $model;
+      $this->modelName = ucfirst(strtolower($model));
     }
 
     return $this;
@@ -64,13 +74,15 @@ class Crud {
 
   public function createModel() {
     try {
-      $model = new MysqlDataTypeMap('crud_test');
+      $model = new MysqlDataTypeMap($this->model);
       $this->fields = $model->getFieldsData();
-      // echo '<pre>';
-      // var_dump($this->fields);
-      // die(__LINE__ . ' :: ' . __FILE__);
+      // Debug::dump($this->fields);
       $this->unique = $model->getUniqueFields();
       $this->autoIncrement = $model->getAutoIncrementFields();
+
+      $this->primaryKey = $model->getPrimaryKey();
+      $this->primaryKeyDefinition = $model->getPrimaryKeyDefinition();
+      $this->binaryFields = $model->getBinaryFields();
 
     } catch (\PDOException $e) {
       self::echoError($e->getMessage());
@@ -81,13 +93,7 @@ class Crud {
     }
 
     try {
-      (new ModelFile(
-        $this->modelName,
-        $this->fields,
-        $this->unique,
-        $this->autoIncrement)
-      )->buildModel();
-
+      (new ModelFile($this))->buildModel();
     } catch(\Exception $e) {
       self::echoError($e->getMessage());
       Config::logger()->error($e->getMessage());
@@ -102,6 +108,7 @@ class Crud {
     if (!$this->valid) {
       return;
     }
+
     $this->controllerName = (new ControllerFile($this->modelName))->buildController();
   }
 
@@ -110,13 +117,7 @@ class Crud {
       return;
     }
 
-    (new PostFile(
-      $this->modelName,
-      $this->controllerName,
-      $this->fields,
-      $this->unique,
-      $this->autoIncrement)
-    )->buildPost();
+    (new PostFile($this))->buildPost();
   }
 
   public function createAction() {
@@ -124,13 +125,7 @@ class Crud {
       return;
     }
 
-    (new ActionFile(
-      $this->modelName,
-      $this->controllerName,
-      $this->fields,
-      $this->unique,
-      $this->autoIncrement)
-    )->buildAction();
+    (new ActionFile($this))->buildAction();
   }
 
   public function updateRoutingAndPost() {
@@ -138,12 +133,6 @@ class Crud {
       return;
     }
 
-    (new ConfigFile(
-      $this->modelName,
-      $this->controllerName,
-      $this->fields,
-      $this->unique,
-      $this->autoIncrement)
-    )->updateConfig();
+    (new ConfigFile($this))->updateConfig();
   }
 }

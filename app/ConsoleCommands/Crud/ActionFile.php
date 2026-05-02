@@ -27,15 +27,17 @@ class ActionFile {
 
   private $htmlPath;
 
-  public function __construct(string $tableName, string $controllerName, array $fields, array $uniqueFields, array $autoIncrementFields) {
-    $this->modelName = ucfirst(strtolower($tableName));
-    $this->controllerName = $controllerName;
-    $this->fields = $fields;
-    $this->unique = $uniqueFields;
-    $this->autoIncrement = $autoIncrementFields;
-    $this->binaryFields = [];
+  public function __construct(\App\ConsoleCommands\Crud $crud) {
+    $this->modelName = $crud->modelName;
+    $this->controllerName = $crud->controllerName;
+    $this->fields = $crud->fields;
+    $this->unique = $crud->unique;
+    $this->autoIncrement = $crud->autoIncrement;
+    $this->primaryKey = $crud->primaryKey;
+    $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
+    $this->binaryFields = $crud->binaryFields;
 
-    $this->htmlPath = APP_ROOT . DS . 'app' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
+    $this->htmlPath = $crud->htmlPath;
   }
 
   public function buildAction() {
@@ -49,11 +51,6 @@ class ActionFile {
     $fields = [];
 
     foreach ($this->fields as $field) {
-      if (!$this->primaryKey && $field['primary_key'] == true) {
-        $this->primaryKey = $field['name'];
-        $this->primaryKeyDefinition = $field;
-      }
-
       if (in_array($field['name'], $excludedFields)) {
         continue;
       }
@@ -84,11 +81,6 @@ class ActionFile {
     $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
 
     foreach ($this->fields as $field) {
-      if (!$this->primaryKey && $field['primary_key'] == true) {
-        $this->primaryKey = $field['name'];
-        $this->primaryKeyDefinition = $field;
-      }
-
       if (!($field['key'] ?? null)) {
         continue;
       }
@@ -259,7 +251,6 @@ class ActionFile {
       case 'UUID':
         return $this->buildTextElement($field, $spaceIndent);
       case 'BINARY':
-        $this->binaryFields[$field['name']] = $field['name'];
         return $this->buildTextareaElement($field, $spaceIndent);
       case 'BLOB':
       case 'LONGBLOB':
@@ -296,6 +287,7 @@ class ActionFile {
       case 'TINYINT':
         return $this->displayBoolean($field, $spaceIndent);
       case 'BINARY':
+        return $this->displayText($field, $spaceIndent);
       case 'BLOB':
       case 'LONGBLOB':
         return $this->displayDownload($field, $spaceIndent);
@@ -412,5 +404,20 @@ class ActionFile {
       'name' => $field['name'],
       'label' => Strings::prettify($field['name']),
     ]);
+  }
+
+  private function binary2hex(int $spaceIndent, string $itemName) {
+    $indentation = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT);
+
+    if (empty($this->binaryFields)) {
+      return '';
+    }
+
+    $content = '';
+    foreach ($this->binaryFields as $field) {
+      $content .= $indentation . '$' . $itemName . '[\'' . $field . '\'] = bin2hex($' . $itemName . '[\'' . $field . '\']);' . PHP_EOL;
+    }
+
+    return $content;
   }
 }

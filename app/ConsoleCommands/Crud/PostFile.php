@@ -23,17 +23,20 @@ class PostFile {
   private $actionName;
   private $binaryFields;
 
+
   private $validationMethods = [];
 
   private $postFiles = [];
 
-  public function __construct(string $tableName, string $controllerName, array $fields, array $uniqueFields, array $autoIncrementFields) {
-    $this->modelName = ucfirst(strtolower($tableName));
-    $this->controllerName = $controllerName;
-    $this->fields = $fields;
-    $this->unique = $uniqueFields;
-    $this->autoIncrement = $autoIncrementFields;
-    $this->binaryFields = [];
+  public function __construct(\App\ConsoleCommands\Crud $crud) {
+    $this->modelName = $crud->modelName;
+    $this->controllerName = $crud->controllerName;
+    $this->fields = $crud->fields;
+    $this->unique = $crud->unique;
+    $this->autoIncrement = $crud->autoIncrement;
+    $this->primaryKey = $crud->primaryKey;
+    $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
+    $this->binaryFields = $crud->binaryFields;
   }
 
   public function buildPost() {
@@ -115,7 +118,6 @@ class PostFile {
       case 'UUID':
         return $this->buildUuidValidationRule($field);
       case 'BINARY':
-        $this->binaryFields[$field['name']] = $field['name'];
         return $this->buildBinaryValidationRule($field);
       case 'BLOB':
       case 'LONGBLOB':

@@ -10,7 +10,11 @@
             "crudtests": "App\\Actions\\CrudTests\\Index",
             "crudtests/add": "App\\Actions\\CrudTests\\Add",
             "crudtests/update": "App\\Actions\\CrudTests\\Update",
-            "crudtests/delete": "App\\Actions\\CrudTests\\Delete"
+            "crudtests/delete": "App\\Actions\\CrudTests\\Delete",
+            "": "App\\Actions\\\\Index",
+            "/add": "App\\Actions\\\\Add",
+            "/update": "App\\Actions\\\\Update",
+            "/delete": "App\\Actions\\\\Delete"
         },
         "front": {
             "logout": "App\\Actions\\Users\\Logout"

@@ -65,7 +65,29 @@
                   <p>Logout</p>
                 </a>
               </li>
-            </ul>
+              <li class="nav-item <?php echo self::openTreeMenu('crudtests') ?>">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-caret-right-fill"></i>
+                  <p>
+                    Crud Test
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                  <li class="nav-item">
+                    <a href="/admin/crudtests" class="nav-link <?php echo self::isActiveMenu(['crudtests']) ?>">
+                      <i class="bi bi-list-columns-reverse nav-icon"></i>
+                      <p>List</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/admin/crudtests/add" class="nav-link <?php echo self::isActiveMenu(['crudtests/add']) ?>">
+                      <i class="bi bi-plus-square nav-icon"></i>
+                      <p>Add</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>            </ul>
             <!--end::Sidebar Menu-->
           </nav>
         </div>

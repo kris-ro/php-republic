@@ -6,11 +6,13 @@ use KrisRo\PhpRepublic\Strings;
 use KrisRo\PhpRepublic\Template;
 use App\ConsoleCommands\Crud\Traits\ConfigFileRouting;
 use App\ConsoleCommands\Crud\Traits\ConfigFilePost;
+use App\ConsoleCommands\Crud\Traits\ConfigFileMenu;
 
 class ConfigFile {
 
   use ConfigFileRouting;
   use ConfigFilePost;
+  use ConfigFileMenu;
 
   private $modelName;
   private $controllerName;
@@ -19,23 +21,34 @@ class ConfigFile {
   private $autoIncrement;
   private $primaryKey;
   private $primaryKeyDefinition;
+  private $binaryFields;
 
   private $jsonRoutingPath;
   private $jsonPostPath;
 
-  public function __construct(string $tableName, string $controllerName, array $fields, array $uniqueFields, array $autoIncrementFields) {
-    $this->modelName = ucfirst(strtolower($tableName));
-    $this->controllerName = $controllerName;
-    $this->fields = $fields;
-    $this->unique = $uniqueFields;
-    $this->autoIncrement = $autoIncrementFields;
+  private $htmlPath;
+  private $htmlMenuPath;
+
+  public function __construct(\App\ConsoleCommands\Crud $crud) {
+    $this->modelName = $crud->modelName;
+    $this->controllerName = $crud->controllerName;
+    $this->fields = $crud->fields;
+    $this->unique = $crud->unique;
+    $this->autoIncrement = $crud->autoIncrement;
+    $this->primaryKey = $crud->primaryKey;
+    $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
+    $this->binaryFields = $crud->binaryFields;
 
     $this->jsonRoutingPath = APP_ROOT . DS . 'app' . DS . 'Config' . DS. 'routes' . DS . 'admin' . DS . 'authenticated.json';
     $this->jsonPostPath = APP_ROOT . DS . 'app' . DS . 'Config' . DS. 'post.json';
+    $this->htmlMenuPath = APP_ROOT . DS . 'app' . DS . 'views' . DS . 'templates' . DS . 'admin' . DS . 'en' . DS. 'side_menu.php';
+
+    $this->htmlPath = $crud->htmlPath;
   }
 
   public function updateConfig() {
     $this->updateRouting();
     $this->updatePost();
+    $this->updateMenu();
   }
 }
