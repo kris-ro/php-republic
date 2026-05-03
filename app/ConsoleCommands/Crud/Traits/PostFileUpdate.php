@@ -50,6 +50,7 @@ trait PostFileUpdate {
                      . '    }' . PHP_EOL . PHP_EOL
                      . '    $post = Config::validator()->getPost();' . PHP_EOL . PHP_EOL
                      .      $this->collectFileFields()
+                     .      $this->setDefaultValues()
                      . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->update' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($post);' . PHP_EOL . PHP_EOL
                      . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was saved\'));' . PHP_EOL . PHP_EOL
                      . '    Request::redirect(\'/admin/' . strtolower($this->controllerName) . '\');' . PHP_EOL

@@ -87,9 +87,9 @@ use KrisRo\PhpRepublic\Request;
                 <label for="enum_field-id" class="form-label">Enum Field</label>
                 <select class="form-select <?php echo self::view('errors/enum_field') ? 'border-danger text-danger' : '' ?>" name="enum_field" id="enum_field-id" aria-label="Enum Field">
                   <option value=""> -- </option>
-                    <option value="aaa" <?php echo "aaa" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field') ?? '')) ? 'selected' : '' ?>>Aaa</option>
-                    <option value="bbb" <?php echo "bbb" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field') ?? '')) ? 'selected' : '' ?>>Bbb</option>
-                    <option value="ccc" <?php echo "ccc" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field') ?? '')) ? 'selected' : '' ?>>Ccc</option>
+                    <option value="aaa" <?php echo "aaa" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field', true, '') ?? '')) ? 'selected' : '' ?>>Aaa</option>
+                    <option value="bbb" <?php echo "bbb" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field', true, '') ?? '')) ? 'selected' : '' ?>>Bbb</option>
+                    <option value="ccc" <?php echo "ccc" == (Request::isPost() ? Request::post('enum_field') : (self::view('item/enum_field', true, '') ?? '')) ? 'selected' : '' ?>>Ccc</option>
                 </select>
                 <?php if (self::view('errors/enum_field')) { ?>
                   <div id="enum_field-id" class="form-text text-danger">
@@ -102,8 +102,8 @@ use KrisRo\PhpRepublic\Request;
                 <label for="boolean_field-id" class="form-label">Boolean Field</label>
                 <select class="form-select <?php echo self::view('errors/boolean_field') ? 'border-danger text-danger' : '' ?>" name="boolean_field" id="boolean_field-id" aria-label="Boolean Field">
                   <option value=""> -- </option>
-                    <option value="1" <?php echo "1" == (Request::isPost() ? Request::post('boolean_field') : (self::view('item/boolean_field') ?? '')) ? 'selected' : '' ?>>Yes</option>
-                    <option value="0" <?php echo "0" == (Request::isPost() ? Request::post('boolean_field') : (self::view('item/boolean_field') ?? '')) ? 'selected' : '' ?>>No</option>
+                    <option value="1" <?php echo "1" == (Request::isPost() ? Request::post('boolean_field') : (self::view('item/boolean_field', true, '0') ?? '')) ? 'selected' : '' ?>>Yes</option>
+                    <option value="0" <?php echo "0" == (Request::isPost() ? Request::post('boolean_field') : (self::view('item/boolean_field', true, '0') ?? '')) ? 'selected' : '' ?>>No</option>
                 </select>
                 <?php if (self::view('errors/boolean_field')) { ?>
                   <div id="boolean_field-id" class="form-text text-danger">

@@ -33,7 +33,7 @@ class MysqlDataTypeMap {
       $this->fieldsData[] = $this->parseMySqlColumnType($row);
     }
 
-    // \KrisRo\PhpRepublic\Debug::dump($this->fieldsData);
+    // Debug::dump($this->fieldsData);
   }
 
   public function getFieldsData() {
@@ -70,10 +70,7 @@ class MysqlDataTypeMap {
    * @return array
    */
   private function parseMySqlColumnType(array $fieldData): array {
-    Debug::log($fieldData);
-    // echo '<pre>';
-    // var_dump($fieldData);
-    // die(__LINE__ . ' :: ' . __FILE__);
+    // Debug::log($fieldData);
     $columnName = $fieldData['Field'];
     $mysqlType = $fieldData['Type'];
 
@@ -216,16 +213,19 @@ class MysqlDataTypeMap {
             explode(',', $paramsStr)
           );
         }
+        $defaultValue = $defaultValue ? '\'' . $defaultValue . '\'' : $defaultValue;
         break;
 
       // === Date / Time ===
       case 'DATE':
         $normalizedType = 'DATE';
         $extra['format'] = 'YYYY-MM-DD';
+        $defaultValue = $defaultValue ? 'date(\'Y-m-d\')' : $defaultValue;
         break;
       case 'DATETIME':
         $normalizedType = 'DATETIME';
         $extra['format'] = 'YYYY-MM-DD HH:MM:SS';
+        $defaultValue = $defaultValue ? 'date(\'Y-m-d H:i:s\')' : $defaultValue;
         if ($length !== null) {
           $extra['fractional_seconds'] = $length; // 0-6
         }
@@ -233,9 +233,11 @@ class MysqlDataTypeMap {
       case 'TIME':
         $normalizedType = 'TIME';
         $extra['format'] = 'HH:MM:SS';
+        $defaultValue = $defaultValue ? 'date(\'H:i:s\')' : $defaultValue;
         break;
       case 'TIMESTAMP':
         $normalizedType = 'TIMESTAMP';
+        $defaultValue = $defaultValue ? 'date(\'Y-m-d H:i:s\')' : $defaultValue;
         break;
 
       case 'BINARY':
@@ -278,7 +280,8 @@ class MysqlDataTypeMap {
     }
 
     $result['is_optional'] = $isOptional;
-    $result['default_value'] = $defaultValue;
+    // Debug::log($fieldData);
+    $result['default_value'] = $isOptional ? $this->defaultValue($defaultValue) : false;
     $result['primary_key'] = $isPrimaryKey;
     $result['key'] = ($fieldData['Key'] ?? null) ? true : false;
 
@@ -295,5 +298,15 @@ class MysqlDataTypeMap {
     // $result['raw_type'] = $rawType;
 
     return $result;
+  }
+
+  private function defaultValue(mixed $defaultValue): string {
+    // Debug::log(gettype($defaultValue));
+    switch (strtolower(gettype($defaultValue))) {
+      case 'string':
+        return empty($defaultValue) ? '\'' . $defaultValue . '\'' : $defaultValue;
+      case 'null':
+        return 'null';
+    }
   }
 }

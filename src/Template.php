@@ -97,7 +97,7 @@ class Template {
     }
 
     if ($clear) {
-      die(__LINE__ . ' :: ' . __FILE__);
+      // die(__LINE__ . ' :: ' . __FILE__);
       unset(self::$data[current($key)]);
       self::clearRequestMessages(current($key));
     }
@@ -305,6 +305,7 @@ class Template {
    * @return string
    */
   public static function openTreeMenu(string $path): string {
+    // Debug::log($path, Config::current_page());
     return strpos(Config::current_page(), $path) === 0 ? 'menu-open' : '';
   }
 

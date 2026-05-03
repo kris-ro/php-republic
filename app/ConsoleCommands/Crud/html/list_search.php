@@ -2,8 +2,7 @@
   use KrisRo\PhpRepublic\Strings;
 ?>
                   <td data-label="<?php echo Strings::prettify($data['name']) ?>:">
-<?php // if ($data['key']) { ?>
-<?php if (1 == 1) { ?>
+<?php if ($data['key']) { ?>
 <?php if ($data['type'] == 'TEXT') { ?>
                     <input type="text"
                            name="<?php echo $data['name'] ?>"

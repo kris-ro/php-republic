@@ -101,11 +101,12 @@ class PostFile {
         return $this->buildNumericalValidationRule($field);
       case 'CHAR':
       case 'VARCHAR':
+        return $this->buildVarcharValidationRule($field);
       case 'TINYTEXT':
       case 'TEXT':
       case 'MEDIUMTEXT':
       case 'LONGTEXT':
-        return $this->buildVarcharValidationRule($field);
+        return $this->buildTextValidationRule($field);
       case 'ENUM':
         return $this->buildListValidationRule($field);
       case 'DATE':
@@ -155,7 +156,27 @@ class PostFile {
 
   private function buildVarcharValidationRule(array $field) {
     $rules = [];
-    $rules[] = '\'is_string\'';
+    
+    if ($field['is_optional']) {
+      $rules[] = '\'is_string\'';
+    } else {
+      $rules[] = '\'notEmptyOneLineString\'';
+    }
+    
+    $rules[] = '[\'maxLength\', ' . ($field['length'] ?? 255) . ']';
+
+    return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
+  }
+
+  private function buildTextValidationRule(array $field) {
+    $rules = [];
+    
+    if ($field['is_optional']) {
+      $rules[] = '\'is_string\'';
+    } else {
+      $rules[] = '\'mandatoryText\'';
+    }
+    
     $rules[] = '[\'maxLength\', ' . ($field['length'] ?? 255) . ']';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
@@ -257,6 +278,22 @@ class PostFile {
 
     foreach ($this->binaryFields as $binaryField) {
       $content .= '    $post[\'' . $binaryField . '\'] = hex2bin($post[\'' . $binaryField .'\']);' . PHP_EOL;
+    }
+
+    return $content . PHP_EOL;
+  }
+
+  private function setDefaultValues(array|null $excludedFields = []) {
+    $content = '';
+
+    foreach ($this->fields as $field) {
+      if (in_array($field['name'], $excludedFields) || !$field['is_optional']) {
+        continue;
+      }
+
+      $content .= '    if (empty($post[\'' . $field['name'] . '\'])) {' . PHP_EOL
+                . '      $post[\'' . $field['name'] . '\'] = ' . $field['default_value'] . ';' . PHP_EOL
+                . '    }' . PHP_EOL;
     }
 
     return $content . PHP_EOL;

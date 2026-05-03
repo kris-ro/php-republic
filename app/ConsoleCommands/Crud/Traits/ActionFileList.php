@@ -103,16 +103,18 @@ trait ActionFileList {
                      . '      <!--begin::Col-->' . PHP_EOL
                      . '      <div class="col-sm-12 list-container" id="user-' . $lowerCaseControllerName . '-list-container" data-list-address="<?php echo self::get(\'list_address\') ?>">' . PHP_EOL
                      . '        <div class="card mb-4 list-content" id="user-' . $lowerCaseControllerName . '-list-content">' . PHP_EOL
-                     . '          <div class="card-body">' . PHP_EOL
+                     . '          <div class="card-body table-responsive">' . PHP_EOL
                      . '            <table id="user-' . $lowerCaseControllerName . '" class="table table-bordered table-striped table-hover dataTable dtr-inline" aria-describedby="' . $lowerCaseControllerName . '_info">' . PHP_EOL
                      . '              <thead>' . PHP_EOL
                      . '                <tr>' . PHP_EOL
                      .                    $this->listTableHeader() . PHP_EOL
+                     . '                  <th></th>' . PHP_EOL
                      . '                </tr>' . PHP_EOL
                      . '              </thead>' . PHP_EOL
                      . '              <tbody>' . PHP_EOL
                      . '                <tr>' . PHP_EOL
                      .                    $this->listTableSearch() . PHP_EOL
+                     . '                  <td></td>' . PHP_EOL
                      . '                </tr>' . PHP_EOL
                      . '                <?php foreach (self::view(\'items\') ?: [] as $item) { ?>' . PHP_EOL
                      .                    $this->listTableItems() . PHP_EOL
@@ -121,6 +123,7 @@ trait ActionFileList {
                      . '              <tfoot>' . PHP_EOL
                      . '                <tr>' . PHP_EOL
                      .                    $this->listTableFooter() . PHP_EOL
+                     . '                  <th></th>' . PHP_EOL
                      . '                </tr>' . PHP_EOL
                      . '              </tfoot>' . PHP_EOL
                      . '            </table>' . PHP_EOL

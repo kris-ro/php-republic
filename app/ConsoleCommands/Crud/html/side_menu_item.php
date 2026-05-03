@@ -6,7 +6,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview" style="display: none;">
+                <ul class="nav nav-treeview" role="navigation" aria-label="Crud Test">
                   <li class="nav-item">
                     <a href="/admin/<?php echo $data['menu_item_path'] ?>" class="nav-link <?php echo  '<?php echo self::isActiveMenu([\'' . $data['menu_item_path'] . '\']) ?>' ?>">
                       <i class="bi bi-list-columns-reverse nav-icon"></i>

@@ -38,7 +38,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview" role="navigation" aria-label="Navigation 5">
+                <ul class="nav nav-treeview" role="navigation" aria-label="Account">
                   <li class="nav-item">
                     <a href="/admin/account/user" class="nav-link <?php echo self::isActiveMenu(['account/user']) ?>">
                       <i class="nav-icon bi bi-person-fill"></i>
@@ -59,12 +59,6 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
-                <a href="/logout" class="nav-link">
-                  <i class="nav-icon bi bi-box-arrow-right"></i>
-                  <p>Logout</p>
-                </a>
-              </li>
               <li class="nav-item <?php echo self::openTreeMenu('crudtests') ?>">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-caret-right-fill"></i>
@@ -73,7 +67,7 @@
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview" style="display: none;">
+                <ul class="nav nav-treeview" role="navigation" aria-label="Crud Test">
                   <li class="nav-item">
                     <a href="/admin/crudtests" class="nav-link <?php echo self::isActiveMenu(['crudtests']) ?>">
                       <i class="bi bi-list-columns-reverse nav-icon"></i>
@@ -87,7 +81,8 @@
                     </a>
                   </li>
                 </ul>
-              </li>            </ul>
+              </li>
+            </ul>
             <!--end::Sidebar Menu-->
           </nav>
         </div>

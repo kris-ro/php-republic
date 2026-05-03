@@ -323,8 +323,10 @@ class ActionFile {
   }
 
   private function buildSelectElement(array $field, int $spaceIndent, bool $boolean = false): string {
+    $default = '';
     if ($boolean) {
       $values = ['1' => 'Yes', '0' => 'No'];
+      $default = '0';
 
     } else {
       $values = [];
@@ -339,6 +341,7 @@ class ActionFile {
       'label' => Strings::prettify($field['name']),
       'values' => $values,
       'selected' => '<?php echo Request::post(\'' . $field['name'] . '\') ?>',
+      'default' => $default,
     ]);
   }
 

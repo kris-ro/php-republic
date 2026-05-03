@@ -42,7 +42,7 @@ class Update implements PostDataProcessor {
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\CrudTests\\Update', 'validFormToken']],
                 'crud_test_id' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 4294967295]],
-                'email' => ['is_string', ['maxLength', 255]],
+                'email' => ['notEmptyOneLineString', ['maxLength', 255]],
                 'price' => ['float', ['smallerThan', PHP_FLOAT_MAX], 'isOptional'],
                 'timestamp_time' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
                 'date_time_field' => ['is_string', ['KrisRo\\PhpRepublic\\Dates', 'isValidMySqlDateTime'], 'isOptional'],
@@ -50,7 +50,7 @@ class Update implements PostDataProcessor {
                 'enum_field' => ['is_string', [new Update(), 'validEnumField'], 'isOptional'],
                 'boolean_field' => ['integer', ['between', 'lowerLimit' => -128, 'upperLimit' => 127]],
                 'long_blob_field' => [['validFileInput']],
-                'long_text_field' => ['is_string', ['maxLength', 4294967295]],
+                'long_text_field' => ['mandatoryText', ['maxLength', 4294967295]],
                 'small_int_field' => ['positiveInteger', ['between', 'lowerLimit' => 0, 'upperLimit' => 65535]],
                 'uuid_field' => ['is_string', ['maxLength', 32]],
                 'default_null_value' => ['is_string', ['maxLength', 255], 'isOptional'],
@@ -73,6 +73,31 @@ class Update implements PostDataProcessor {
 
     $post['long_blob_field'] = $post['long_blob_field']['name'] ? file_get_contents($post['long_blob_field']['tmp_name']) : null;
     $post['uuid_field'] = hex2bin($post['uuid_field']);
+
+    if (empty($post['price'])) {
+      $post['price'] = 0.0000;
+    }
+    if (empty($post['timestamp_time'])) {
+      $post['timestamp_time'] = date('Y-m-d H:i:s');
+    }
+    if (empty($post['date_time_field'])) {
+      $post['date_time_field'] = date('Y-m-d H:i:s');
+    }
+    if (empty($post['date_field'])) {
+      $post['date_field'] = date('Y-m-d');
+    }
+    if (empty($post['enum_field'])) {
+      $post['enum_field'] = 'aaa';
+    }
+    if (empty($post['default_null_value'])) {
+      $post['default_null_value'] = null;
+    }
+    if (empty($post['time_field'])) {
+      $post['time_field'] = date('H:i:s');
+    }
+    if (empty($post['default_empty_string'])) {
+      $post['default_empty_string'] = '';
+    }
 
     (new \App\Models\CrudTest())->updateCrudTestByCrudTestId($post);
 
