@@ -1,9 +1,9 @@
 <?php
   use KrisRo\PhpRepublic\Strings;
 ?>
-                  <th class="sorting <?php echo '<?php echo self::get(\'sort_classes/' . $data['name'] . '\') ?>' ?>"
+                  <th class="sorting <?php echo $data['slim_table'] ? '<?php echo self::view(\'slim_select\') ?>' : '' ?> <?php echo '<?php echo self::get(\'sort_classes/' . $data['name'] . '\') ?>' ?>"
                       tabindex="0"
-                      aria-controls="user-tokens"
+                      aria-controls="table-<?php echo $data['lower_case_controller_name'] ?>"
                       rowspan="1"
                       colspan="1"
                       aria-label="<?php echo Strings::prettify($data['name']) ?>"

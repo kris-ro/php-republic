@@ -45,6 +45,7 @@ trait ActionFileList {
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Listing;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Dates;' . PHP_EOL
+                     . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
                      . 'use KrisRo\PhpConfig\Config;' . PHP_EOL . PHP_EOL
                      . "class Index extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
                      .    $this->listFilters(2) . PHP_EOL
@@ -69,6 +70,7 @@ trait ActionFileList {
                      . '      ] + $item;' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL
                      . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/index.php', [" . PHP_EOL
+                     . '      \'slim_select\' => Request::get(\'slim_table\') ? \'slim-select\' : \'\',' . PHP_EOL
                      . '      \'items\' => $items,' . PHP_EOL
                      . '    ]);' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
@@ -104,17 +106,17 @@ trait ActionFileList {
                      . '      <div class="col-sm-12 list-container" id="user-' . $lowerCaseControllerName . '-list-container" data-list-address="<?php echo self::get(\'list_address\') ?>">' . PHP_EOL
                      . '        <div class="card mb-4 list-content" id="user-' . $lowerCaseControllerName . '-list-content">' . PHP_EOL
                      . '          <div class="card-body table-responsive">' . PHP_EOL
-                     . '            <table id="user-' . $lowerCaseControllerName . '" class="table table-bordered table-striped table-hover dataTable dtr-inline" aria-describedby="' . $lowerCaseControllerName . '_info">' . PHP_EOL
+                     . '            <table id="table-' . $lowerCaseControllerName . '" class="table table-bordered table-striped table-hover dataTable dtr-inline <?php echo self::view(\'slim_select\') ?>" aria-describedby="' . $lowerCaseControllerName . '_info">' . PHP_EOL
                      . '              <thead>' . PHP_EOL
                      . '                <tr>' . PHP_EOL
-                     .                    $this->listTableHeader() . PHP_EOL
-                     . '                  <th></th>' . PHP_EOL
+                     .                    $this->listTableHeader($lowerCaseControllerName) . PHP_EOL
+                     . '                  <th class="<?php echo self::view(\'slim_select\') ?>"></th>' . PHP_EOL
                      . '                </tr>' . PHP_EOL
                      . '              </thead>' . PHP_EOL
                      . '              <tbody>' . PHP_EOL
                      . '                <tr>' . PHP_EOL
                      .                    $this->listTableSearch() . PHP_EOL
-                     . '                  <td></td>' . PHP_EOL
+                     . '                  <td class="<?php echo self::view(\'slim_select\') ?>"></td>' . PHP_EOL
                      . '                </tr>' . PHP_EOL
                      . '                <?php foreach (self::view(\'items\') ?: [] as $item) { ?>' . PHP_EOL
                      .                    $this->listTableItems() . PHP_EOL

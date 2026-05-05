@@ -28,6 +28,7 @@ class Crud {
   public $primaryKey;
   public $primaryKeyDefinition;
   public $binaryFields;
+  public $slimTableFields;
 
   private $valid = true;
 
@@ -83,6 +84,7 @@ class Crud {
       $this->primaryKey = $model->getPrimaryKey();
       $this->primaryKeyDefinition = $model->getPrimaryKeyDefinition();
       $this->binaryFields = $model->getBinaryFields();
+      $this->slimTableFields = $model->getSlimTableFields();
 
     } catch (\PDOException $e) {
       self::echoError($e->getMessage());

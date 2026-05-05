@@ -65,6 +65,9 @@
     <?php if (Arrays::getValueByPath(Config::get('css'), Config::get('current_page'))) { ?>
       <link rel="stylesheet" href="/admin/css/<?php echo Config::get('css/' . Config::get('current_page')) ?>">
     <?php } ?>
+
+    <link rel="stylesheet" href="/admin/css/lists.css">
+    <link rel="stylesheet" href="/admin/css/selector_popup.css">
   </head>
 
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -113,6 +116,16 @@
     <?php if (Arrays::getValueByPath(Config::get('js'), Config::get('current_page'))) { ?>
       <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script>
     <?php } ?>
+
+    <script src="/admin/js/selector_popup.js"></script>
+
+    <div id="selector-popup-loader">
+      <div id="selector-popup-header">
+        <a id="selector-popup-closer"><i class="bi bi-x-lg text-dark"></i> Close</a>
+      </div>
+      <iframe src="about:blank" id="selector-popup"></iframe>
+    </div>
+    <!-- end #selector-popup-loader -->
 
   </body>
 </html>

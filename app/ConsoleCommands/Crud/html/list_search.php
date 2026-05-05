@@ -1,7 +1,7 @@
 <?php
   use KrisRo\PhpRepublic\Strings;
 ?>
-                  <td data-label="<?php echo Strings::prettify($data['name']) ?>:">
+                  <td data-label="<?php echo Strings::prettify($data['name']) ?>:" class="<?php echo $data['slim_table'] ? '<?php echo self::view(\'slim_select\') ?>' : '' ?>">
 <?php if ($data['key']) { ?>
 <?php if ($data['type'] == 'TEXT') { ?>
                     <input type="text"

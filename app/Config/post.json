@@ -12,9 +12,9 @@
             "crudtests/add": "App\\Post\\CrudTests\\Add",
             "crudtests/update": "App\\Post\\CrudTests\\Update",
             "crudtests/delete": "App\\Post\\CrudTests\\Delete",
-            "/add": "App\\Post\\\\Add",
-            "/update": "App\\Post\\\\Update",
-            "/delete": "App\\Post\\\\Delete"
+            "todos/add": "App\\Post\\Todos\\Add",
+            "todos/update": "App\\Post\\Todos\\Update",
+            "todos/delete": "App\\Post\\Todos\\Delete"
         }
     }
 }

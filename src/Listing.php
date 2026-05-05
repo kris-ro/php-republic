@@ -416,7 +416,7 @@ class Listing {
    * @return type
    */
   private function filterDefault(string $table, string $field, string $filter, string $operator) {
-    $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $this->listFilters[$filter][1], $operator, $table);
+    $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $this->listFilters[$filter][1], strtolower($operator), $table);
     if (!($criteria['condition'] ?? null)) {
       return;
     }

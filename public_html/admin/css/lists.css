@@ -1,0 +1,16 @@
+table tr td a.slim-select,
+table.slim-select tr td a,
+table.slim-select tr th,
+table.slim-select tr td,
+table.slim-select tr tfoot {
+  display: none;
+}
+
+table.slim-select tr td a.slim-select {
+  display: inline;
+}
+
+table.slim-select tr th.slim-select,
+table.slim-select tr td.slim-select {
+  display: table-cell !important;
+}

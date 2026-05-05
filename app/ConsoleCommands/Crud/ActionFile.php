@@ -4,6 +4,7 @@ namespace App\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
 use KrisRo\PhpRepublic\Template;
+use KrisRo\PhpRepublic\Debug;
 use App\ConsoleCommands\Crud\Traits\ActionFileAdd;
 use App\ConsoleCommands\Crud\Traits\ActionFileUpdate;
 use App\ConsoleCommands\Crud\Traits\ActionFileDelete;
@@ -24,6 +25,7 @@ class ActionFile {
   private $primaryKey;
   private $primaryKeyDefinition;
   private $binaryFields;
+  private $slimTableFields;
 
   private $htmlPath;
 
@@ -36,6 +38,7 @@ class ActionFile {
     $this->primaryKey = $crud->primaryKey;
     $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
     $this->binaryFields = $crud->binaryFields;
+    $this->slimTableFields = $crud->slimTableFields;
 
     $this->htmlPath = $crud->htmlPath;
   }
@@ -123,7 +126,7 @@ class ActionFile {
     return implode(PHP_EOL, array_filter($items));
   }
 
-  private function listTableHeader() {
+  private function listTableHeader(string $lowerCaseControllerName) {
     $cols = [];
 
     foreach ($this->fields as $field) {
@@ -131,6 +134,8 @@ class ActionFile {
         'name' => $field['name'],
         'key' => $field['key'],
         'label' => Strings::prettify($field['name']),
+        'slim_table' => in_array($field['name'], $this->slimTableFields) ? true : false,
+        'lower_case_controller_name' => $lowerCaseControllerName,
       ]);
     }
 
@@ -172,6 +177,7 @@ class ActionFile {
         'label' => Strings::prettify($field['name']),
         'type' => $type,
         'options' => $values,
+        'slim_table' => in_array($field['name'], $this->slimTableFields) ? true : false,
       ]);
     }
 
@@ -179,10 +185,12 @@ class ActionFile {
   }
 
   private function listTableItems() {
+    // Debug::dump($this->fields);
     return Template::load($this->htmlPath . 'list_row.php', [
       'fields' => $this->fields,
       'controller' => strtolower($this->controllerName),
       'primary_key' => $this->primaryKey,
+      'slim_table_fields' => $this->slimTableFields,
     ]);
   }
 

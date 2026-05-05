@@ -17,5 +17,7 @@ CREATE TABLE `users` (
   -- Indexes
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_email` (`email`),
-  UNIQUE KEY `idx_username` (`username`)
+  UNIQUE KEY `idx_username` (`username`),
+  KEY `idx_created` (`created`),
+  KEY `idx_updated` (`updated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

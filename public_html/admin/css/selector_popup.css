@@ -1,0 +1,33 @@
+#selector-popup-loader {
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80%; /* Set the final height here */
+  margin: 0;
+  padding: 0;
+  z-index: 1134;
+  background: #fff;
+  
+  /* Start the element fully pushed down below the screen */
+  transform: translateY(100%); 
+  
+  /* Smooth transition for the transform property */
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+
+  -webkit-transform: translateY(100%);
+}
+
+#selector-popup-header {
+  text-align: right;
+}
+#selector-popup-header a#selector-popup-closer {
+  display: inline-block;
+}
+
+#selector-popup-loader.active {
+  transform: translateY(0) !important;
+  -webkit-transform: translateY(0) !important;
+  background: blue;
+}

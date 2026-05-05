@@ -109,6 +109,8 @@ class Request {
       trigger_error('Action must extend \KrisRo\PhpRepublic\Controller', E_USER_ERROR);
     }
 
+    $this->overrideLayoutComponents();
+
     Template::page($action->run());
 
     $this->loadPopups();
@@ -129,8 +131,6 @@ class Request {
       if (empty(Template::footer())) {
         Template::footer(Template::load(APP_ROOT . DS . Config::get('app/paths/language_templates') . '/' . 'footer.php', ['languages' => array_diff(Config::get('app/languages'), [Session::language()])]));
       }
-
-      Template::footer(Template::load(APP_ROOT . DS . Config::get('app/paths/language_templates') . '/' . 'footer.php', ['languages' => array_diff(Config::get('app/languages'), [Session::language()])]));
 
       Template::js(Template::load(APP_ROOT . DS . Config::get('app/paths/language_templates') . '/' . 'js.php', ['languages' => array_diff(Config::get('app/languages'), [Session::language()])]));
     }
@@ -160,6 +160,30 @@ class Request {
 
     if (Messages::popup_success()) {
       Template::popup_success(Template::load(APP_ROOT . DS . $templates . '/popup_success.php', $asArray ? Messages::popup_success() : implode(Template::BR, Messages::popup_success())));
+    }
+  }
+
+  /**
+   * Override or hide top menu, side menu, footer 
+   * or any other layout components
+   */
+  private function overrideLayoutComponents(): void {
+    if (Request::get('slim_table') || Request::header('slim-table')) {
+      if (empty(Template::topMenu())) {
+        Template::topMenu(Template::HIDDEN_TOP_MENU);
+      }
+  
+      if (empty(Template::sideMenu())) {
+        Template::sideMenu(Template::HIDDEN_LEFT_SIDE_BAR);
+      }
+  
+      if (empty(Template::rightBar())) {
+        Template::rightBar(Template::HIDDEN_RIGHT_SIDE_BAR);
+      }
+  
+      if (empty(Template::footer())) {
+        Template::footer(Template::HIDDEN_FOOTER);
+      }
     }
   }
 

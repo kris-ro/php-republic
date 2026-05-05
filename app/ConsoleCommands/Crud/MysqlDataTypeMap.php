@@ -11,8 +11,9 @@ class MysqlDataTypeMap {
   private $uniqueFields = [];
   private $autoIncrementFields = [];
   private $primaryKey;
-  public $primaryKeyDefinition;
-  public $binaryFields;
+  private $primaryKeyDefinition;
+  private $binaryFields;
+  private $slimTableFields = [];
 
   /**
    * Get all columns and build the JSON array
@@ -27,12 +28,14 @@ class MysqlDataTypeMap {
       ->execute([]);
 
     while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+      // Debug::log($row);
       $field = $row['Field'];
       $type = $row['Type'];           // e.g. "smallint(5) unsigned"
       $key = $row['Key'];           // e.g. "smallint(5) unsigned"
       $this->fieldsData[] = $this->parseMySqlColumnType($row);
     }
 
+    // Debug::dump('');
     // Debug::dump($this->fieldsData);
   }
 
@@ -58,6 +61,10 @@ class MysqlDataTypeMap {
 
   public function getBinaryFields() {
     return $this->binaryFields;
+  }
+
+  public function getSlimTableFields() {
+    return array_slice($this->slimTableFields, 0, 2);
   }
 
   /**
@@ -111,6 +118,9 @@ class MysqlDataTypeMap {
       if ($fieldData['Key'] == 'PRI') {
         $isPrimaryKey = true;
         $this->primaryKey = $columnName;
+        $this->slimTableFields = [
+          $columnName => $columnName,
+        ];
       }
     }
 
@@ -285,6 +295,9 @@ class MysqlDataTypeMap {
     $result['primary_key'] = $isPrimaryKey;
     $result['key'] = ($fieldData['Key'] ?? null) ? true : false;
 
+    if ($fieldData['Key']) {
+      $this->slimTableFields[$columnName] = $columnName;
+    }
 
     if ($isPrimaryKey) {
       $this->primaryKeyDefinition = $result;

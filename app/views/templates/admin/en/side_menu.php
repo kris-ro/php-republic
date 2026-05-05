@@ -82,6 +82,29 @@
                   </li>
                 </ul>
               </li>
+              <li class="nav-item <?php echo self::openTreeMenu('todos') ?>">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-caret-right-fill"></i>
+                  <p>
+                    Todo
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview" role="navigation" aria-label="Crud Test">
+                  <li class="nav-item">
+                    <a href="/admin/todos" class="nav-link <?php echo self::isActiveMenu(['todos']) ?>">
+                      <i class="bi bi-list-columns-reverse nav-icon"></i>
+                      <p>List</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/admin/todos/add" class="nav-link <?php echo self::isActiveMenu(['todos/add']) ?>">
+                      <i class="bi bi-plus-square nav-icon"></i>
+                      <p>Add</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
             </ul>
             <!--end::Sidebar Menu-->
           </nav>
