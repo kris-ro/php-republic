@@ -74,7 +74,7 @@ use KrisRo\PhpRepublic\Request;
                 <label for="users_id-id" class="form-label">Users Id</label>
                 <div class="input-group">
                   <input type="text" class="form-control <?php echo self::view('errors/users_id') ? 'border-danger text-danger' : '' ?>" name="users_id" id="users_id-id" value="<?php echo Request::isPost() ? Request::post('users_id') : (self::view('item/users_id') ?? '') ?>" aria-describedby="user-selector">
-                  <div class="input-group-text slim-selector-trigger" id="user-selector" data-source="/admin/users?slim_table=1&target=users_id-id"><i class="bi bi-hand-index-fill"></i></div>
+                  <div class="input-group-text slim-selector-trigger" id="user-selector" data-source="/admin/users?slim_table=1&target=users_id-id"><i class="bi bi-hand-index-fill" data-source="/admin/users?slim_table=1&target=users_id-id"></i></div>
                 </div>
                 <?php if (self::view('errors/users_id')) { ?>
                   <div id="users_id-id" class="form-text text-danger">

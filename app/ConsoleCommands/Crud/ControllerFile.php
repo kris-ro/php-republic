@@ -7,9 +7,11 @@ use KrisRo\PhpRepublic\Strings;
 class ControllerFile {
 
   private $controllerName;
+  private $controllerPath;
 
-  public function __construct(string $controllerName) {
-    $this->controllerName = ucfirst(Strings::toCamelCase($controllerName)) . 's';
+  public function __construct(\App\ConsoleCommands\Crud $crud) {
+    $this->controllerName = $crud->controllerName;
+    $this->controllerPath = $crud->controllerPath;
   }
 
   public function buildController() {
@@ -20,7 +22,7 @@ class ControllerFile {
                      . 'class ' . Strings::toCamelCase($this->controllerName) . ' extends Controller {}' . PHP_EOL;
 
 
-    file_put_contents(APP_ROOT . DS . 'app' . DS . 'Controllers' . DS . Strings::toCamelCase($this->controllerName) . '.php', $fileContent . PHP_EOL);
+    file_put_contents($this->controllerPath, $fileContent . PHP_EOL);
 
     return $this->controllerName;
   }

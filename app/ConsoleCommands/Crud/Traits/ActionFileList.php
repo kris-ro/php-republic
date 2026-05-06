@@ -9,27 +9,11 @@ trait ActionFileList {
   public function buildList() {
     $lowerCaseControllerName = strtolower($this->controllerName);
 
-    if (!file_exists(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName)) {
-      mkdir(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName);
-      chmod(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName, 0755);
-    }
-
-    file_put_contents(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName . DS . 'Index.php', $this->createListActionFileContent($lowerCaseControllerName) . PHP_EOL);
+    file_put_contents($this->actionPath . DS . 'Index.php', $this->createListActionFileContent($lowerCaseControllerName) . PHP_EOL);
 
     file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_index.css', '');
 
-    $adminViewPath = APP_ROOT
-                    . DS . 'app'
-                    . DS . 'views'
-                    . DS . 'admin'
-                    . DS . 'en' // always 'en'
-                    . DS . $lowerCaseControllerName
-                    . DS . 'index.php';
-
-    if (!file_exists(dirname($adminViewPath))) {
-      mkdir(dirname($adminViewPath));
-      chmod(dirname($adminViewPath), 0755);
-    }
+    $adminViewPath = $this->adminViewPath . DS . 'index.php';
 
     file_put_contents($adminViewPath, $this->createListActionTemplateFileContent($lowerCaseControllerName) . PHP_EOL);
   }

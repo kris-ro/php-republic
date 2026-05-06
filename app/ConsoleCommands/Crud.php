@@ -34,8 +34,21 @@ class Crud {
 
   public $htmlPath = APP_ROOT . DS . 'app' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
 
-  public function __construct(string|null $model = null) {
+  public $modelPath = '';
+  public $controllerPath = '';
+  public $postPath = '';
+  public $actionPath = '';
+  public $adminViewPath = '';
+
+  public function __construct(string|null $model = null, bool|null $force = null) {
     $this->setModel($model);
+
+    if ($this->filesExists($force ? true : false)) {
+      self::echoError('At least some of the files exists. If you want to overrite them please use the --force=1 flag');
+      $this->valid = false;
+
+      return $this;
+    }
   }
 
   public function setModel(string|null $model = null) {
@@ -63,6 +76,7 @@ class Crud {
     if (!$this->valid) {
       return $this;
     }
+    // Debug::dump('');
 
     $this->createModel();
     $this->createController();
@@ -111,7 +125,7 @@ class Crud {
       return;
     }
 
-    $this->controllerName = (new ControllerFile($this->modelName))->buildController();
+    (new ControllerFile($this))->buildController();
   }
 
   public function createPost() {
@@ -136,5 +150,43 @@ class Crud {
     }
 
     (new ConfigFile($this))->updateConfig();
+  }
+
+  private function filesExists(bool $force): bool {
+    if (!$this->valid) {
+      return $this;
+    }
+
+    $this->controllerName = ucfirst(Strings::toCamelCase($this->modelName)) . 's';
+
+    $this->modelPath = APP_ROOT . DS . 'app' . DS . 'Models' . DS . Strings::toCamelCase($this->modelName) . '.php';
+    $this->controllerPath = APP_ROOT . DS . 'app' . DS . 'Controllers' . DS . Strings::toCamelCase($this->controllerName) . '.php';
+    $this->postPath = APP_ROOT . DS . 'app' . DS . 'Post' . DS . $this->controllerName;
+    $this->actionPath = APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName;
+    $this->adminViewPath = APP_ROOT . DS . 'app' . DS . 'views' . DS . 'admin' . DS . 'en' . DS . strtolower($this->controllerName);
+
+    if ($force) {
+      return false;
+    }
+
+    if (file_exists($this->modelPath)) {
+      return true;
+    }
+
+    if (file_exists($this->controllerPath)) {
+      return true;
+    }
+
+    if (file_exists($this->postPath)) {
+      return true;
+    }
+
+    if (file_exists($this->actionPath)) {
+      return true;
+    }
+
+    if (file_exists($this->adminViewPath)) {
+      return true;
+    }
   }
 }

@@ -28,6 +28,8 @@ class ActionFile {
   private $slimTableFields;
 
   private $htmlPath;
+  private $actionPath;
+  private $adminViewPath;
 
   public function __construct(\App\ConsoleCommands\Crud $crud) {
     $this->modelName = $crud->modelName;
@@ -39,11 +41,23 @@ class ActionFile {
     $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
     $this->binaryFields = $crud->binaryFields;
     $this->slimTableFields = $crud->slimTableFields;
+    $this->actionPath = $crud->actionPath;
+    $this->adminViewPath = $crud->adminViewPath;
 
     $this->htmlPath = $crud->htmlPath;
   }
 
   public function buildAction() {
+    if (!file_exists($this->actionPath)) {
+      mkdir($this->actionPath);
+      chmod($this->actionPath, 0755);
+    }
+
+    if (!file_exists($this->adminViewPath)) {
+      mkdir($this->adminViewPath);
+      chmod($this->adminViewPath, 0755);
+    }
+
     $this->buildAdd();
     $this->buildUpdate();
     $this->buildDelete();

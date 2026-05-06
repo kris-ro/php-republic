@@ -13,6 +13,7 @@ class ModelFile {
   private $primaryKey;
   private $primaryKeyDefinition;
   private $binaryFields;
+  private $modelPath;
 
   public function __construct(\App\ConsoleCommands\Crud $crud) {
     $this->modelName = ucfirst(strtolower($crud->modelName));
@@ -22,6 +23,7 @@ class ModelFile {
     $this->primaryKey = $crud->primaryKey;
     $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
     $this->binaryFields = $crud->binaryFields;
+    $this->modelPath = $crud->modelPath;
   }
 
   public function buildModel() {
@@ -64,7 +66,7 @@ class ModelFile {
 
     $fileContent    .= '}' . PHP_EOL;
 
-    file_put_contents(APP_ROOT . DS . 'app' . DS . 'Models' . DS . Strings::toCamelCase($this->modelName) . '.php', $fileContent . PHP_EOL);
+    file_put_contents($this->modelPath, $fileContent . PHP_EOL);
   }
 
   private function buildFields(int $spaceIndent, array|null $excludedFields = []) {

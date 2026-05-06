@@ -26,7 +26,6 @@
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="/admin/css/adminlte.min.css" as="style" />
     <!--end::Accessibility Features-->
 
     <!--begin::Fonts-->
@@ -114,14 +113,14 @@
     <?php echo Template::js('', false); ?>
 
     <?php if (Arrays::getValueByPath(Config::get('js'), Config::get('current_page'))) { ?>
-      <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script>
+      <!-- <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script> -->
     <?php } ?>
 
     <script src="/admin/js/selector_popup.js"></script>
 
     <div id="selector-popup-loader">
       <div id="selector-popup-header">
-        <a id="selector-popup-closer"><i class="bi bi-x-lg text-dark"></i> Close</a>
+        <a id="selector-popup-closer" class="me-2"><i class="bi bi-x-square-fill"></i> Close</a>
       </div>
       <iframe src="about:blank" id="selector-popup"></iframe>
     </div>

@@ -22,6 +22,7 @@ class PostFile {
   private $primaryKeyDefinition;
   private $actionName;
   private $binaryFields;
+  private $postPath;
 
 
   private $validationMethods = [];
@@ -37,9 +38,15 @@ class PostFile {
     $this->primaryKey = $crud->primaryKey;
     $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
     $this->binaryFields = $crud->binaryFields;
+    $this->postPath = $crud->postPath;
   }
 
   public function buildPost() {
+    if (!file_exists($this->postPath)) {
+      mkdir($this->postPath);
+      chmod($this->postPath, 0755);
+    }
+    
     $this->buildAdd();
     $this->buildUpdate();
     $this->buildDelete();

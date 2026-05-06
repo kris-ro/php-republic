@@ -10,27 +10,11 @@ trait ActionFileDelete {
     $lowerCaseControllerName = strtolower($this->controllerName);
     $itemName = lcfirst(Strings::toCamelCase($this->modelName));
 
-    if (!file_exists(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName)) {
-      mkdir(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName);
-      chmod(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName, 0755);
-    }
-
-    $adminViewPath = APP_ROOT
-                    . DS . 'app'
-                    . DS . 'views'
-                    . DS . 'admin'
-                    . DS . 'en' // always 'en'
-                    . DS . $lowerCaseControllerName
-                    . DS . 'delete.php';
-
-    if (!file_exists(dirname($adminViewPath))) {
-      mkdir(dirname($adminViewPath));
-      chmod(dirname($adminViewPath), 0755);
-    }
+    $adminViewPath = $this->adminViewPath . DS . 'delete.php';
 
     file_put_contents($adminViewPath, $this->createDeleteActionTemplateFileContent($lowerCaseControllerName) . PHP_EOL);
 
-    file_put_contents(APP_ROOT . DS . 'app' . DS . 'Actions' . DS . $this->controllerName . DS . 'Delete.php', $this->createDeleteActionFileContent($lowerCaseControllerName, $itemName) . PHP_EOL);
+    file_put_contents($this->actionPath . DS . 'Delete.php', $this->createDeleteActionFileContent($lowerCaseControllerName, $itemName) . PHP_EOL);
 
     file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_delete.css', '');
   }

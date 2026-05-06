@@ -61,11 +61,6 @@ trait PostFileUpdate {
                      . '}' . PHP_EOL . PHP_EOL
       ;
 
-    if (!file_exists(APP_ROOT . DS . 'app' . DS . 'Post' . DS . $this->controllerName)) {
-      mkdir(APP_ROOT . DS . 'app' . DS . 'Post' . DS . $this->controllerName);
-      chmod(APP_ROOT . DS . 'app' . DS . 'Post' . DS . $this->controllerName, 0755);
-    }
-
-    file_put_contents(APP_ROOT . DS . 'app' . DS . 'Post' . DS . $this->controllerName . DS . 'Update.php', $fileContent . PHP_EOL);
+    file_put_contents($this->postPath . DS . 'Update.php', $fileContent . PHP_EOL);
   }
 }

@@ -24,7 +24,8 @@
     "crud" : {
       "class" : "App\\ConsoleCommands\\Crud",
       "_construct" : {
-        "model": null
+        "model": null,
+        "force": null
       },
       "create" : {
       }

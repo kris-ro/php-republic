@@ -8,6 +8,7 @@ use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Messages;
 use KrisRo\PhpRepublic\Listing;
 use KrisRo\PhpRepublic\Dates;
+use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpConfig\Config;
 
 class Index extends CrudTestsController {
@@ -51,6 +52,7 @@ class Index extends CrudTestsController {
     }
 
     return Template::renderView('/admin/' . Session::language() . '/crudtests/index.php', [
+      'slim_select' => Request::get('slim_table') ? 'slim-select' : '',
       'items' => $items,
     ]);
   }
