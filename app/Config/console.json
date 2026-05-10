@@ -7,6 +7,10 @@
         "second": null
       }
     },
+    "check" : {
+      "class" : "App\\ConsoleCommands\\Check",
+      "_construct" : {}
+    },
     "test:staticTest" : {
       "class" : "App\\ConsoleCommands\\Test",
       "staticTest" : {

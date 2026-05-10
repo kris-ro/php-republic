@@ -127,14 +127,20 @@ trait ConsoleIO {
   }
 
   public static function echoError(string $text) {
-    echo self::consoleFormat(['bold', 'redbg'], 'ERROR:') . ' '
+    echo self::consoleFormat(['bold', 'redbg'], ' ERROR: ') . ' '
        . self::consoleFormat(['red'], $text)
        . PHP_EOL;
   }
 
   public static function echoWarning(string $text) {
-    echo self::consoleFormat(['bold', 'yellowbg'], 'WARNING:') . ' '
+    echo self::consoleFormat(['bold', 'yellowbg'], ' WARNING: ') . ' '
        . self::consoleFormat(['yellow'], $text)
+       . PHP_EOL;
+  }
+
+  public static function echoInfo(string $text) {
+    echo self::consoleFormat(['bold', 'bluebg'], ' INFO: ') . ' '
+       . self::consoleFormat(['white'], $text)
        . PHP_EOL;
   }
 }

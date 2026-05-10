@@ -67,5 +67,6 @@
     "cipher" : "",
     "key" : "",
     "iv" : ""
-  }
+  },
+  "php_extensions" : ["pdo_mysql", "curl", "mbstring", "openssl", "json", "intl", "filter", "xml", "simplexml", "dom", "gd"]
 }
