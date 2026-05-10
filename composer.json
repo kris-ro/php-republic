@@ -27,7 +27,7 @@
         "ext-xml": "XML processing", 
         "ext-simplexml": "XML processing", 
         "ext-dom": "XML processing"
-    }
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -41,5 +41,10 @@
             "email": "kris_ro@yahoo.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "scripts": {
+        "post-create-project-cmd": [
+            "@php ./republic instal"
+        ]
+    }
 }

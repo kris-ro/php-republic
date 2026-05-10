@@ -143,4 +143,8 @@ trait ConsoleIO {
        . self::consoleFormat(['white'], $text)
        . PHP_EOL;
   }
+
+  public static function echoDefault(string $text) {
+    echo self::consoleFormat(['white'], ' ' . $text);
+  }
 }

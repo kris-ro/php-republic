@@ -1,29 +1,12 @@
 {
   "console": {
-    "test" : {
-      "class" : "App\\ConsoleCommands\\Test",
-      "_construct" : {
-        "first": null,
-        "second": null
-      }
+    "install" : {
+      "class" : "App\\ConsoleCommands\\Install",
+      "_construct" : {}
     },
     "check" : {
       "class" : "App\\ConsoleCommands\\Check",
       "_construct" : {}
-    },
-    "test:staticTest" : {
-      "class" : "App\\ConsoleCommands\\Test",
-      "staticTest" : {
-        "first": null,
-        "second": null
-      }
-    },
-    "test:instanceTest" : {
-      "class" : "App\\ConsoleCommands\\Test",
-      "instanceTest" : {
-        "first": null,
-        "second": null
-      }
     },
     "crud" : {
       "class" : "App\\ConsoleCommands\\Crud",
@@ -38,6 +21,28 @@
       "class" : "App\\ConsoleCommands\\CryptoKeys",
       "_construct" : {
         "type": null
+      }
+    },
+
+    "test" : {
+      "class" : "App\\ConsoleCommands\\Test",
+      "_construct" : {
+        "first": null,
+        "second": null
+      }
+    },
+    "test:staticTest" : {
+      "class" : "App\\ConsoleCommands\\Test",
+      "staticTest" : {
+        "first": null,
+        "second": null
+      }
+    },
+    "test:instanceTest" : {
+      "class" : "App\\ConsoleCommands\\Test",
+      "instanceTest" : {
+        "first": null,
+        "second": null
       }
     }
   }
