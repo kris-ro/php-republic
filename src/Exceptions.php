@@ -10,6 +10,8 @@ class Exceptions {
 
   use \KrisRo\PhpRepublic\Traits\Logger;
 
+  public static $consolePrintOnly = false;
+
   public static function install(): void {
     set_error_handler([Exceptions::class, 'handleAllErrors']);
   }
@@ -25,6 +27,10 @@ class Exceptions {
    * @return void
    */
   public static function handleAllErrors(int $errno, string $errstr, ?string $errfile = null, ?int $errline = 0, ?array $errcontext = []): void {
+    if (self::$consolePrintOnly) {
+      throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+    }
+
     $logger = static::getLogger();
 
     $message = $errstr;
@@ -48,6 +54,7 @@ class Exceptions {
         if ($errfile) {
           $logger->error(" > {$errfile} :: {$errline}");
         }
+        break;
       default:
         $logger->info($errstr);
         if ($errfile) {

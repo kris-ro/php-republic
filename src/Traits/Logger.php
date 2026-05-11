@@ -22,7 +22,10 @@ trait Logger {
     $errorHandler->setFormatter($formatter);
 
     $logger->pushHandler($errorHandler);
-    $logger->pushHandler(new NativeMailerHandler(Config::get('mail/system'), 'Logger', Config::get('mail/system')));
+
+    if (Config::get('_debug')) {
+      $logger->pushHandler(new NativeMailerHandler(Config::get('mail/system'), 'Logger', Config::get('mail/system')));
+    }
 
     return $logger;
   }

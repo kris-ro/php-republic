@@ -3,8 +3,11 @@
 namespace App\ConsoleCommands;
 
 use KrisRo\PhpConfig\Config;
+use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;
 use KrisRo\PhpRepublic\Debug;
+use KrisRo\PhpRepublic\Exceptions;
+use KrisRo\PhpRepublic\Crypto;
 
 class Install {
 
@@ -13,9 +16,41 @@ class Install {
   private $databaseName;
   private $databaseUsername;
   private $databasePassword;
+  private $databaseConfig;
+
+  private $jsonLocalConfigPath;
+  private $localConfig;
 
   public function __construct() {
-    $this->configDatabase();
+    Exceptions::$consolePrintOnly = true;
+
+    $this->jsonLocalConfigPath = APP_ROOT . DS . 'app' . DS . 'Config' . DS . 'local.json';
+
+    if (!$this->loadConfig()) {
+      self::echoErro("Can not read config data at {$this->jsonLocalConfigPath}.");
+    }
+
+    if (!$this->configDatabase()) {
+      return;
+    }
+
+    if (!$this->setEncryptionKeys()) {
+      return;
+    }
+
+    if (!$this->setEmailAddress()) {
+      return;
+    }
+
+    if (!$this->setDebug()) {
+      return;
+    }
+
+    if (!$this->saveConfig()) {
+      self::echoError("Can not save config data at {$this->jsonLocalConfigPath}.");
+    }
+
+    $this->printInstructions();
   }
 
   private function configDatabase() {
@@ -31,7 +66,7 @@ class Install {
       $this->readDatabasePassword();
     }
 
-    $this->validateConection();
+    return $this->validateConection();
   }
 
   private function readDatabaseName() {
@@ -53,6 +88,116 @@ class Install {
   }
 
   private function validateConection() {
-    
+    $this->databaseConfig = Config::get('app/database');
+    if (!($this->databaseConfig['creator'] ?? null)) {
+      $this->databaseConfig = [
+        'creator' => '\\KrisRo\\PhpDatabaseModel\\Model',
+        'host' => 'localhost',
+      ];
+    }
+
+    $this->databaseConfig['database'] = $this->databaseName;
+    $this->databaseConfig['username'] = $this->databaseUsername;
+    $this->databaseConfig['password'] = $this->databasePassword; 
+
+    try {
+      $dbModel = new $this->databaseConfig['creator']($this->databaseConfig);
+
+      if (!($dbModel instanceof $this->databaseConfig['creator'])) {
+        self::echoError("Can not connect to database {$this->databaseName}.");
+        return false;
+      }
+
+      $this->localConfig['app']['database'] = $this->databaseConfig;
+
+      return true;
+
+    } catch (\PDOException $e) {
+      self::echoError("Database connection failed: " . $e->getMessage());
+      return false;
+
+    } catch (\Exception $e) {
+      self::echoError("Database connection failed: " . $e->getMessage());
+      return false;
+    }
+
+    return false;
+  }
+
+  private function setEmailAddress() {
+    self::echoDefault('Enter site email address: ');
+    $siteEmail = trim(fgets(STDIN));
+
+    if (!$siteEmail || !(new Validator())->email($siteEmail)) {
+      self::echoWarning('Invalid email. You need to set the email section manually in ' . $this->jsonLocalConfigPath);
+      return true;
+    }
+
+    $this->localConfig['mail'] = [
+      'test' => $siteEmail,
+      'support' => $siteEmail,
+      'system' => $siteEmail,
+      'contact' => $siteEmail,
+      'signature' => 'The team',
+    ];
+
+    return true;
+  }
+
+  private function setEncryptionKeys() {
+    $iv = Crypto::generateOpenSslIv();
+    $key = Crypto::generateEncryptionKey();
+
+    if (!$iv || !$key) {
+      self::echoError('Failed to create encryption keys. Make sure the openssl extension is isntalled.');
+      return false;
+    }
+
+    $this->localConfig['crypto'] = [
+      'cipher' => Config::get('install/cipher'),
+      'key' => $key,
+      'iv' => $iv,
+    ];
+
+    return true;
+  }
+
+  private function setDebug() {
+    self::echoDefault('Enable debug (yes/no) ?');
+    self::echoWarning('Do not enable debug (enter "no" to the console or just press Enter) if you are on production environment !');
+
+    if (trim(fgets(STDIN)) == 'yes') {
+      $this->localConfig['_debug'] = true;
+    } else {
+      $this->localConfig['_debug'] = false;
+    }
+
+    return true;
+  }
+
+  private function printInstructions() {
+    self::echoInfo('Settings were saved. You can edit tese settings in ' . $this->jsonLocalConfigPath);
+  }
+
+  private function loadConfig() {
+    $jsonContent = file_get_contents($this->jsonLocalConfigPath);
+    if (!($config = json_decode($jsonContent, true)) || json_last_error() != JSON_ERROR_NONE) {
+      self::echoError(json_last_error_msg());
+      return false;
+    }
+
+    $this->localConfig = $config;
+
+    return true;
+  }
+
+  private function saveConfig() {
+    if (!$this->localConfig) {
+      return false;
+    }
+
+    $jsonContent = json_encode($this->localConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+    return file_put_contents($this->jsonLocalConfigPath, $jsonContent);
   }
 }
