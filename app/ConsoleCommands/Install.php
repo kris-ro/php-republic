@@ -66,7 +66,7 @@ class Install {
     while (!$this->databaseName) {
       $this->readDatabaseName();
     }
-    
+
     while (!$this->databaseUsername) {
       $this->readDatabaseUsername();
     }
@@ -107,7 +107,7 @@ class Install {
 
     $this->databaseConfig['database'] = $this->databaseName;
     $this->databaseConfig['username'] = $this->databaseUsername;
-    $this->databaseConfig['password'] = $this->databasePassword; 
+    $this->databaseConfig['password'] = $this->databasePassword;
 
     try {
       $this->dbModel = new $this->databaseConfig['creator']($this->databaseConfig);
@@ -201,8 +201,8 @@ class Install {
   }
 
   private function setDebug() {
-    self::echoDefault('Enable debug (yes/no) ?');
-    self::echoWarning('Do not enable debug (enter "no" to the console or just press Enter) if you are on production environment !');
+    self::echoDefault('Enable debug (yes/no) ? ');
+    self::echoWarning('Do not enable debug if you are on production environment (enter "no" to the console or just press Enter) !');
 
     if (trim(fgets(STDIN)) == 'yes') {
       $this->localConfig['_debug'] = true;
@@ -214,7 +214,7 @@ class Install {
   }
 
   private function printInstructions() {
-    self::echoInfo('Settings were saved. You can edit tese settings in ' . $this->jsonLocalConfigPath);
+    self::echoInfo('Settings were saved. You can edit these settings in ' . $this->jsonLocalConfigPath);
   }
 
   private function loadConfig() {
