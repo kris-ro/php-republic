@@ -2,23 +2,23 @@
     "app": {
         "database": {
             "host": "localhost",
-            "database": "php_republic",
-            "username": "k",
-            "password": "123456",
-            "creator": "\\KrisRo\\PhpDatabaseModel\\Model"
+            "database": "",
+            "username": "",
+            "password": "",
+            "creator": ""
         }
     },
     "mail": {
-        "test": "contact@php-republic.ro",
-        "support": "contact@php-republic.ro",
-        "system": "contact@php-republic.ro",
-        "contact": "contact@php-republic.ro",
-        "signature": "The team"
+        "test": "",
+        "support": "",
+        "system": "",
+        "contact": "",
+        "signature": ""
     },
     "crypto": {
         "cipher": "AES-256-GCM",
-        "key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFsK3VqVEJzQnJLTWN5Q3MxZmY0eQo5K0FrZEpqekV6T3lSQU1zVWRLK3dWWmFoY0FOVGtpbmlNaEljOG9HQnM0UGM3SlNQN1l5SVQ5WjBCWWpLNnFwClBBQURmZ0g3ZGhxTFJST2k4aUloVmh5d29seHh3M0hlZ1YyRG0xc0hHUjNWdHhWR0tGaUdIMm5oeS9zMmJ2a1EKbnhycVFPSDRCU2cwY04vYnhaWmZnR3ZEVktLNzU2YnFBYnQwaU5FTzEzdC9ZYlE5NFBRWDZraUEyV1UzTVpyeQpoc3Ivd093cVNxREhPZnhOZVB3ZlM0di9tOTU2VGdMamx4ak1QNk92aFE0M2tSZXpwSkRXb1FmeHd3dElOZUl2CjBrUG8yVnJZc25yaWY2REl3TG9ST2kzZUhQR3FYQU9VUXNHVmlTQWdNZGNsY2NtMlJOc2xESnVJVS9ta3pNVk4KZlFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==",
-        "iv": "092498051fb1f5eeff6933cb"
+        "key": "",
+        "iv": ""
     },
-    "_debug": true
+    "_debug": false
 }
