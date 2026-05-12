@@ -21,16 +21,25 @@ class Install {
   private $jsonLocalConfigPath;
   private $localConfig;
 
+  private $dbModel;
+  private $sqlPath;
+
   public function __construct() {
     Exceptions::$consolePrintOnly = true;
 
     $this->jsonLocalConfigPath = APP_ROOT . DS . 'app' . DS . 'Config' . DS . 'local.json';
+
+    $this->sqlPath = APP_ROOT . DS . 'sql';
 
     if (!$this->loadConfig()) {
       self::echoErro("Can not read config data at {$this->jsonLocalConfigPath}.");
     }
 
     if (!$this->configDatabase()) {
+      return;
+    }
+
+    if (!$this->importSql()) {
       return;
     }
 
@@ -101,9 +110,9 @@ class Install {
     $this->databaseConfig['password'] = $this->databasePassword; 
 
     try {
-      $dbModel = new $this->databaseConfig['creator']($this->databaseConfig);
+      $this->dbModel = new $this->databaseConfig['creator']($this->databaseConfig);
 
-      if (!($dbModel instanceof $this->databaseConfig['creator'])) {
+      if (!($this->dbModel instanceof $this->databaseConfig['creator'])) {
         self::echoError("Can not connect to database {$this->databaseName}.");
         return false;
       }
@@ -113,15 +122,44 @@ class Install {
       return true;
 
     } catch (\PDOException $e) {
-      self::echoError("Database connection failed: " . $e->getMessage());
+      self::echoError('Database connection failed: ' . $e->getMessage());
       return false;
 
     } catch (\Exception $e) {
-      self::echoError("Database connection failed: " . $e->getMessage());
+      self::echoError('Database connection failed: ' . $e->getMessage());
       return false;
     }
 
     return false;
+  }
+
+  private function importSql() {
+    try {
+      foreach (scandir($this->sqlPath) as $file) {
+        if (strpos($file, '.sql') === false) {
+          continue;
+        }
+
+        if (!($sqlQuery = file_get_contents($this->sqlPath . DS . $file))) {
+          self::echoError('Failed to read sql query at: ' . $this->sqlPath . DS . $file);
+          return false;
+        }
+
+        self::echoDefault('Runing SQL query from: ' . $this->sqlPath . DS . $file . ' ... ');
+        $this->dbModel->query($sqlQuery)->execute([])->rowCount();
+        self::echoDefault('Done' . PHP_EOL);
+      }
+
+    } catch (\PDOException $e) {
+      self::echoError('Failed to execute sql query: ' . $e->getMessage());
+      return false;
+
+    } catch (\Exception $e) {
+      self::echoError('Failed to execute sql query: ' . $e->getMessage());
+      return false;
+    }
+
+    return true;
   }
 
   private function setEmailAddress() {

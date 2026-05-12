@@ -34,6 +34,18 @@ class User extends \KrisRo\PhpRepublic\Model {
     return $this->db->updateUsersByCondition($criteria);
   }
 
+  public function updateLastLogin(array $user) {
+    $criteria = [
+      'condition' => '`id` = :id',
+      'params' => [':id' => $user['id']],
+      'values' => [
+        'last_login' => $user['last_login'],
+      ],
+    ];
+
+    return $this->db->updateUsersByCondition($criteria);
+  }
+
   public function getUser(int|string $id): array|null {
     // email
     if (is_string($id)) {

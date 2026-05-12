@@ -7,15 +7,7 @@
             "account/user/tokens": "App\\Actions\\Users\\Tokens",
             "account/user/token/add": "App\\Actions\\Users\\TokenAdd",
             "account/user/token/delete": "App\\Actions\\Users\\TokenDelete",
-            "users": "App\\Actions\\Users\\Index",
-            "crudtests": "App\\Actions\\CrudTests\\Index",
-            "crudtests/add": "App\\Actions\\CrudTests\\Add",
-            "crudtests/update": "App\\Actions\\CrudTests\\Update",
-            "crudtests/delete": "App\\Actions\\CrudTests\\Delete",
-            "todos": "App\\Actions\\Todos\\Index",
-            "todos/add": "App\\Actions\\Todos\\Add",
-            "todos/update": "App\\Actions\\Todos\\Update",
-            "todos/delete": "App\\Actions\\Todos\\Delete"
+            "users": "App\\Actions\\Users\\Index"
         },
         "front": {
             "logout": "App\\Actions\\Users\\Logout"

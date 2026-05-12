@@ -1,9 +1,9 @@
 CREATE TABLE `users` (
   -- Ids and authentication
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL, -- Length 255 for compatibility with password_hash()
+  `username` CHAR(255) NOT NULL,
+  `email` CHAR(255) NOT NULL,
+  `password` CHAR(255) NOT NULL, -- Length 255 for compatibility with password_hash()
 
   -- Status and Security
   `is_active` TINYINT(1) NOT NULL DEFAULT 0,
@@ -19,5 +19,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `idx_email` (`email`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_created` (`created`),
-  KEY `idx_updated` (`updated`)
+  KEY `idx_updated` (`updated`),
+  KEY `idx_last_login` (`last_login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -11,6 +11,7 @@ use KrisRo\PhpRepublic\Authenticate;
 use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;
 use KrisRo\PhpRepublic\Traits\CSRF;
+use App\Models\User as UserModel;
 
 class Signin implements PostDataProcessor {
 
@@ -42,7 +43,7 @@ class Signin implements PostDataProcessor {
       return;
     }
 
-    $user = (new \App\Models\User())->getUser(Config::validator()->getPost()['email']);
+    $user = (new UserModel())->getUser(Config::validator()->getPost()['email']);
 
     Session::set('user', $user);
 //    Session::set('request/messages/index/popup_success', Translate::users('Signin successful'));
@@ -56,7 +57,11 @@ class Signin implements PostDataProcessor {
       return false;
     }
 
-    $user = (new \App\Models\User())->getuser($post['email']);
+    $userModel = new UserModel();
+
+    $user = $userModel->getuser($post['email']);
+
+    $userModel->updateLastLogin(['id' => $user['id'], 'last_login' => (new \DateTime('now'))->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s')]);
 
     if (!$user || !Authenticate::verifyPassword($value, $user['password'] ?? '')) {
       Messages::popup_error($errorMessage);
