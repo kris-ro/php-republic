@@ -188,5 +188,7 @@ class Crud {
     if (file_exists($this->adminViewPath)) {
       return true;
     }
+
+    return false;
   }
 }
