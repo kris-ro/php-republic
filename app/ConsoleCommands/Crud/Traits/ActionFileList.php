@@ -11,7 +11,7 @@ trait ActionFileList {
 
     file_put_contents($this->actionPath . DS . 'Index.php', $this->createListActionFileContent($lowerCaseControllerName) . PHP_EOL);
 
-    file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_index.css', '');
+    // file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_index.css', '');
 
     $adminViewPath = $this->adminViewPath . DS . 'index.php';
 
@@ -35,9 +35,12 @@ trait ActionFileList {
                      .    $this->listFilters(2) . PHP_EOL
                      . '  public function run(): string {' . PHP_EOL
                      . '    /**' . PHP_EOL
+                     . "     * Uncomment the lines bellow if you need CCS and JS. " . PHP_EOL
                      . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_index.css" . PHP_EOL
-                     . '     */' . PHP_EOL
-                     . "    Config::set('css/{$lowerCaseControllerName}_index', '{$lowerCaseControllerName}_index.css');" . PHP_EOL . PHP_EOL
+                     . "     * and public_html/admin/js/{$lowerCaseControllerName}_index.js" . PHP_EOL . PHP_EOL
+                     . "     * Config::set('css/{$lowerCaseControllerName}/index', '{$lowerCaseControllerName}_index.css');" . PHP_EOL
+                    . "      * Config::set('js/{$lowerCaseControllerName}/index', '{$lowerCaseControllerName}_index.js');" . PHP_EOL
+                     . '     */' . PHP_EOL . PHP_EOL
                      . '    $list = new Listing([' . PHP_EOL
                      . '      \'order-by\' => \'id\',' . PHP_EOL
                      . '      \'size\' => \'10\',' . PHP_EOL

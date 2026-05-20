@@ -16,7 +16,7 @@ trait ActionFileDelete {
 
     file_put_contents($this->actionPath . DS . 'Delete.php', $this->createDeleteActionFileContent($lowerCaseControllerName, $itemName) . PHP_EOL);
 
-    file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_delete.css', '');
+    // file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_delete.css', '');
   }
 
   private function createDeleteActionFileContent(string $lowerCaseControllerName, string $itemName): string {
@@ -39,9 +39,12 @@ trait ActionFileDelete {
                      . '      Request::redirect(\'/admin/' . $lowerCaseControllerName . '\');' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL
                      . '    /**' . PHP_EOL
+                     . "     * Uncomment the lines bellow if you need CCS and JS. " . PHP_EOL
                      . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_delete.css" . PHP_EOL
-                     . '     */' . PHP_EOL
-                     . "    Config::set('css/{$lowerCaseControllerName}_delete', '{$lowerCaseControllerName}_delete.css');" . PHP_EOL . PHP_EOL
+                     . "     * and public_html/admin/js/{$lowerCaseControllerName}_delete.js" . PHP_EOL . PHP_EOL
+                     . "     * Config::set('css/{$lowerCaseControllerName}/delete', '{$lowerCaseControllerName}_delete.css');" . PHP_EOL
+                    . "      * Config::set('js/{$lowerCaseControllerName}/delete', '{$lowerCaseControllerName}_delete.js');" . PHP_EOL
+                     . '     */' . PHP_EOL . PHP_EOL
                      .      $this->binary2hex(4, $itemName) . PHP_EOL
                      . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/delete.php', [" . PHP_EOL
                      . '      \'item\' => $' . $itemName . ',' . PHP_EOL

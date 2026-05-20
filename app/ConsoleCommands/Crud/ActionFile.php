@@ -323,9 +323,9 @@ class ActionFile {
       case 'DATE':
       case 'DATETIME':
       case 'TIMESTAMP':
-        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\']),';
+        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\'] ?? \'\'),';
       case 'TIME':
-        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\'], \'H:i:s\'),';
+        return $indentation . '\'' . $field['name'] . '\' => Dates::format($item[\'' . $field['name'] . '\'] ?? \'\', \'H:i:s\'),';
       case 'TINYINT':
         return $indentation . '\'' . $field['name'] . '\' => $item[\'' . $field['name'] . '\'] ? \'Yes\' : \'No\',';
       case 'BINARY':

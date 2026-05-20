@@ -61,7 +61,7 @@
 
     <link rel="stylesheet" href="/admin/css/admin.css">
 
-    <?php if (Arrays::getValueByPath(Config::get('css'), Config::get('current_page'))) { ?>
+    <?php if (Config::get('css/' . Config::get('current_page'))) { ?>
       <link rel="stylesheet" href="/admin/css/<?php echo Config::get('css/' . Config::get('current_page')) ?>">
     <?php } ?>
 
@@ -112,8 +112,8 @@
 
     <?php echo Template::js('', false); ?>
 
-    <?php if (Arrays::getValueByPath(Config::get('js'), Config::get('current_page'))) { ?>
-      <!-- <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script> -->
+    <?php if (Config::get('js/' . Config::get('current_page'))) { ?>
+      <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script>
     <?php } ?>
 
     <script src="/admin/js/selector_popup.js"></script>

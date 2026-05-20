@@ -11,7 +11,7 @@ trait ActionFileAdd {
 
     file_put_contents($this->actionPath . DS . 'Add.php', $this->createAddActionFileContent($lowerCaseControllerName) . PHP_EOL);
 
-    file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_add.css', '');
+    // file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_add.css', '');
 
     $adminViewPath = $this->adminViewPath . DS . 'add.php';
 
@@ -30,9 +30,12 @@ trait ActionFileAdd {
                      . "class Add extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
                      . '  public function run(): string {' . PHP_EOL
                      . '    /**' . PHP_EOL
+                     . "     * Uncomment the lines bellow if you need CCS and JS. " . PHP_EOL
                      . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_add.css" . PHP_EOL
-                     . '     */' . PHP_EOL
-                     . "    Config::set('css/{$lowerCaseControllerName}_add', '{$lowerCaseControllerName}_add.css');" . PHP_EOL . PHP_EOL
+                     . "     * and public_html/admin/js/{$lowerCaseControllerName}_add.js" . PHP_EOL . PHP_EOL
+                     . "     * Config::set('css/{$lowerCaseControllerName}/add', '{$lowerCaseControllerName}_add.css');" . PHP_EOL
+                    . "      * Config::set('js/{$lowerCaseControllerName}/add', '{$lowerCaseControllerName}_add.js');" . PHP_EOL
+                     . '     */' . PHP_EOL . PHP_EOL
                      . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/add.php', [" . PHP_EOL
                      . '      \'errors\' => Messages::add' . strtolower($this->modelName) . 'form_error(),' . PHP_EOL
                      . '    ]);' . PHP_EOL
