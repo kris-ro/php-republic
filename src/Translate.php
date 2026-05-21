@@ -106,7 +106,7 @@ class Translate {
       $translationFile = APP_ROOT . DS . $translationsFolder . DS . "{$language}.json";
       $translation = json_decode(file_get_contents($translationFile), true);
       $translation['translations'][$model][$key] = ($defaultLanguage !== $language ? '----' : '') . $string;
-      file_put_contents($translationFile, json_encode($translation));
+      file_put_contents($translationFile, json_encode($translation, JSON_PRETTY_PRINT));
     }
 
     $bootstrap = Resources::globals('bootstrap');
