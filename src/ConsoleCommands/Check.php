@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommands;
+namespace KrisRo\PhpRepublic\ConsoleCommands;
 
 use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;

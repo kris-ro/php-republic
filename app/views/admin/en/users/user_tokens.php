@@ -29,7 +29,7 @@ use KrisRo\PhpRepublic\Request;
       <div class="<?php echo (self::view('token_add_form') ?? '') ? 'col-lg-9 col-sm-12' : 'col-12' ?> list-container" id="user-tokens-list-container" data-list-address="<?php echo self::get('list_address') ?>">
 
         <div class="card mb-4 list-content" id="user-tokens-list-content">
-          <div class="card-body">
+          <div class="card-body table-responsive">
             <table id="user-tokens" class="table table-bordered table-striped table-hover dataTable dtr-inline" aria-describedby="example2_info">
               <thead>
                 <tr>

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\ConsoleCommands;
+namespace KrisRo\PhpRepublic\ConsoleCommands;
 
 use KrisRo\Validator\Validator;
 use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;
 use KrisRo\PhpRepublic\Debug;
 use KrisRo\PhpRepublic\Strings;
-use App\ConsoleCommands\Crud\MysqlDataTypeMap;
-use App\ConsoleCommands\Crud\ModelFile;
-use App\ConsoleCommands\Crud\ControllerFile;
-use App\ConsoleCommands\Crud\PostFile;
-use App\ConsoleCommands\Crud\ActionFile;
-use App\ConsoleCommands\Crud\ConfigFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\MysqlDataTypeMap;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\ModelFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\ControllerFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\PostFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\ActionFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\ConfigFile;
 
 class Crud {
 
@@ -104,6 +104,12 @@ class Crud {
       self::echoError($e->getMessage());
       Config::logger()->error($e->getMessage());
 
+      $this->valid = false;
+      return $this;
+    }
+
+    if (!$this->primaryKey) {
+      self::echoError('No primary key found');
       $this->valid = false;
       return $this;
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
-use App\ConsoleCommands\Crud\Traits\PostFileAdd;
-use App\ConsoleCommands\Crud\Traits\PostFileUpdate;
-use App\ConsoleCommands\Crud\Traits\PostFileDelete;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\PostFileAdd;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\PostFileUpdate;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\PostFileDelete;
 
 class PostFile {
 
@@ -29,7 +29,7 @@ class PostFile {
 
   private $postFiles = [];
 
-  public function __construct(\App\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
     $this->modelName = $crud->modelName;
     $this->controllerName = $crud->controllerName;
     $this->fields = $crud->fields;
@@ -114,6 +114,8 @@ class PostFile {
       case 'MEDIUMTEXT':
       case 'LONGTEXT':
         return $this->buildTextValidationRule($field);
+      case 'SET':
+        return $this->buildMultipleOptionListValidationRule($field);
       case 'ENUM':
         return $this->buildListValidationRule($field);
       case 'DATE':
@@ -132,7 +134,7 @@ class PostFile {
         return $this->buildLongBlobValidationRule($field);
     }
 
-   throw new \Exception('Unknown field type');
+   throw new \Exception('Unknown field type: ' . $field['type']);
   }
 
   private function buildIntegerValidationRule(array $field) {
@@ -156,7 +158,7 @@ class PostFile {
 
   private function buildNumericalValidationRule(array $field) {
     $rules = [];
-    $rules[] = '[\'float\']';
+    $rules[] = '\'float\'';
 
     return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
   }
@@ -205,6 +207,23 @@ class PostFile {
     $this->validationMethods[] = PHP_EOL
       . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
       . '    $acceptedValues = [\'' . implode('\', \'', $field['enum_values']) . '\'];' . PHP_EOL . PHP_EOL
+      . '    if (in_array($value, $acceptedValues)) {' . PHP_EOL
+      . '      return true;' . PHP_EOL
+      . '    }' . PHP_EOL . PHP_EOL
+      . '    return false;' . PHP_EOL
+      . '  }';
+
+    return '[' . implode(', ', $rules + $this->isOptional($field)) . '],';
+  }
+
+  private function buildMultipleOptionListValidationRule(array $field) {
+    $rules = [];
+    $rules[] = '\'is_array\'';
+    $rules[] = '[new ' . $this->actionName . '(), \'valid' . ucfirst(Strings::toCamelCase($field['name'])) . '\']';
+
+    $this->validationMethods[] = PHP_EOL
+      . '  public function valid' . ucfirst(Strings::toCamelCase($field['name'])) . '($value, $post) {' . PHP_EOL
+      . '    $acceptedValues = [\'' . implode('\', \'', $field['set_values']) . '\'];' . PHP_EOL . PHP_EOL
       . '    if (in_array($value, $acceptedValues)) {' . PHP_EOL
       . '      return true;' . PHP_EOL
       . '    }' . PHP_EOL . PHP_EOL
@@ -279,11 +298,11 @@ class PostFile {
 
     $content = '';
 
-    foreach ($this->postFiles as $fileField) {
+    foreach ($this->postFiles ?: [] as $fileField) {
       $content .= '    $post[\'' . $fileField . '\'] = $post[\'' . $fileField . '\'][\'name\'] ? file_get_contents($post[\'' . $fileField . '\'][\'tmp_name\']) : null;' . PHP_EOL;
     }
 
-    foreach ($this->binaryFields as $binaryField) {
+    foreach ($this->binaryFields ?: [] as $binaryField) {
       $content .= '    $post[\'' . $binaryField . '\'] = hex2bin($post[\'' . $binaryField .'\']);' . PHP_EOL;
     }
 

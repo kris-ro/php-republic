@@ -30,6 +30,12 @@ class Listing {
   private $sqlComponents = [];
   private $table = null;
 
+  /**
+   * Base URL for paging. Use this when url doesn't match <code>Congig::current_page()</code>
+   * @var string
+   */
+  public $pageUrl;
+
   public function __construct(?array $params = [], ?array $filters = []) {
     $this->listParams = $params + Config::get('app/pagination/default');
     $this->listFilters = $filters + $this->listFilters;
@@ -192,7 +198,7 @@ class Listing {
 
     foreach ($this->listFilters as $key => $params) {
       if (!empty($params[1])) {
-        $groupedParams[] = str_replace('_', '-', $key) . '/' . implode('/', $params[1]);
+        $groupedParams[] = str_replace('_', '-', $key) . '/' . implode('/', array_unique($params[1]));
       }
     }
 
@@ -215,11 +221,17 @@ class Listing {
       $groupedParams[] = 'page-' . $this->listParams['page'];
     }
 
+    $getParams = [];
     if (Request::get('format')) {
-      $groupedParams[] = '&format=' . Request::get('format'); // e.g. format=print (no side-bar)
+      $getParams[] = '&format=' . Request::get('format'); // e.g. format=print (no side-bar)
     }
 
-    return implode('/', $groupedParams);
+    if (Request::get('slim_table') !== null) {
+      $getParams[] = 'slim_table=1';
+      $getParams[] = 'target=' . Request::get('target');
+    }
+
+    return implode('/', $groupedParams) . ($getParams ? ('?' . implode('&', $getParams)) : '');
   }
 
   /**
@@ -268,6 +280,10 @@ class Listing {
         . '/order-by-' . $field
         . '/sort-' . ($this->listParams['order-by'] == $field && $this->listParams['sort'] == 'desc' ? 'asc' : 'desc')
         . '/size-' . $this->listParams['size'];
+
+      if (Request::get('slim_table') !== null) {
+        $urls[$field] .= '?slim_table=1&target=' . Request::get('target');
+      }
     }
 
     return $urls;
@@ -297,10 +313,26 @@ class Listing {
   public function select(array $fields): self {
     $sqlFields = [];
     foreach ($fields as $field) {
-      $sqlFields[] = strpos($field, '`') !== false ? $field : '`' . str_replace('.', '`.`', $field) . '`';
+      list($selectTable, $selectField) = array_pad(explode('.', $field), 2, null);
+
+      $selectTable = '`' . trim($selectTable, '`') . '`';
+      
+      if (!$selectField) {
+        $sqlFields[] = $selectTable; // actually a field
+        continue;
+      }
+
+      if ($selectField == '*') {
+        $sqlFields[] = "{$selectTable}.*";
+        continue;
+      }
+
+      $selectField = '`' . trim($selectField, '`') . '`';
+
+      $sqlFields[] = "{$selectTable}.{$selectField}";
     }
 
-    $this->sqlComponents['select'] = ' SELECT ' . implode(', ', $sqlFields) . ' ';
+    $this->sqlComponents['select'] = ' SELECT DISTINCT ' . implode(', ', $sqlFields) . ' ';
 
     return $this;
   }
@@ -324,15 +356,32 @@ class Listing {
    *
    * @param string $joinedTable
    * @param string $toTable
+   * @param array $condition
+   * 
    * @return self
    */
-  public function join(string $joinedTable, string $toTable): self {
-    $this->sqlComponents['join'][] = ' JOIN ' .
+  public function join(string $joinedTable, string $toTable, ?array $condition = null): self {
+    $join = ' JOIN ' .
                                      '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
                                      ' ON ' .
                                      ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
                                      ' = ' .
                                      (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+
+    if ($condition) {
+      $field = str_replace('`', '', $condition[0]);
+      $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $condition[1], $condition[2] ?? '=', $condition[3] ?? null);
+
+      $join .= ' AND ' . $criteria['condition'];
+
+      if ($this->sqlComponents['params'] ?? null) {
+        $this->sqlComponents['params'] += $criteria['params'];
+      } else {
+        $this->sqlComponents['params'] = $criteria['params'];
+      }
+    }
+
+    $this->sqlComponents['join'][] = $join;
 
     return $this;
   }
@@ -342,15 +391,32 @@ class Listing {
    *
    * @param string $joinedTable
    * @param string $toTable
+   * @param array $condition
+   * 
    * @return self
    */
-  public function left(string $joinedTable, string $toTable): self {
-    $this->sqlComponents['join'][] = ' LEFT JOIN ' .
-                                     '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
-                                     ' ON ' .
-                                     ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
-                                     ' = ' .
-                                     (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+  public function left(string $joinedTable, string $toTable, ?array $condition = null): self {
+    $join = ' LEFT JOIN ' .
+                '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
+            ' ON ' .
+                ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
+                   ' = ' .
+                (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+
+    if ($condition) {
+      $field = str_replace('`', '', $condition[0]);
+      $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $condition[1], $condition[2] ?? '=', $condition[3] ?? null);
+
+      $join .= ' AND ' . $criteria['condition'];
+
+      if ($this->sqlComponents['params'] ?? null) {
+        $this->sqlComponents['params'] += $criteria['params'];
+      } else {
+        $this->sqlComponents['params'] = $criteria['params'];
+      }
+    }
+
+    $this->sqlComponents['join'][] = $join;
 
     return $this;
   }
@@ -360,15 +426,32 @@ class Listing {
    *
    * @param string $joinedTable
    * @param string $toTable
+   * @param array $condition
+   * 
    * @return self
    */
-  public function right(string $joinedTable, string $toTable): self {
-    $this->sqlComponents['join'][] = ' RIGHT JOIN ' .
-                                     '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
-                                     ' ON ' .
-                                     ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
-                                     ' = ' .
-                                     (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+  public function right(string $joinedTable, string $toTable, ?array $condition = null): self {
+    $join = ' RIGHT JOIN ' .
+                '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
+            ' ON ' .
+                ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
+                   ' = ' .
+                (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+
+    if ($condition) {
+      $field = str_replace('`', '', $condition[0]);
+      $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $condition[1], $condition[2] ?? '=', $condition[3] ?? null);
+
+      $join .= ' AND ' . $criteria['condition'];
+
+      if ($this->sqlComponents['params'] ?? null) {
+        $this->sqlComponents['params'] += $criteria['params'];
+      } else {
+        $this->sqlComponents['params'] = $criteria['params'];
+      }
+    }
+
+    $this->sqlComponents['join'][] = $join;
 
     return $this;
   }
@@ -389,10 +472,6 @@ class Listing {
       list($table, $field) = explode('.', $field);
     }
 
-    if (!Request::param($filter, array_keys($this->listFilters))) {
-      return $this;
-    }
-
     switch ($type) {
       case 'date':
         $this->filterDate($table, $field, $filter, $operator);
@@ -402,6 +481,31 @@ class Listing {
         $this->filterDefault($table, $field, $filter, $operator);
     }
 
+
+    return $this;
+  }
+
+  /**
+   * Builds the GROUP BY part of the query
+   *
+   * @param array $fields
+   * @return self
+   */
+  public function group(array $fields): self {
+    foreach ($fields as $field) {
+      list($groupTable, $groupField) = array_pad(explode('.', $field), 2, null);
+
+      $groupTable = '`' . trim($groupTable, '`') . '`';
+      
+      if (!$groupField) {
+        $this->sqlComponents['group'][] = $groupTable; // actually a field
+        continue;
+      }
+
+      $groupField = '`' . trim($groupField, '`') . '`';
+
+      $this->sqlComponents['group'][] = "{$groupTable}.{$groupField}";
+    }
 
     return $this;
   }
@@ -478,6 +582,7 @@ class Listing {
     $sql = $this->sqlComponents['from'] . PHP_EOL;
     $sql .= ($this->sqlComponents['join'] ?? null) ? implode(PHP_EOL, $this->sqlComponents['join']) . PHP_EOL : '';
     $sql .= ($this->sqlComponents['where'] ?? null) ? ' WHERE ' . implode(' AND ', $this->sqlComponents['where']) . ' ' : '';
+    $sql .= ($this->sqlComponents['group'] ?? null) ? ' GROUP BY ' . implode(', ', $this->sqlComponents['group']) . ' ' : '';
 
     $countSql = "SELECT COUNT(*) AS `total` " . $sql;
     $dataSql = (($this->sqlComponents['select'] ?? null) ?: ' SELECT * ') . PHP_EOL . $sql;
@@ -527,7 +632,7 @@ class Listing {
 
     $section = SECTION == 'front' ? '' : SECTION . '/';
 
-    $pageUrl = Request::buildUrl($section . Config::current_page()) . '/';
+    $pageUrl = $this->pageUrl ? trim($this->pageUrl, '/') . '/' : Request::buildUrl($section . Config::current_page()) . '/';
 
     Template::filter($this->listFilters);
     Template::pagination($this->listParams);
@@ -549,7 +654,7 @@ class Listing {
     }
 
     foreach ($this->params as $param) {
-      if (false !== strpos($item, $param)) {
+      if (false !== strpos($item . '-', $param)) {
         return $param;
       }
     }

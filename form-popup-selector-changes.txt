@@ -1,0 +1,61 @@
+In action pass 'webroot' to template
+
+```
+	return Template::renderView('/admin/' . Session::language() . '/{controller}/{action}.php', [
+    'errors' => Messages::{action}{controller}form_error(),
+    'webroot' => Config::get('url/protocol') . '://' . Config::get('url/domain'),
+  ]);
+```
+
+In template modify input form element to input group
+{field_name} is the value for the input field name in the form, in php-republic is usualy the column name from database table.
+{relation_controller} is the targeted entity we want to add to the form (like 'countries' - for the 'country_id' input form element) 
+
+```
+<div class="input-group">
+  <input type="text" class="form-control <?php echo self::view('errors/{field_name}') ? 'border-danger text-danger' : '' ?>" name="{field_name}" id="{field_name}-id" value="<?php echo Request::isPost() ? Request::post('{field_name}') : (self::view('item/{field_name}') ?? '') ?>" aria-describedby="{field_name}-selector">
+  <div class="input-group-text slim-selector-trigger" id="{field_name}-selector" data-source="<?php echo self::view('webroot') ?>/admin/{relation_controller}?slim_table=1&target={field_name}-id"><i class="bi bi-hand-index-fill" data-source="<?php echo self::view('webroot') ?>/admin/{relation_controller}?slim_table=1&target={field_name}-id"></i></div>
+</div>
+```
+
+In the Post processor you need to update the validation rule to account for the `id|label` format of the selected value
+
+```
+  public static function ValidatePostData(): void {
+    $result = Config::validator()
+              ->addPostValidationMessages([
+                ...
+                '{field_name}' => Translate::{controller}('Invalid {field_name}'),
+                ...
+              ])
+              ->addPostValidationRules([
+                ...
+                '{field_name}' => [..., [new {CustomClass}(), '{customMdethod}']],
+                ...
+              ])
+              ->processPost();
+
+    if (!$result) {
+      Messages::{action}{controller}form_error(Config::validator()->getPostValidationMessages());
+    }
+  }
+
+  ...
+
+  public static function ProcessPostData(): void {
+    ...
+    ${field_name}_id' => current(explode('|', $post['{field_name}'])),
+    ...
+  }
+
+  ...
+
+  public function {customMdethod}($value, $post) {
+    // validate data and return TRUE or FALSE
+
+    return true;
+  }
+
+
+
+```

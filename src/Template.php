@@ -154,7 +154,7 @@ class Template {
   private static function view(string $item, ?bool $escape = true, mixed $default = null) {
     $data = self::get(self::get('viewDataPath') . '/' . $item, '', $escape) ?: $default;
 
-    return $escape ? self::escape($data) : $data;
+    return $data;
   }
 
   /**

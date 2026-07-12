@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Debug;
@@ -110,6 +110,7 @@ class MysqlDataTypeMap {
     $precision = null;      // for DECIMAL / FLOAT / DOUBLE
     $lengthField = null;    // for strings and binary
     $enumValues = null;
+    $setValues = null;
     $extra = [];
 
     $isPrimaryKey = false;
@@ -226,6 +227,19 @@ class MysqlDataTypeMap {
         $defaultValue = $defaultValue ? '\'' . $defaultValue . '\'' : $defaultValue;
         break;
 
+      // === SET ===
+      case 'SET':
+        $normalizedType = 'SET';
+        if ($paramsStr) {
+          // Remove quotes and split values
+          $setValues = array_map(
+            fn($v) => trim($v, " '\"\t\n\r"),
+            explode(',', $paramsStr)
+          );
+        }
+        $defaultValue = $defaultValue ? '\'' . $defaultValue . '\'' : $defaultValue;
+        break;
+
       // === Date / Time ===
       case 'DATE':
         $normalizedType = 'DATE';
@@ -281,6 +295,9 @@ class MysqlDataTypeMap {
     }
     if ($enumValues !== null) {
       $result['enum_values'] = $enumValues;
+    }
+    if ($setValues !== null) {
+      $result['set_values'] = $setValues;
     }
     if (in_array($normalizedType, ['TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'BIGINT'])) {
       $result['unsigned'] = $isUnsigned ? true : false;

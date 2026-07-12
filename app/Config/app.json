@@ -17,6 +17,7 @@
     "json_sections" : ["api"],
     "languages" : ["en"],
     "datetime" : {
+      "minute_format" : "H:i",
       "time_format" : "H:i:s",
       "date_format" : "Y-m-d",
       "time_zone" : "Europe/Bucharest"

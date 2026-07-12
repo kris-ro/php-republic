@@ -11,7 +11,7 @@ class UserToken extends \KrisRo\PhpRepublic\Model {
   }
 
   public function setToken(array $token): int {
-    return $this->db->setUser_tokens($token);
+    return $this->db->setUser_tokensAndGetId($token);
   }
 
   public function getToken(int $id): array|false|null {

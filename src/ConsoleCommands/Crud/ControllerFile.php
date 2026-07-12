@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
 
@@ -9,7 +9,7 @@ class ControllerFile {
   private $controllerName;
   private $controllerPath;
 
-  public function __construct(\App\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
     $this->controllerName = $crud->controllerName;
     $this->controllerPath = $crud->controllerPath;
   }
@@ -17,7 +17,7 @@ class ControllerFile {
   public function buildController() {
     $fileContent = '<?php'
                      . PHP_EOL . PHP_EOL
-                     . 'namespace App\Controllers;' . PHP_EOL . PHP_EOL
+                     . 'namespace KrisRo\PhpRepublic\Controllers;' . PHP_EOL . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Controller;' . PHP_EOL . PHP_EOL
                      . 'class ' . Strings::toCamelCase($this->controllerName) . ' extends Controller {}' . PHP_EOL;
 

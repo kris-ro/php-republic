@@ -1,15 +1,14 @@
 <?php
 
-namespace App\ConsoleCommands\Crud\Traits;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits;
 
 use KrisRo\PhpRepublic\Strings;
 
-trait PostFileUpdate {
+trait PostFileDelete {
 
-  public function buildUpdate() {
-    $this->actionName = 'Update';
+  public function buildDelete() {
+    $this->actionName = 'Delete';
     $this->validationMethods = [];
-    $this->postFiles = [];
 
     $fileContent = '<?php'
                      . PHP_EOL . PHP_EOL
@@ -19,28 +18,28 @@ trait PostFileUpdate {
                      . 'use KrisRo\PhpRepublic\Translate;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
-                     . 'use KrisRo\PhpRepublic\Files;' . PHP_EOL
-                     . 'use KrisRo\PhpRepublic\Debug;' . PHP_EOL
                      . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
-                     . 'class Update implements PostDataProcessor {' . PHP_EOL . PHP_EOL
+                     . 'class Delete implements PostDataProcessor {' . PHP_EOL . PHP_EOL
 
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
 
-                     . '  static protected $formId = \'update' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
+                     . '  static protected $formId = \'delete' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
 
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
-                     .                  $this->buildFieldsMessages(16) . PHP_EOL
+                     . '                 self::INPUT_ELEMENT_NAME => Translate::csrf(\'Invalid Form\'),' . PHP_EOL
+                     . '                \'' . $this->primaryKey . '\' => Translate::' . strtolower($this->modelName) . '(\'Invalid ' . strtolower(str_replace('_', ' ', $this->primaryKey)) . '\'),' . PHP_EOL
                      . '              ])' . PHP_EOL
                      . '              ->addPostValidationRules([' . PHP_EOL
-                     .                  $this->buildFieldsValidation(16) . PHP_EOL
+                     . '                 self::INPUT_ELEMENT_NAME => [[\'App\\\\Post\\\\' . $this->controllerName . '\\\\' . $this->actionName .'\', \'validFormToken\']],' . PHP_EOL
+                     . '                \'' . $this->primaryKey . '\' => ' . $this->mapDbTypeToValidationRule($this->primaryKeyDefinition) . PHP_EOL
                      . '              ])' . PHP_EOL
                      . '              ->processPost();' . PHP_EOL . PHP_EOL
                      . '    if (!$result) {' . PHP_EOL
-                     . '      Messages::update' . strtolower($this->modelName) . 'form_error(Config::validator()->getPostValidationMessages());' . PHP_EOL
+                     . '      Messages::delete' . strtolower($this->modelName) . 'form_error(Config::validator()->getPostValidationMessages());' . PHP_EOL
                      . '    }' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
 
@@ -48,11 +47,8 @@ trait PostFileUpdate {
                      . '    if (!empty(Config::validator()->getPostValidationMessages())) {' . PHP_EOL
                      . '      return;' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL
-                     . '    $post = Config::validator()->getPost();' . PHP_EOL . PHP_EOL
-                     .      $this->collectFileFields()
-                     .      $this->setDefaultValues()
-                     . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->update' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($post);' . PHP_EOL . PHP_EOL
-                     . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was saved\'));' . PHP_EOL . PHP_EOL
+                     . '    (new \App\Models\\' . Strings::toCamelCase($this->modelName) . '())->delete' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '(Config::validator()->getPost()[\'' . $this->primaryKey . '\']);' . PHP_EOL . PHP_EOL
+                     . '    Session::set(\'request/messages/' . strtolower($this->controllerName) . '/popup_success\', Translate::' . strtolower($this->modelName) . '(\'' . ucfirst(strtolower(str_replace('_', ' ', $this->modelName))) . ' was deleted\'));' . PHP_EOL . PHP_EOL
                      . '    Request::redirect(\'/admin/' . strtolower($this->controllerName) . '\');' . PHP_EOL
                      . '  }' . PHP_EOL
 
@@ -61,6 +57,6 @@ trait PostFileUpdate {
                      . '}' . PHP_EOL . PHP_EOL
       ;
 
-    file_put_contents($this->postPath . DS . 'Update.php', $fileContent . PHP_EOL);
+    file_put_contents($this->postPath . DS . 'Delete.php', $fileContent . PHP_EOL);
   }
 }

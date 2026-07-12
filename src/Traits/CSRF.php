@@ -27,7 +27,7 @@ trait CSRF {
     }
 
     $token = Session::get('csrf-' . self::$formId);
-    session::set('csrf-' . self::$formId, null);
+    Session::set('csrf-' . self::$formId, null);
     return ($token && Request::post('csrf_token') === $token) ?: !(Messages::popup_error(Translate::csrf('Invalid Form')));
   }
 }

@@ -111,6 +111,17 @@ function filterList(listContainer, listContent) {
       }
     }
   });
-  console.log(path);
-  loadList(listContainer, listContent, path);
+  // console.log(path);
+  loadList(listContainer, listContent, path + getSlimSelectParams());
+}
+
+function getSlimSelectParams() {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  let slimSelectParams = '';
+  if (searchParams.get("slim_table") === "1") {
+    slimSelectParams = '?slim_table=1&target=' + searchParams.get("target");
+  }
+
+  return slimSelectParams;
 }

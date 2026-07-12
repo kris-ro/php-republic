@@ -32,7 +32,7 @@ class Crypto {
    * @param string $data
    * @return string
    */
-  public static function decrypt( string $data): string {
+  public static function decrypt(string $data): string {
     return openssl_decrypt(
 			$data,
 			Config::get('crypto/cipher'),

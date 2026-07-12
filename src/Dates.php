@@ -71,4 +71,16 @@ class Dates {
 
     return $date && $date->format($format) === $time . $sufix;
   }
+
+  public static function convertDateTimeToUTC(string $time, ?string $localZone = '') {
+    if (!$localZone && !($localZone = Config::get('app/datetime/time_zone'))) {
+      return $time;
+    }
+
+    $localTime = new \DateTime($time, new \DateTimeZone($localZone));
+
+    $localTime->setTimezone(new \DateTimeZone('UTC'));
+
+    return $localTime;
+  }
 }

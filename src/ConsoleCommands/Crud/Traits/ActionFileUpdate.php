@@ -1,25 +1,25 @@
 <?php
 
-namespace App\ConsoleCommands\Crud\Traits;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits;
 
 use KrisRo\PhpRepublic\Strings;
 
-trait ActionFileDelete {
+trait ActionFileUpdate {
 
-  public function buildDelete() {
+  public function buildUpdate() {
     $lowerCaseControllerName = strtolower($this->controllerName);
     $itemName = lcfirst(Strings::toCamelCase($this->modelName));
 
-    $adminViewPath = $this->adminViewPath . DS . 'delete.php';
+    $adminViewPath = $this->adminViewPath . DS . 'update.php';
 
-    file_put_contents($adminViewPath, $this->createDeleteActionTemplateFileContent($lowerCaseControllerName) . PHP_EOL);
+    file_put_contents($adminViewPath, $this->createUpdateActionTemplateFileContent($lowerCaseControllerName) . PHP_EOL);
 
-    file_put_contents($this->actionPath . DS . 'Delete.php', $this->createDeleteActionFileContent($lowerCaseControllerName, $itemName) . PHP_EOL);
+    file_put_contents($this->actionPath . DS . 'Update.php', $this->createUpdateActionFileContent($lowerCaseControllerName, $itemName) . PHP_EOL);
 
-    // file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_delete.css', '');
+    // file_put_contents(APP_ROOT . DS . 'public_html' . DS . 'admin' . DS . 'css' . DS . $lowerCaseControllerName . '_update.css', '');
   }
 
-  private function createDeleteActionFileContent(string $lowerCaseControllerName, string $itemName): string {
+  private function createUpdateActionFileContent(string $lowerCaseControllerName, string $itemName): string {
     return '<?php'
                      . PHP_EOL . PHP_EOL
                      . "namespace App\Actions\\{$this->controllerName};" . PHP_EOL . PHP_EOL
@@ -31,7 +31,7 @@ trait ActionFileDelete {
                      . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use App\Models\\' . Strings::toCamelCase($this->modelName) . ';' . PHP_EOL
                      . 'use KrisRo\PhpConfig\Config;' . PHP_EOL . PHP_EOL
-                     . "class Delete extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
+                     . "class Update extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
                      . '  public function run(): string {' . PHP_EOL
                      . '    $' . $itemName . 'Id = Request::nth(4);' . PHP_EOL
                      . '    if (!(Config::validator() ?? (new Validator()))->positiveInteger($' . $itemName . 'Id) || !($' . $itemName . ' = (new ' . Strings::toCamelCase($this->modelName) . '())->get' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($' . $itemName . 'Id))) {' . PHP_EOL
@@ -40,22 +40,22 @@ trait ActionFileDelete {
                      . '    }' . PHP_EOL . PHP_EOL
                      . '    /**' . PHP_EOL
                      . "     * Uncomment the lines bellow if you need CCS and JS. " . PHP_EOL
-                     . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_delete.css" . PHP_EOL
-                     . "     * and public_html/admin/js/{$lowerCaseControllerName}_delete.js" . PHP_EOL . PHP_EOL
-                     . "     * Config::set('css/{$lowerCaseControllerName}/delete', '{$lowerCaseControllerName}_delete.css');" . PHP_EOL
-                    . "      * Config::set('js/{$lowerCaseControllerName}/delete', '{$lowerCaseControllerName}_delete.js');" . PHP_EOL
+                     . "     * This is mapped to public_html/admin/css/{$lowerCaseControllerName}_update.css" . PHP_EOL
+                     . "     * and public_html/admin/js/{$lowerCaseControllerName}_update.js" . PHP_EOL . PHP_EOL
+                     . "     * Config::set('css/{$lowerCaseControllerName}/update', '{$lowerCaseControllerName}_update.css');" . PHP_EOL
+                    . "      * Config::set('js/{$lowerCaseControllerName}/update', '{$lowerCaseControllerName}_update.js');" . PHP_EOL
                      . '     */' . PHP_EOL . PHP_EOL
                      .      $this->binary2hex(4, $itemName) . PHP_EOL
-                     . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/delete.php', [" . PHP_EOL
+                     . "    return Template::renderView('/admin/' . Session::language() . '/{$lowerCaseControllerName}/update.php', [" . PHP_EOL
                      . '      \'item\' => $' . $itemName . ',' . PHP_EOL
-                     . '      \'errors\' => Messages::delete' . strtolower($this->modelName) . 'form_error(),' . PHP_EOL
+                     . '      \'errors\' => Messages::update' . strtolower($this->modelName) . 'form_error(),' . PHP_EOL
                      . '    ]);' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL
                      . '}' . PHP_EOL . PHP_EOL
     ;
   }
 
-  private function createDeleteActionTemplateFileContent(string $lowerCaseControllerName): string {
+  private function createUpdateActionTemplateFileContent(string $lowerCaseControllerName): string {
     return '<?php'
                      . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
@@ -66,7 +66,7 @@ trait ActionFileDelete {
                      . '  <div class="container-fluid">' . PHP_EOL
                      . '    <!--begin::Row-->' . PHP_EOL
                      . '    <div class="row">' . PHP_EOL
-                     . '      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; ' . Strings::prettify($this->modelName) . ' &raquo; Delete</h3></div>' . PHP_EOL
+                     . '      <div class="col-sm-6"><h3 class="mb-0"> Admin &raquo; ' . Strings::prettify($this->modelName) . ' &raquo; Update</h3></div>' . PHP_EOL
                      . '    </div>' . PHP_EOL
                      . '    <!--end::Row-->' . PHP_EOL
                      . '  </div>' . PHP_EOL
@@ -83,24 +83,20 @@ trait ActionFileDelete {
                      . '      <div class="col-sm-12">' . PHP_EOL
                      . '        <div class="card card-primary card-outline mb-4">' . PHP_EOL
                      . '          <!--begin::Header-->' . PHP_EOL
-                     . '          <div class="card-header"><div class="card-title">Delete ' . Strings::prettify($this->modelName) . '</div></div>' . PHP_EOL
+                     . '          <div class="card-header"><div class="card-title">Update ' . Strings::prettify($this->modelName) . '</div></div>' . PHP_EOL
                      . '          <!--end::Header-->' . PHP_EOL
-                     . '          <div class="alert alert-warning m-3" role="alert">' . PHP_EOL
-                     . '            <h5><i class="bi bi-exclamation-triangle-fill"></i> Warning</h5>' . PHP_EOL
-                     . '            You\'re deleting ' . Strings::prettify($this->modelName) . ' item. You won\'t be able to undo this.' . PHP_EOL
-                     . '          </div>' . PHP_EOL
                      . '          <!--begin::Form-->' . PHP_EOL
-                     . '          <form action="/admin/' . $lowerCaseControllerName . '/delete/<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>" method="POST">' . PHP_EOL
-                     . '            <?php echo self::getFormToken(\'delete' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
+                     . '          <form action="/admin/' . $lowerCaseControllerName . '/update/<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>" method="POST" enctype="multipart/form-data">' . PHP_EOL
+                     . '            <?php echo self::getFormToken(\'update' . strtolower($this->modelName) . '\') // self is instance of KrisRo\PhpRepublic\Template ?>' . PHP_EOL
                      . '            <!--begin::Body-->' . PHP_EOL
                      . '            <div class="card-body">' . PHP_EOL
                      . '              <input type="hidden" name="' . $this->primaryKey . '" id="' . $this->primaryKey . '-id" value="<?php echo self::view(\'item/' . $this->primaryKey . '\') ?>">' . PHP_EOL
-                     .                $this->detailItems(14) . PHP_EOL
+                     .                $this->formElements(14, $this->autoIncrement + [999 => $this->primaryKey]) . PHP_EOL
                      . '            </div>' . PHP_EOL
                      . '            <!--end::Body-->' . PHP_EOL
                      . '            <!--begin::Footer-->' . PHP_EOL
                      . '            <div class="card-footer">' . PHP_EOL
-                     . '              <button type="submit" class="btn btn-danger">Delete</button>' . PHP_EOL
+                     . '              <button type="submit" class="btn btn-primary">Submit</button>' . PHP_EOL
                      . '            </div>' . PHP_EOL
                      . '            <!--end::Footer-->' . PHP_EOL
                      . '          </form>' . PHP_EOL

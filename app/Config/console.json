@@ -1,15 +1,15 @@
 {
   "console": {
     "install" : {
-      "class" : "App\\ConsoleCommands\\Install",
+      "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\Install",
       "_construct" : {}
     },
     "check" : {
-      "class" : "App\\ConsoleCommands\\Check",
+      "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\Check",
       "_construct" : {}
     },
     "crud" : {
-      "class" : "App\\ConsoleCommands\\Crud",
+      "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\Crud",
       "_construct" : {
         "model": null,
         "force": null
@@ -18,7 +18,7 @@
       }
     },
     "cryptoKeys" : {
-      "class" : "App\\ConsoleCommands\\CryptoKeys",
+      "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\CryptoKeys",
       "_construct" : {
         "type": null
       }

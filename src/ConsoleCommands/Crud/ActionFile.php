@@ -1,14 +1,14 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
 use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Debug;
-use App\ConsoleCommands\Crud\Traits\ActionFileAdd;
-use App\ConsoleCommands\Crud\Traits\ActionFileUpdate;
-use App\ConsoleCommands\Crud\Traits\ActionFileDelete;
-use App\ConsoleCommands\Crud\Traits\ActionFileList;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ActionFileAdd;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ActionFileUpdate;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ActionFileDelete;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ActionFileList;
 
 class ActionFile {
 
@@ -31,7 +31,7 @@ class ActionFile {
   private $actionPath;
   private $adminViewPath;
 
-  public function __construct(\App\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
     $this->modelName = $crud->modelName;
     $this->controllerName = $crud->controllerName;
     $this->fields = $crud->fields;
@@ -162,7 +162,7 @@ class ActionFile {
     foreach ($this->fields as $field) {
       $type = 'TEXT';
 
-      if (in_array($field['type'], ['ENUM', 'TINYINT'])) {
+      if (in_array($field['type'], ['ENUM', 'TINYINT', 'SET'])) {
         $type = 'SELECT';
       }
 
@@ -181,6 +181,12 @@ class ActionFile {
 
       if ($field['type'] == 'ENUM') {
         foreach ($field['enum_values'] as $value) {
+          $values[$value] = Strings::prettify($value);
+        }
+      }
+
+      if ($field['type'] == 'SET') {
+        foreach ($field['set_values'] as $value) {
           $values[$value] = Strings::prettify($value);
         }
       }
@@ -248,6 +254,7 @@ class ActionFile {
       case 'LONGTEXT':
         return $this->buildTextareaElement($field, $spaceIndent);
       case 'ENUM':
+      case 'SET':
         return $this->buildSelectElement($field, $spaceIndent);
       case 'DATE':
         return $this->buildDateElement($field, $spaceIndent);
@@ -288,6 +295,7 @@ class ActionFile {
       case 'MEDIUMTEXT':
       case 'LONGTEXT':
       case 'ENUM':
+      case 'SET':
       case 'DATE':
       case 'DATETIME':
       case 'TIMESTAMP':
@@ -352,7 +360,7 @@ class ActionFile {
 
     } else {
       $values = [];
-      foreach ($field['enum_values'] as $value) {
+      foreach (($field['enum_values'] ?? $field['set_values']) as $value) {
         $values[$value] = Strings::prettify($value);
       }
     }

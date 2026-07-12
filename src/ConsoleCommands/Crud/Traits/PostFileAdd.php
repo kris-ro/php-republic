@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommands\Crud\Traits;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits;
 
 use KrisRo\PhpRepublic\Strings;
 

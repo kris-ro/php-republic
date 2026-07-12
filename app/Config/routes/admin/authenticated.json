@@ -7,7 +7,8 @@
             "account/user/tokens": "App\\Actions\\Users\\Tokens",
             "account/user/token/add": "App\\Actions\\Users\\TokenAdd",
             "account/user/token/delete": "App\\Actions\\Users\\TokenDelete",
-            "users": "App\\Actions\\Users\\Index"
+            "users": "App\\Actions\\Users\\Index",
+            "debug/emails": "App\\Actions\\Debug\\Emails"
         },
         "front": {
             "logout": "App\\Actions\\Users\\Logout"

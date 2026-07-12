@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
 
@@ -15,7 +15,7 @@ class ModelFile {
   private $binaryFields;
   private $modelPath;
 
-  public function __construct(\App\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
     $this->modelName = ucfirst(strtolower($crud->modelName));
     $this->fields = $crud->fields;
     $this->unique = $crud->unique;
@@ -34,7 +34,7 @@ class ModelFile {
                      . 'use KrisRo\PhpRepublic\Translate;' . PHP_EOL . PHP_EOL
                      . 'class ' . Strings::toCamelCase($this->modelName) . ' extends \KrisRo\PhpRepublic\Model {' . PHP_EOL . PHP_EOL
                      . '  public function set' . Strings::toCamelCase($this->modelName) . '(array $data): int {' . PHP_EOL
-                     . '    return $this->db->set' . $this->modelName . '([' . PHP_EOL
+                     . '    return $this->db->set' . $this->modelName . 'AndGetId([' . PHP_EOL
                      .        $this->buildFields(6) . PHP_EOL
                      . '    ]);' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL;

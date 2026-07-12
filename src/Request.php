@@ -109,9 +109,9 @@ class Request {
       trigger_error('Action must extend \KrisRo\PhpRepublic\Controller', E_USER_ERROR);
     }
 
-    $this->overrideLayoutComponents();
-
     Template::page($action->run());
+
+    $this->overrideLayoutComponents();
 
     $this->loadPopups();
 
@@ -168,7 +168,7 @@ class Request {
    * or any other layout components
    */
   private function overrideLayoutComponents(): void {
-    if (Request::get('slim_table') || Request::header('slim-table')) {
+    if (Request::get('slim_table') || Request::header('slim-table') || Template::format('popup')) {
       if (empty(Template::topMenu())) {
         Template::topMenu(Template::HIDDEN_TOP_MENU);
       }
@@ -229,11 +229,12 @@ class Request {
    *
    * @param type $searchKey
    * @param type $searchParams
+   * @param type $default
    * @return null
    */
-  public static function param($searchKey = '', $searchParams = []) {
+  public static function param($searchKey = '', $searchParams = [], $default = null) {
     if (!$searchKey) {
-      return null;
+      return $default;
     }
 
     $components = Config::get('url/components');
@@ -243,7 +244,7 @@ class Request {
     $position = 0;
 
     if (!is_array($components ?? null)) {
-      return null;
+      return $default;
     }
 
     foreach ($components as $index => $component) {
@@ -255,7 +256,7 @@ class Request {
     }
 
     if (empty($item)) {
-      return null;
+      return $default;
     }
 
     if (in_array($searchKey, $pageParams)) {
@@ -263,10 +264,22 @@ class Request {
     }
 
     if (in_array($searchKey, $searchParams)) {
-      if (isset($components[$position + 1])) {
-        return urldecode($components[$position + 1]);
+      if (isset($components[++$position])) {
+        if (count($searchParams) == 1) {
+          return urldecode($components[$position]);
+
+        } else {
+          $values = [];
+          $keys = array_merge($searchParams, $pageParams);
+
+          while (($components[$position] ?? null) && !in_array($components[$position], $keys)) {
+            $values[] = urldecode($components[$position++]);
+          }
+
+          return $values;
+        }
       } else {
-        return null;
+        return $default;
       }
     }
 

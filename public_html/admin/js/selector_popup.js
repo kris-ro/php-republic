@@ -40,7 +40,32 @@
     window.parent.document.querySelector('#selector-popup-loader').classList.toggle('active');
 
     if (window.parent.document.querySelector('#' + targetElement)) {
+      let replace = window.parent.document.querySelector('#' + targetElement).getAttribute('data-replace');
+
+      if (replace) {
+        let regExp = new RegExp(replace);
+        value = value.replace(regExp, '');
+      }
+
       window.parent.document.querySelector('#' + targetElement).value = value;
+
+      if (window.parent.document.querySelector('#' + targetElement).classList.contains('table-search')) {
+
+        let tableSearchElement = window.parent.document.querySelector('#' + targetElement);
+
+        let listContainer = tableSearchElement.closest('.list-container');
+        if (!listContainer) {
+          return true;
+        }
+    
+        let listContent = tableSearchElement.closest('.list-content');
+        if (!listContent || !listContent.id) {
+          return true;
+        }
+
+        window.parent.filterList(listContainer, listContent);
+
+      }
     }
   };
 })();

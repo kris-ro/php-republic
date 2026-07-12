@@ -10,7 +10,7 @@ use App\Models\UserToken;
 class User extends \KrisRo\PhpRepublic\Model {
 
   public function setUser(array $user): int {
-    return $this->db->setUsers([
+    return $this->db->setUsersAndGetId([
       'email' => $user['email'],
       'password' => Authenticate::hashPassword($user['password']),
       'username' => $user['username'],

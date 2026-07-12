@@ -1,12 +1,12 @@
 <?php
 
-namespace App\ConsoleCommands\Crud;
+namespace KrisRo\PhpRepublic\ConsoleCommands\Crud;
 
 use KrisRo\PhpRepublic\Strings;
 use KrisRo\PhpRepublic\Template;
-use App\ConsoleCommands\Crud\Traits\ConfigFileRouting;
-use App\ConsoleCommands\Crud\Traits\ConfigFilePost;
-use App\ConsoleCommands\Crud\Traits\ConfigFileMenu;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ConfigFileRouting;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ConfigFilePost;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\Traits\ConfigFileMenu;
 
 class ConfigFile {
 
@@ -29,7 +29,7 @@ class ConfigFile {
   private $htmlPath;
   private $htmlMenuPath;
 
-  public function __construct(\App\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
     $this->modelName = $crud->modelName;
     $this->controllerName = $crud->controllerName;
     $this->fields = $crud->fields;
