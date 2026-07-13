@@ -32,7 +32,7 @@ class Crud {
 
   private $valid = true;
 
-  public $htmlPath = APP_ROOT . DS . 'app' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
+  public $htmlPath = APP_ROOT . DS . 'src' . DS . 'ConsoleCommands' . DS. 'Crud' . DS . 'html' . DS;
 
   public $modelPath = '';
   public $controllerPath = '';

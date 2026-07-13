@@ -17,7 +17,7 @@ class ControllerFile {
   public function buildController() {
     $fileContent = '<?php'
                      . PHP_EOL . PHP_EOL
-                     . 'namespace KrisRo\PhpRepublic\Controllers;' . PHP_EOL . PHP_EOL
+                     . 'namespace App\Controllers;' . PHP_EOL . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Controller;' . PHP_EOL . PHP_EOL
                      . 'class ' . Strings::toCamelCase($this->controllerName) . ' extends Controller {}' . PHP_EOL;
 
