@@ -20,7 +20,6 @@ trait PostFileAdd {
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Files;' . PHP_EOL
-                     . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Add implements PostDataProcessor {' . PHP_EOL . PHP_EOL

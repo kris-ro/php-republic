@@ -1,40 +1,40 @@
 {
     "app": {
         "database": {
-            "host": "localhost",
-            "database": "php_republic",
-            "username": "k",
-            "password": "123456",
+            "host": "",
+            "database": "",
+            "username": "",
+            "password": "",
             "creator": "\\KrisRo\\PhpDatabaseModel\\Model"
         }
     },
     "mail": {
-        "test": "contact@php-republic.v1",
-        "support": "contact@php-republic.v1",
-        "system": "contact@php-republic.v1",
-        "contact": "contact@php-republic.v1",
-        "signature": "team"
+        "test": "",
+        "support": "",
+        "system": "",
+        "contact": "",
+        "signature": ""
     },
     "crypto": {
         "cipher": "AES-256-GCM",
-        "key": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFyR3lzaEo1Ky92Y29UeHpxR3BmdgpoTDUyKzlKZTVkeGdVOEJKMUE3QTNIOGphVkFkd3dnYi93N0JqZ2l6cmI5a1lscFlKajVzZHErSW9ZNmVLeDRrCi82bEN4eGhIQnVXSEVRYXhtM1NKRjFEV3pTcTh3R1F6MVhZNzBNa2dDYkNBMWtKMmZTRkxRd2JHNk03UUlISi8KYnUxTW9uQUVtM0FFMjRIbnFYT3Nuemp3M1Y3aGxyNE04aXUvQy9QcXV2WlRuNmgwK1VEVlJqYW9McUdqWHM5eAo3bzh3bExYaWgrRTloSEhnVmdDU2l2ZTROTS9hUjdLQ3FrUVVsaGxlSFQyTXg2RlplUDR2VEZFM0o2Y0VJZ1kyCmxDRDB2aDY4cndrWWVZY3MwcFliY3RxN3FVRzJ6RFRodVA2Y08vQnUvN1lQbUNvdlQ5bVN1RmZvNG1CM3lNREEKS0dJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS5tCg==",
-        "iv": "bdb924cf54f3af88ab530ca6"
+        "key": "",
+        "iv": ""
     },
     "_debug": true,
     "_mail_folder": "app/mails/",
     "smtp": {
-        "host" : "mail.php-republic.ro",
-        "dkim_host" : "mail.php-republic.ro",
+        "host" : "",
+        "dkim_host" : "",
         "useSsl" : true,
         "port" : 587,
         "dkim" : {
-            "domain" : "php-republic.ro",
+            "domain" : "",
             "private_key" : "app/Config/dkim.private.key",
-            "selector" : "202403",
+            "selector" : "",
             "passphrase" : ""
         },
-        "username" : "contact@php-republic.ro",
-        "password" : "Q#123werty",
-        "password_no_reply" : "WJRm5iVtCvivAwv124bKlk0gz"
+        "username" : "",
+        "password" : "",
+        "password_no_reply" : ""
     }
 }

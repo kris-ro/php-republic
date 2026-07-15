@@ -33,6 +33,9 @@ class Bootstrap implements \KrisRo\PhpRepublic\Interfaces\Bootstrap {
       ->loadConfigFile(APP_ROOT . "{$this->DS}app{$this->DS}Config{$this->DS}app.json")
       // this is the place to override data with local specific values
       ->loadConfigFile(APP_ROOT . "{$this->DS}app{$this->DS}Config{$this->DS}local.json");
+
+    $validatorClass = Config::get('app/validator');
+    Config::set('validator', new $validatorClass());
   }
 
   /**

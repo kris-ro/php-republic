@@ -6,7 +6,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 use \KrisRo\PhpConfig\Config;
-use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Arrays;
@@ -17,8 +16,6 @@ use App\Models\Notification;
 use App\Models\User;
 
 class Mailer {
-
-  private static $validator;
 
   private $mail = null;
   private $isHTML = true;
@@ -74,13 +71,13 @@ class Mailer {
     if (!strlen(trim($message['subject'] ?? ''))) {
       return false;
     }
-    if (!Mailer::getValidator()->email($message['to']['address'] ?? '')) {
+    if (!Config::validator()->email($message['to']['address'] ?? '')) {
       return false;
     }
-    if (!Mailer::getValidator()->email($message['from']['address'] ?? '')) {
+    if (!Config::validator()->email($message['from']['address'] ?? '')) {
       return false;
     }
-    if (!Mailer::getValidator()->email($message['reply_to']['address'] ?? '')) {
+    if (!Config::validator()->email($message['reply_to']['address'] ?? '')) {
       $message['reply_to']['address'] = $message['from']['address'];
     }
 
@@ -162,15 +159,6 @@ class Mailer {
       $folder . Strings::slug((new \DateTime('@' . time()))->format('Y-m-d\Th-i-s') . '-' . $params['subject']) . '.html',
       $params['message']
     );
-  }
-
-  private static function getValidator() {
-    if (!self::$validator && !(self::$validator = Config::validator())) {
-      $validatorClass = Config::get('app/validator');
-      self::$validator = new $validatorClass();
-    }
-
-    return self::$validator;
   }
 
   private function getLanguage($language): string {

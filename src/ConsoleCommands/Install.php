@@ -3,7 +3,6 @@
 namespace KrisRo\PhpRepublic\ConsoleCommands;
 
 use KrisRo\PhpConfig\Config;
-use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;
 use KrisRo\PhpRepublic\Debug;
 use KrisRo\PhpRepublic\Exceptions;
@@ -166,7 +165,7 @@ class Install {
     self::echoDefault('Enter site email address: ');
     $siteEmail = trim(fgets(STDIN));
 
-    if (!$siteEmail || !(new Validator())->email($siteEmail)) {
+    if (!$siteEmail || !Config::validator()->email($siteEmail)) {
       self::echoWarning('Invalid email. You need to set the email section manually in ' . $this->jsonLocalConfigPath);
       return true;
     }

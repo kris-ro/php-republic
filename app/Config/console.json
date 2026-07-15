@@ -12,10 +12,15 @@
       "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\Crud",
       "_construct" : {
         "model": null,
+        "validate": null,
         "force": null
       },
       "create" : {
       }
+    },
+    "slim_selector" : {
+      "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\SlimSelector",
+      "_construct" : {}
     },
     "cryptoKeys" : {
       "class" : "KrisRo\\PhpRepublic\\ConsoleCommands\\CryptoKeys",

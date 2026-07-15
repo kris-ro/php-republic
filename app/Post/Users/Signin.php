@@ -8,7 +8,6 @@ use KrisRo\PhpRepublic\Translate;
 use KrisRo\PhpRepublic\Messages;
 use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Authenticate;
-use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;
 use KrisRo\PhpRepublic\Traits\CSRF;
 use App\Models\User as UserModel;
@@ -28,7 +27,7 @@ class Signin implements PostDataProcessor {
               ])
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\Users\\Signin', 'validFormToken']],
-                'email' => [['isValidEmail', 'mode' => Validator::EMAIL_VALIDATOR_REGEXP]],
+                'email' => [['isValidEmail', 'mode' => \App\Validator::EMAIL_VALIDATOR_REGEXP]],
                 'password' => [['App\\Post\\Users\\Signin', 'validUserAndPassword']],
               ])
               ->processPost();

@@ -28,13 +28,12 @@ trait ActionFileUpdate {
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Request;' . PHP_EOL
-                     . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use App\Models\\' . Strings::toCamelCase($this->modelName) . ';' . PHP_EOL
                      . 'use KrisRo\PhpConfig\Config;' . PHP_EOL . PHP_EOL
                      . "class Update extends {$this->controllerName}Controller {" . PHP_EOL . PHP_EOL
                      . '  public function run(): string {' . PHP_EOL
                      . '    $' . $itemName . 'Id = Request::nth(4);' . PHP_EOL
-                     . '    if (!(Config::validator() ?? (new Validator()))->positiveInteger($' . $itemName . 'Id) || !($' . $itemName . ' = (new ' . Strings::toCamelCase($this->modelName) . '())->get' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($' . $itemName . 'Id))) {' . PHP_EOL
+                     . '    if (!Config::validator()->positiveInteger($' . $itemName . 'Id) || !($' . $itemName . ' = (new ' . Strings::toCamelCase($this->modelName) . '())->get' . Strings::toCamelCase($this->modelName) . 'By' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '($' . $itemName . 'Id))) {' . PHP_EOL
                      . '      Messages::send_popup(\'Invalid ' . Strings::prettify($this->primaryKey) . ' ID\');' . PHP_EOL
                      . '      Request::redirect(\'/admin/' . $lowerCaseControllerName . '\');' . PHP_EOL
                      . '    }' . PHP_EOL . PHP_EOL

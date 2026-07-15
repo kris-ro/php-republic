@@ -57,9 +57,6 @@ class Request {
       return;
     }
 
-    $validatorClass = Config::get('app/validator');
-    Config::set('validator', new $validatorClass());
-
     $processor::ValidatePostData();
     $processor::ProcessPostData();
 

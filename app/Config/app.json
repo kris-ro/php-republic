@@ -29,7 +29,7 @@
       "xml" : "application/xml"
     },
     "requestFormat" : "application/json",
-    "validator" : "KrisRo\\Validator\\Validator",
+    "validator" : "App\\Validator",
     "validation_rules": {
       "model_name" : "/^[a-z](_?[a-z0-9]+)+$/i"
     },
@@ -60,7 +60,7 @@
   "mail" : {
     "test" : "",
     "support" : "",
-    "system" : "awork@awork.ro",
+    "system" : "",
     "contact" : "",
     "signature" : ""
   },

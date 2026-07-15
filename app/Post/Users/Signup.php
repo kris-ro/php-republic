@@ -7,7 +7,6 @@ use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpRepublic\Translate;
 use KrisRo\PhpRepublic\Messages;
 use KrisRo\PhpRepublic\Session;
-use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;
 use KrisRo\PhpRepublic\Traits\CSRF;
 
@@ -28,7 +27,7 @@ class Signup implements PostDataProcessor {
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\Users\\Signup', 'validFormToken']],
                 'username' => ['notEmptyOneLineString'],
-                'email' => [['isValidEmail', 'mode' => Validator::EMAIL_VALIDATOR_REGEXP]],
+                'email' => [['isValidEmail', 'mode' => \App\Validator::EMAIL_VALIDATOR_REGEXP]],
                 'password' => [['minLength', 10], 'paranoiaStrongPassword', ['App\\Post\\Users\\Signup', 'confirmed']],
               ])
               ->processPost();

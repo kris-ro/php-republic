@@ -10,7 +10,6 @@ use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpRepublic\Arrays;
-use KrisRo\Validator\Validator;
 
 class Listing {
 
@@ -538,7 +537,7 @@ class Listing {
       return;
     }
 
-    if (!(new Validator())->isValidDate($date)) {
+    if (!Config::validator()->isValidDate($date)) {
       return;
     }
 

@@ -26,10 +26,11 @@ class PostFile {
 
 
   private $validationMethods = [];
+  private $entityValidator = false;
 
   private $postFiles = [];
 
-  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud) {
+  public function __construct(\KrisRo\PhpRepublic\ConsoleCommands\Crud $crud, bool $entityValidator) {
     $this->modelName = $crud->modelName;
     $this->controllerName = $crud->controllerName;
     $this->fields = $crud->fields;
@@ -39,6 +40,7 @@ class PostFile {
     $this->primaryKeyDefinition = $crud->primaryKeyDefinition;
     $this->binaryFields = $crud->binaryFields;
     $this->postPath = $crud->postPath;
+    $this->entityValidator = $entityValidator;
   }
 
   public function buildPost() {
@@ -84,8 +86,13 @@ class PostFile {
         continue;
       }
 
-      $fields[] = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT)
-                . '\'' . $field['name'] . '\' => ' . $this->mapDbTypeToValidationRule($field);
+      if ($this->primaryKey == $field['name'] && $this->entityValidator) {
+        $fields[] = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT)
+                  . '\'' . $field['name'] . '\' => [\'valid' . ucfirst(Strings::toCamelCase($this->primaryKey)) . '\'],' ;
+      } else {
+        $fields[] = str_pad('', $spaceIndent, ' ', STR_PAD_LEFT)
+                  . '\'' . $field['name'] . '\' => ' . $this->mapDbTypeToValidationRule($field);
+      }
     }
 
     return implode(PHP_EOL, $fields);

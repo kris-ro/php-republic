@@ -18,7 +18,6 @@ trait PostFileDelete {
                      . 'use KrisRo\PhpRepublic\Translate;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Messages;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Session;' . PHP_EOL
-                     . 'use KrisRo\Validator\Validator;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Delete implements PostDataProcessor {' . PHP_EOL . PHP_EOL

@@ -9,7 +9,6 @@ use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpRepublic\Template;
 use App\Models\UserToken;
 use KrisRo\PhpConfig\Config;
-use KrisRo\Validator\Validator;
 
 class TokenDelete extends UsersController {
 
@@ -17,7 +16,7 @@ class TokenDelete extends UsersController {
     Config::set('css/delete', 'profile.css');
 
     $tokenId = Request::nth(6);
-    if (!(Config::validator() ?? (new Validator()))->positiveInteger($tokenId) || !($token = (new UserToken())->getToken($tokenId))) {
+    if (!(Config::validator()->positiveInteger($tokenId)) || !($token = (new UserToken())->getToken($tokenId))) {
       Messages::send_popup('Invalid Token ID');
       Request::redirect('/admin/account/user/tokens');
     }

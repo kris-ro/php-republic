@@ -34,7 +34,7 @@ class ModelFile {
                      . 'use KrisRo\PhpRepublic\Translate;' . PHP_EOL . PHP_EOL
                      . 'class ' . Strings::toCamelCase($this->modelName) . ' extends \KrisRo\PhpRepublic\Model {' . PHP_EOL . PHP_EOL
                      . '  public function set' . Strings::toCamelCase($this->modelName) . '(array $data): int {' . PHP_EOL
-                     . '    return $this->db->set' . $this->modelName . 'AndGetId([' . PHP_EOL
+                     . '    return $this->db->set' . $this->modelName . $this->andGetIdOnAutoIncrement() . '([' . PHP_EOL
                      .        $this->buildFields(6) . PHP_EOL
                      . '    ]);' . PHP_EOL
                      . '  }' . PHP_EOL . PHP_EOL;
@@ -82,5 +82,13 @@ class ModelFile {
     }
 
     return implode(PHP_EOL, $fields);
+  }
+
+  private function andGetIdOnAutoIncrement() {
+    if (in_array($this->primaryKey, $this->autoIncrement)) {
+      return 'AndGetId';
+    }
+
+    return '';
   }
 }

@@ -2,7 +2,6 @@
 
 namespace KrisRo\PhpRepublic\ConsoleCommands;
 
-use KrisRo\Validator\Validator;
 use KrisRo\PhpConfig\Config;
 use KrisRo\PhpRepublic\Traits\ConsoleIO;
 use KrisRo\PhpRepublic\Debug;
@@ -12,6 +11,7 @@ use KrisRo\PhpRepublic\ConsoleCommands\Crud\ModelFile;
 use KrisRo\PhpRepublic\ConsoleCommands\Crud\ControllerFile;
 use KrisRo\PhpRepublic\ConsoleCommands\Crud\PostFile;
 use KrisRo\PhpRepublic\ConsoleCommands\Crud\ActionFile;
+use KrisRo\PhpRepublic\ConsoleCommands\Crud\ValidatorFile;
 use KrisRo\PhpRepublic\ConsoleCommands\Crud\ConfigFile;
 
 class Crud {
@@ -40,7 +40,9 @@ class Crud {
   public $actionPath = '';
   public $adminViewPath = '';
 
-  public function __construct(string|null $model = null, bool|null $force = null) {
+  private $entityValidator = false;
+
+  public function __construct(string|null $model = null, bool|null $validate = true, bool|null $force = null) {
     $this->setModel($model);
 
     if ($this->filesExists($force ? true : false)) {
@@ -49,6 +51,8 @@ class Crud {
 
       return $this;
     }
+
+    $this->entityValidator = $validate ? true : false;
   }
 
   public function setModel(string|null $model = null) {
@@ -56,7 +60,8 @@ class Crud {
       throw new \Exception('Invalid model supplied in console crud command');
     }
 
-    $validName = (new Validator(Config::get('app/validation_rules')))
+    $validName = Config::validator()
+      ->createRegexRules(Config::get('app/validation_rules'))
       ->value($model)
       ->addValidationRule('model_name')
       ->process();
@@ -84,6 +89,10 @@ class Crud {
     $this->createAction();
     $this->updateRoutingAndPost();
 
+    if ($this->entityValidator) {
+      $this->addEntityValidator();
+    }
+
     return $this;
   }
 
@@ -94,7 +103,6 @@ class Crud {
       // Debug::dump($this->fields);
       $this->unique = $model->getUniqueFields();
       $this->autoIncrement = $model->getAutoIncrementFields();
-
       $this->primaryKey = $model->getPrimaryKey();
       $this->primaryKeyDefinition = $model->getPrimaryKeyDefinition();
       $this->binaryFields = $model->getBinaryFields();
@@ -139,7 +147,7 @@ class Crud {
       return;
     }
 
-    (new PostFile($this))->buildPost();
+    (new PostFile($this, $this->entityValidator))->buildPost();
   }
 
   public function createAction() {
@@ -196,5 +204,27 @@ class Crud {
     }
 
     return false;
+  }
+
+  private function addEntityValidator() {
+    if (!$this->valid) {
+      return;
+    }
+
+    $validatorFile = new ValidatorFile($this);
+
+    if (!$validatorFile->addValidationMethod()) {
+      if ($validatorFile->getError()) {
+        self::echoError($validatorFile->getError());
+      }
+
+      if ($validatorFile->getWarning()) {
+        self::echoWarning($validatorFile->getWarning());
+      }
+
+      if ($validatorFile->getMessage()) {
+        self::echoInfo($validatorFile->getMessage());
+      }
+    }
   }
 }

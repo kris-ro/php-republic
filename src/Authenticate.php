@@ -13,7 +13,6 @@ use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Request;
 use KrisRo\PhpRepublic\Translate;
 use KrisRo\PhpRepublic\Messages;
-use KrisRo\Validator\Validator;
 use KrisRo\PhpRepublic\ApiTokens;
 use KrisRo\PhpConfig\Config;
 
@@ -75,8 +74,7 @@ class Authenticate {
       return;
     }
 
-    $validator = new Validator();
-    if (empty($token['uid']) || !$validator->positiveInteger($token['uid'])) {
+    if (empty($token['uid']) || !Config::validator()->positiveInteger($token['uid'])) {
       Config::logger()->info('Invalid api token used');
       Messages::popup_error($message);
       return;
