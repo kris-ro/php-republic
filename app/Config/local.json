@@ -1,12 +1,6 @@
 {
     "app": {
-        "database": {
-            "host": "",
-            "database": "",
-            "username": "",
-            "password": "",
-            "creator": "\\KrisRo\\PhpDatabaseModel\\Model"
-        }
+        "database": null
     },
     "mail": {
         "test": "",

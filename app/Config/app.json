@@ -7,10 +7,11 @@
       "translations" : "app/Config/translations"
     },
     "database" : {
-      "host" : "",
-      "database" : "",
-      "username" : "",
-      "password" : ""
+      "host": "localhost",
+      "database": "",
+      "username": "",
+      "password": "",
+      "creator": "\\KrisRo\\PhpDatabaseModel\\Model"
     },
     "message_templates" : ["info", "warning", "success", "error"],
     "default_message_template" : "error",
