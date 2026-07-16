@@ -7,7 +7,7 @@
 <?php } ?>
 <?php echo $data['indent'] ?>  </select>
 <?php echo $data['indent'] ?>  <?php echo '<?php if (self::view(\'errors/' . $data['name'] . '\')) { ?>' . PHP_EOL ?>
-<?php echo $data['indent'] ?>    <div id="<?php echo $data['name'] ?>-id" class="form-text text-danger">
+<?php echo $data['indent'] ?>    <div id="err-<?php echo $data['name'] ?>-id" class="form-text text-danger">
 <?php echo $data['indent'] ?>      <?php echo '<?php echo self::view(\'errors/' . $data['name'] . '\') ?>' . PHP_EOL ?>
 <?php echo $data['indent'] ?>    </div>
 <?php echo $data['indent'] ?>  <?php echo '<?php } ?>' . PHP_EOL ?>
