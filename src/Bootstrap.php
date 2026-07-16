@@ -60,8 +60,21 @@ class Bootstrap implements \KrisRo\PhpRepublic\Interfaces\Bootstrap {
     Authenticate::createSessionFromApiToken();
 
     $this->setLanguage();
+    
     // route maping to controller/action
-    $this->setACL();
+    // if no ACL specified in config files use default method
+    if (!Config::get('app/acl') || !method_exists(Config::get('app/acl/0'), Config::get('app/acl/1'))) {
+      $this->setACL();
+
+    } else {
+      $aclClass = Config::get('app/acl/0');
+      $aclMethod = Config::get('app/acl/1');
+
+      // if specified method failes, fallback to default method
+      if (!(new $aclClass())->$aclMethod()) {
+        $this->setACL();
+      }
+    }
 
     $this->config->loadConfigFile(APP_ROOT . $this->DS . Config::get('app/paths/translations') . $this->DS . (Session::language() ?: Config::get('app/default_language')) . '.json');
 

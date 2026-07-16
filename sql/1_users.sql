@@ -3,6 +3,7 @@ CREATE TABLE `users` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` CHAR(255) NOT NULL,
   `email` CHAR(255) NOT NULL,
+  `phone` char(32) NOT NULL DEFAULT '',
   `password` CHAR(255) NOT NULL, -- Length 255 for compatibility with password_hash()
 
   -- Status and Security
@@ -12,13 +13,16 @@ CREATE TABLE `users` (
   -- Audit (Time)
   `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `email_confirmed` SMALLINT(3) UNSIGNED NOT NULL DEFAULT 0,
   `last_login` DATETIME DEFAULT NULL,
 
   -- Indexes
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_email` (`email`),
+  UNIQUE KEY `idx_phone` (`phone`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_created` (`created`),
   KEY `idx_updated` (`updated`),
+  KEY `idx_email_confirmed` (`email_confirmed`),
   KEY `idx_last_login` (`last_login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -56,7 +56,8 @@
       "metadata": {
         "timestamp": null
       }
-    }
+    },
+    "acl": null
   },
   "mail" : {
     "test" : "",
