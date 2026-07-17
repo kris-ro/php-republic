@@ -7,6 +7,7 @@ use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Arrays;
 use KrisRo\PhpRepublic\Messages;
+use KrisRo\PhpRepublic\Debug;
 
 class Request {
 
@@ -410,5 +411,55 @@ class Request {
     }
 
     Session::set('request/messages', $messages);
+  }
+
+  public static function getUrl($url, $params = []) {
+    $params = $params + [
+      'get' => [],
+      'post' => [],
+      'headers' => [],
+      'accepted_status' => [200],
+    ];
+
+    $ch = curl_init();
+
+    if (!empty($params['headers'])) {
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $params['headers']);
+    }
+
+    if ($params['post']) {
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, is_array($params['post']) ? http_build_query($params['post']) : $params['post']);
+    }
+
+    if ($params['get']) {
+      $url .= '?' . http_build_query($params['get']);
+    }
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+
+    if ($error != '') {
+      curl_close($ch);
+      Config::logger()->error('Request::getUrl() error: ' . print_r($error, true));
+      return false;
+    }
+
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $result['header'] = substr($response, 0, $header_size);
+    $result['body'] = substr($response, $header_size);
+    $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    curl_close($ch);
+
+    if (!in_array($result['http_code'], $params['accepted_status'])) {
+      Config::logger()->error('Request::getUrl() http-code: ' . $result['http_code']);
+      return false;
+    }
+
+    return $response;
   }
 }
