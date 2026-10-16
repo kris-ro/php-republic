@@ -27,6 +27,7 @@ RewriteCond %{REQUEST_URI} !^/api/index.php
 RewriteRule ^(.*)$ /api/index.php?route=$1 [L,QSA,B]
 
 RewriteCond %{REQUEST_URI} ^/admin
+RewriteCond %{REQUEST_URI} !^/admin/assets/
 RewriteCond %{REQUEST_URI} !^/admin/css/
 RewriteCond %{REQUEST_URI} !^/admin/js/
 RewriteCond %{REQUEST_URI} !^/admin/img/

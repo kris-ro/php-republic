@@ -29,7 +29,7 @@ class Profile implements PostDataProcessor {
               ->addPostValidationRules([
                 self::INPUT_ELEMENT_NAME => [['App\\Post\\Users\\Profile', 'validFormToken']],
                 'username' => ['notEmptyOneLineString'],
-                'email' => [['isValidEmail', 'mode' => \App\Validator::EMAIL_VALIDATOR_REGEXP]],
+                'email' => [['isValidEmail', 'mode' => \App\Validator::EMAIL_VALIDATOR_REGEXP], ['App\\Post\\Users\\Profile', 'isUnique']],
                 'password' => ['isOptional', ['minLength', 10], 'paranoiaStrongPassword', ['App\\Post\\Users\\Profile', 'confirmed']],
                 'current_password' => ['notEmptyOneLineString', ['App\\Post\\Users\\Profile', 'validPassword']],
               ])
@@ -62,5 +62,17 @@ class Profile implements PostDataProcessor {
     }
 
     return true;
+  }
+
+  public static function isUnique($value, $post) {
+    if (!($user = (new UserModel())->getUserByEmail($value))) {
+      return true;
+    }
+
+    if ($user['id'] == Session::get('user/id')) {
+      return true;
+    }
+
+    return false;
   }
 }

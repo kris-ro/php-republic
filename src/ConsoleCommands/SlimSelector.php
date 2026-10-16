@@ -20,14 +20,16 @@ class SlimSelector {
   private $targetLink;
   private $adminRoutes;
 
-  private $webroot;
+  private $xmlStart = '<?xml encoding="utf-8" ?>';
+  private $webroot = '<?php echo self::view(\'webroot\') ?>';
+
+  private $matches = [];
+  private $fileArray = [];
+  private $inputLine;
+  private $inputGroupHtml;
   
   public function __construct() {
     Exceptions::$consolePrintOnly = true;
-
-    if (!$this->getWebroot()) {
-      return $this;
-    }
 
     if (!$this->getTemplatePath()) {
       return $this;
@@ -46,16 +48,6 @@ class SlimSelector {
     $this->saveHtml();
   }
 
-  private function getWebroot() {
-    self::echoDefault('Enter the site domain: ');
-    if (!($this->webroot = trim(fgets(STDIN))) || !Config::validator()->website($this->webroot)) {
-      self::echoError('Invalid webroot : ' . $this->webroot);
-      return false;
-    }
-
-    return true;
-  }
-
   private function getTemplatePath() {
     self::echoDefault('Enter template path starting with controller name e.g. "users/add.php": ');
     $this->templatePath = trim(fgets(STDIN));
@@ -70,12 +62,14 @@ class SlimSelector {
       return false;
     }
 
+    $this->fileArray = explode("\n", $html);
+
     $this->dom = new \DOMDocument();
 
     // Deactivate errors to silence warnings about HTML5/Bootstrap structure
     libxml_use_internal_errors(true);
 
-    $this->dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $this->dom->loadHTML($this->xmlStart . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
     libxml_clear_errors();
 
@@ -127,6 +121,9 @@ class SlimSelector {
   }
 
   private function modifyNode() {
+    // Subtract 1 because getLineNo() starts from 1 and $fileArray is indexed from 0;
+    $this->inputLine = $this->inputNode->getLineNo() - 1;
+
     $this->inputNode->setAttribute('aria-describedby', $this->elementName . '-selector');
 
     $parentNode = $this->inputNode->parentNode;
@@ -156,16 +153,21 @@ class SlimSelector {
     $icon->setAttribute('data-source', $link);
     $button->appendChild($icon);
 
+    $this->inputGroupHtml = $this->dom->saveHTML($inputGroup);
+
+    $this->inputGroupHtml = str_replace('&lt;?', '<?', $this->inputGroupHtml);
+    $this->inputGroupHtml = str_replace('?&gt;', '?>', $this->inputGroupHtml);
+
     return true;
   }
 
   private function saveHtml() {
-    $updatedHtml = $this->dom->saveHTML();
+    $matches = null;
+    $indentation = preg_match('/^(\s*)/', $this->fileArray[$this->inputLine], $matches);
 
-    $updatedHtml = str_replace('&lt;?', '<?', $updatedHtml);
-    $updatedHtml = str_replace('?&gt;', '?>', $updatedHtml);
+    $this->fileArray[$this->inputLine] = ($matches[1] ?? '') . $this->inputGroupHtml;
 
-    file_put_contents(Config::get('app/paths/views') . '/admin/en/' . $this->templatePath, $updatedHtml);
+    file_put_contents(Config::get('app/paths/views') . '/admin/en/' . $this->templatePath, implode("\n", $this->fileArray));
   }
 
   private function loadAdminRoutes() {

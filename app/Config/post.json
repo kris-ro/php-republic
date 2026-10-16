@@ -2,7 +2,8 @@
     "post": {
         "front": {
             "signin": "App\\Post\\Users\\Signin",
-            "signup": "App\\Post\\Users\\Signup"
+            "signup": "App\\Post\\Users\\Signup",
+            "users/confirm/email": "App\\Post\\Users\\ConfirmEmail"
         },
         "admin": {
             "account/user": "App\\Post\\Users\\Profile",

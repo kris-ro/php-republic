@@ -17,6 +17,16 @@
     "default_message_template" : "error",
     "json_sections" : ["api"],
     "languages" : ["en"],
+    "number_format" : {
+      "en": {
+        "decimals": ".",
+        "thousand": ","
+      },
+      "ro": {
+        "decimals": ",",
+        "thousand": "."
+      }
+    },
     "datetime" : {
       "minute_format" : "H:i",
       "time_format" : "H:i:s",
@@ -38,7 +48,7 @@
       "guest" : "/",
       "customer" : "/",
       "company" : "/admin",
-      "app" : "/app"
+      "app" : "/admin"
     },
     "pagination" : {
       "default" : {

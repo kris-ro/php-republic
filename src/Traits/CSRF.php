@@ -20,6 +20,10 @@ trait CSRF {
     return Session::set('csrf-' . $formId, Crypto::generateToken());
   }
 
+  public static function getToken(): string {
+    return Session::get('csrf-' . self::$formId);
+  }
+
   public static function validFormToken(): bool {
     if (empty(self::$formId)) {
       trigger_error('CSRF Missing form ID', E_USER_ERROR);

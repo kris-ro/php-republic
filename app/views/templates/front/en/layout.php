@@ -30,12 +30,12 @@
     <main>
       <?php echo Template::topMenu('', false); ?>
 
-      <?php if (Template::popup_error('', false) || Template::popup_warning('', false) || Template::popup_info('', false) || Template::popup_success('', false)) { ?>
+      <?php if (Template::{Template::POPUP_ERROR}('', false) || Template::{Template::POPUP_WARNING}('', false) || Template::{Template::POPUP_INFO}('', false) || Template::{Template::POPUP_SUCCESS}('', false)) { ?>
         <section class="container xpt-lg-2 xpt-xl-3 xpb-3 xpb-xl-5 xmt-n2 xmt-sm-0 xmb-2 xmb-md-4 xmb-lg-5">
-          <?php echo Template::popup_error('', false); ?>
-          <?php echo Template::popup_warning('', false); ?>
-          <?php echo Template::popup_info('', false); ?>
-          <?php echo Template::popup_success('', false); ?>
+          <?php echo Template::{Template::POPUP_ERROR}('', false); ?>
+          <?php echo Template::{Template::POPUP_WARNING}('', false); ?>
+          <?php echo Template::{Template::POPUP_INFO}('', false); ?>
+          <?php echo Template::{Template::POPUP_SUCCESS}('', false); ?>
         </section>
       <?php } ?>
 

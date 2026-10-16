@@ -282,6 +282,7 @@ class ActionFile {
       case 'BINARY':
         return $this->buildTextareaElement($field, $spaceIndent);
       case 'BLOB':
+      case 'MEDIUMBLOB':
       case 'LONGBLOB':
         return $this->buildFileElement($field, $spaceIndent);
     }
@@ -319,6 +320,7 @@ class ActionFile {
       case 'BINARY':
         return $this->displayText($field, $spaceIndent);
       case 'BLOB':
+      case 'MEDIUMBLOB':
       case 'LONGBLOB':
         return $this->displayDownload($field, $spaceIndent);
     }

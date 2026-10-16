@@ -19,6 +19,7 @@ class Signin implements PostDataProcessor {
   static protected $formId = 'signin';
 
   public static function ValidatePostData(): void {
+    $self = new Signin();
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),
@@ -57,15 +58,30 @@ class Signin implements PostDataProcessor {
     }
 
     $userModel = new UserModel();
-
+\KrisRo\PhpRepublic\Debug::dump($userModel);
     $user = $userModel->getuser($post['email']);
 
-    $userModel->updateLastLogin(['id' => $user['id'], 'last_login' => (new \DateTime('now'))->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s')]);
-
-    if (!$user || !Authenticate::verifyPassword($value, $user['password'] ?? '')) {
+    if (!$user) {
       Messages::popup_error($errorMessage);
       return false;
     }
+
+    if (!($user['email_confirmed'] ?? null)) {
+      Messages::popup_error(Translate::users('Please validate your email address. Instructions were sent when you created the account'));
+      return false;
+    }
+
+    if (!($user['is_active'] ?? null)) {
+      Messages::popup_error(Translate::users('Your account is not active. If you validated your email address, please contact support'));
+      return false;
+    }
+
+    if (!Authenticate::verifyPassword($value ?? '', $user['password'] ?? '')) {
+      Messages::popup_error($errorMessage);
+      return false;
+    }
+
+    $userModel->updateLastLogin(['id' => $user['id'], 'last_login' => (new \DateTime('now'))->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s')]);
 
     return true;
   }

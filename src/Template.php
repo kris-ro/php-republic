@@ -21,6 +21,12 @@ class Template {
   public const HIDDEN_LEFT_SIDE_BAR = '<!-- left side bar hidden -->';
   public const HIDDEN_RIGHT_SIDE_BAR = '<!-- right side bar hidden -->';
 
+  public const POPUP_ERROR = 'popup_error';
+  public const POPUP_WARNING = 'popup_warning';
+  public const POPUP_INFO = 'popup_info';
+  public const POPUP_SUCCESS = 'popup_success';
+  
+
   private static $format = 'screen';
   private static $data = [];
 
@@ -163,14 +169,14 @@ class Template {
    * @param array|null $data
    * @return mixed
    */
-  public static function renderApi($data = null) {
+  public static function renderApi(?array $data = null, ?array $errorAllowedFields = []) {
     $format = array_flip(Config::get('app/api_formats'))[Config::get('app/requestFormat')];
 
     switch ($format) {
       case 'json':
-        return self::formatJson($data);
+        return self::formatJson($data, $errorAllowedFields);
       case 'xml':
-        return self::formatXml($data);
+        return self::formatXml($data, $errorAllowedFields);
     }
   }
 
@@ -180,7 +186,7 @@ class Template {
    * @param array|null $data
    * @return string
    */
-  private static function formatJson($data) {
+  private static function formatJson($data, ?array $errorAllowedFields = []) {
     $template = Config::get('app/default_api_respons_format');
 
     $template['error'] = Messages::getAllMessages(Messages::ERROR);
@@ -190,12 +196,14 @@ class Template {
     if (empty($template['error'])) {
       $template['success'] = true;
       $template['data'] = $data;
+    } else {
+      $template['data'] = array_intersect_key($data, array_flip($errorAllowedFields));
     }
 
     return json_encode($template);
   }
 
-  private static function formatXml($data) {
+  private static function formatXml($data, ?array $errorAllowedFields = []) {
     $template = Config::get('app/default_api_respons_format');
 
     $template['error'] = Messages::getAllMessages(Messages::ERROR);
@@ -205,6 +213,8 @@ class Template {
     if (empty($template['error'])) {
       $template['success'] = true;
       $template['data'] = $data;
+    } else {
+      $template['data'] = array_intersect_key($data, array_flip($errorAllowedFields));
     }
 
     $xml = new \SimpleXMLElement('<root/>');

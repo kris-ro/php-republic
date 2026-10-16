@@ -71,7 +71,7 @@ class Bootstrap implements \KrisRo\PhpRepublic\Interfaces\Bootstrap {
       $aclMethod = Config::get('app/acl/1');
 
       // if specified method failes, fallback to default method
-      if (!(new $aclClass())->$aclMethod()) {
+      if (!(new $aclClass($this->config))->$aclMethod()) {
         $this->setACL();
       }
     }
@@ -110,8 +110,8 @@ class Bootstrap implements \KrisRo\PhpRepublic\Interfaces\Bootstrap {
   public function AcceptedContentType() {
     $acceptedContentType = Config::get('app/api_formats');
 
-    if (in_array(strtolower(Request::header('Content-Type')), $acceptedContentType)) {
-      Config::set('app/requestFormat', strtolower(Request::header('Content-Type')));
+    if (in_array(strtolower(Request::header('Content-Type', '')), $acceptedContentType)) {
+      Config::set('app/requestFormat', strtolower(Request::header('Content-Type', '')));
       return true;
     }
 
@@ -182,7 +182,7 @@ class Bootstrap implements \KrisRo\PhpRepublic\Interfaces\Bootstrap {
     // 'guest', 'customer', 'company', 'app'
     switch (Session::get('user/role')) {
       case 'app':
-        $this->config->loadConfigFile(APP_ROOT . "{$this->DS}app{$this->DS}Config{$this->DS}routes{$this->DS}app{$this->DS}authenticated.json");
+        $this->config->loadConfigFile(APP_ROOT . "{$this->DS}app{$this->DS}Config{$this->DS}routes{$this->DS}admin{$this->DS}authenticated.json");
         break;
 
       case 'company':

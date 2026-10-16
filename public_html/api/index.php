@@ -54,7 +54,7 @@ $request->setContentTypeHeader();
 /**
  * Printing result
  */
-echo Template::page();
+echo Template::page('', false);
 
 /**
  * Shooting down

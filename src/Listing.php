@@ -20,6 +20,14 @@ class Listing {
   protected $listFilters = [];
 
   /**
+   * List excluded params
+   * Exclude records that match this filter
+   * 
+   * @var array
+   */
+  protected $listExclude = [];
+
+  /**
    * List params (paging)
    * @var array
    */
@@ -77,6 +85,34 @@ class Listing {
         $this->listFilters[$filterKey][1][] = (string) urldecode($arg);
       }
     }
+  }
+
+  /**
+   * Exclude undesired values from filter 
+   */
+  public function excludeFilterValue(string $filterKey, $value): self {
+    if (!is_array($value)) {
+      $value = [$value];
+    }
+
+    $this->listExclude[$filterKey] = array_merge(($this->listExclude[$filterKey] ?? []), $value);
+
+    $this->listFilters[$filterKey][1] = array_diff($this->listFilters[$filterKey][1], $value);
+
+    return $this;
+  }
+
+   /**
+   * Force specifiv values for filter 
+   */
+  public function onlyFilterValue(string $filterKey, $value): self {
+    if (!is_array($value)) {
+      $value = [$value];
+    }
+
+    $this->listFilters[$filterKey] = [$filterKey, $value];
+
+    return $this;
   }
 
   /**
@@ -277,7 +313,7 @@ class Listing {
     foreach (array_keys($this->listFilters) as $field) {
       $urls[$field] = trim($baseUrl, '/')
         . '/order-by-' . $field
-        . '/sort-' . ($this->listParams['order-by'] == $field && $this->listParams['sort'] == 'desc' ? 'asc' : 'desc')
+        . '/sort-' . ($this->listParams['order-by'] == $field ? ($this->listParams['sort'] == 'desc' ? 'asc' : 'desc') : 'asc')
         . '/size-' . $this->listParams['size'];
 
       if (Request::get('slim_table') !== null) {
@@ -337,6 +373,26 @@ class Listing {
   }
 
   /**
+   * Custom SELECT condition part.
+   *
+   * @param callable $select builder
+   *   Need to be a callable that returns an array with the 'select' entry containing the select part of the query
+   *   and, optionaly, the 'count_select' entry containing the select part for the count query
+
+   * @return self
+   */
+  public function customSelect(callable $callable): self {
+    $select = call_user_func($callable);
+    $this->sqlComponents['select'] = 'SELECT DISTINCT ' . $select['select'];
+
+    if ($select['count_select'] ?? null) {
+      $this->sqlComponents['count_select'] = 'SELECT ' . $select['count_select'] . ' AS `total` ';
+    }
+
+    return $this;
+  }
+
+  /**
    * Builds the FROM part of the query
    *
    * @param string $table
@@ -360,12 +416,15 @@ class Listing {
    * @return self
    */
   public function join(string $joinedTable, string $toTable, ?array $condition = null): self {
+    $joinedTable = preg_split('/(\.| )/', $joinedTable);
+    $toTable = preg_split('/\./', $toTable);
+
     $join = ' JOIN ' .
-                                     '`' . substr(trim($joinedTable, '`'), 0, strpos(trim($joinedTable, '`'), '.')) . '`' .
-                                     ' ON ' .
-                                     ((strpos($joinedTable, '`') ? $joinedTable : '`' . str_replace('.', '`.`', $joinedTable) . '`')) .
-                                     ' = ' .
-                                     (strpos($toTable, '`') ? $toTable : '`' . str_replace('.', '`.`', $toTable) . '`');
+                '`' . trim($joinedTable[0], '` ') . '`' . (($joinedTable[2] ?? null) ? ' `' . trim($joinedTable[2], '` ') . '`' : '') .
+            ' ON ' .
+                '`' . trim($joinedTable[2] ?? $joinedTable[0], '` ') . '`.`' . trim($joinedTable[1], '` ') . '`' .
+                   ' = ' .
+                '`' . trim($toTable[0], '` ') . '`.`' . trim($toTable[1], '` ') . '`';
 
     if ($condition) {
       $field = str_replace('`', '', $condition[0]);
@@ -456,6 +515,26 @@ class Listing {
   }
 
   /**
+   * Custom (LEFT|RIGHT) JOIN clause.
+   *
+   * @param callable $join builder
+   *   Need to be a callable that returns an string with a 'join' clause 
+
+   * @return self
+   */
+  public function customJoin(callable $callable): self {
+    $join = call_user_func($callable);
+
+    if (!$join) {
+      return $this;
+    }
+
+    $this->sqlComponents['join'][] = $join;
+
+    return $this;
+  }
+
+  /**
    * Builds the WHERE part of the query
    *
    * @param string $field
@@ -478,6 +557,68 @@ class Listing {
 
       default:
         $this->filterDefault($table, $field, $filter, $operator);
+    }
+
+
+    return $this;
+  }
+
+  /**
+   * Custom WHERE condition part.
+   *
+   * @param callable $criteria
+   *   Need to be a callable that takes <code>$this->listFilters</code> and <code>$this->listExclude</code> as arguments  and returns <code>[
+   *    'condition' => 'field = :param1 ...', 
+   *    'params' => [':param1' => 'value 1', ...]
+   *   ]</code>
+
+   * @return self
+   */
+  public function customFilter(callable $callable): self {
+    $criteria = call_user_func($callable, $this->listFilters, $this->listExclude);
+
+    if (!($criteria['condition'])) {
+      return $this;
+    }
+
+    $this->sqlComponents['where'][] = ' ' . $criteria['condition'] . ' ';
+
+    if (!($criteria['params'])) {
+      return $this;
+    }
+
+    if ($this->sqlComponents['params'] ?? null) {
+      $this->sqlComponents['params'] += $criteria['params'];
+    } else {
+      $this->sqlComponents['params'] = $criteria['params'];
+    }
+
+    return $this;
+  }
+
+  /**
+   * Builds the WHERE part of the query with excluded fields
+   *
+   * @param string $field
+   * @param string $filter
+   * @param string|null $operator
+   * @param string|null $type
+   * @return self
+   */
+  public function exclude(string $field, string $filter, ?string $operator = '!=', ?string $type = null, ?string $join = 'OR'): self {
+    $table = $this->table;
+
+    if (strpos($field, '.') !== false) {
+      list($table, $field) = explode('.', $field);
+    }
+
+    switch ($type) {
+      case 'date':
+        $this->excludeDate($table, $field, $filter, $operator);
+        break;
+
+      default:
+        $this->excludeDefault($table, $field, $filter, $operator, $join);
     }
 
 
@@ -532,6 +673,29 @@ class Listing {
     }
   }
 
+  /**
+   * Build individual condition for the SQL query with excluded value
+   *
+   * @param string $table
+   * @param string $field
+   * @param string $filter
+   * @param string $operator
+   * @return type
+   */
+  private function excludeDefault(string $table, string $field, string $filter, string $operator, ?string $join = 'OR') {
+    $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $this->listExclude[$filter] ?? [], strtolower($operator), $table, $join);
+    if (!($criteria['condition'] ?? null)) {
+      return;
+    }
+
+    $this->sqlComponents['exclude'][] = ' ' . $criteria['condition'] . ' ';
+    if ($this->sqlComponents['params'] ?? null) {
+      $this->sqlComponents['params'] += $criteria['params'];
+    } else {
+      $this->sqlComponents['params'] = $criteria['params'];
+    }
+  }
+
   private function filterDate(string $table, string $field, string $filter, string $operator) {
     if (!($date = current($this->listFilters[$filter][1] ?? []))) {
       return;
@@ -549,6 +713,36 @@ class Listing {
     $field = '`' . str_replace('.', '`.`', str_replace('`', '', "{$table}.{$field}") . '`');
 
     $this->sqlComponents['where'][] = ' ' . "({$field} between :{$filter}_from and :{$filter}_until)" . ' ';
+
+    $params = [
+      ":{$filter}_from" => $start,
+      ":{$filter}_until" => $stop,
+    ];
+
+    if ($this->sqlComponents['params'] ?? null) {
+      $this->sqlComponents['params'] += $params;
+    } else {
+      $this->sqlComponents['params'] = $params;
+    }
+  }
+
+  private function excludeDate(string $table, string $field, string $filter, string $operator) {
+    if (!($date = current($this->listExclude[$filter][1] ?? []))) {
+      return;
+    }
+
+    if (!Config::validator()->isValidDate($date)) {
+      return;
+    }
+
+    $date = new \DateTimeImmutable("{$date} midnight");
+
+    $start = $date->format('Y-m-d H:i:s');
+    $stop = $date->modify('+1 day')->format('Y-m-d H:i:s');
+
+    $field = '`' . str_replace('.', '`.`', str_replace('`', '', "{$table}.{$field}") . '`');
+
+    $this->sqlComponents['exclude'][] = ' ' . "({$field} not between :{$filter}_from and :{$filter}_until)" . ' ';
 
     $params = [
       ":{$filter}_from" => $start,
@@ -581,9 +775,12 @@ class Listing {
     $sql = $this->sqlComponents['from'] . PHP_EOL;
     $sql .= ($this->sqlComponents['join'] ?? null) ? implode(PHP_EOL, $this->sqlComponents['join']) . PHP_EOL : '';
     $sql .= ($this->sqlComponents['where'] ?? null) ? ' WHERE ' . implode(' AND ', $this->sqlComponents['where']) . ' ' : '';
-    $sql .= ($this->sqlComponents['group'] ?? null) ? ' GROUP BY ' . implode(', ', $this->sqlComponents['group']) . ' ' : '';
+    $sql .= ($this->sqlComponents['exclude'] ?? null) ? (($this->sqlComponents['where'] ?? null) ? ' AND ' : ' WHERE ') . implode(' AND ', $this->sqlComponents['exclude']) . ' ' : '';
 
-    $countSql = "SELECT COUNT(*) AS `total` " . $sql;
+    $countSql = (($this->sqlComponents['count_select'] ?? null) ?: 'SELECT COUNT(*) AS `total` ') . $sql;
+    
+    $sql .= ($this->sqlComponents['group'] ?? null) ? ' GROUP BY ' . implode(', ', $this->sqlComponents['group']) . ' ' : '';
+    
     $dataSql = (($this->sqlComponents['select'] ?? null) ?: ' SELECT * ') . PHP_EOL . $sql;
 
     $dataSql .= $this->orderBy();

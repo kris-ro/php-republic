@@ -76,12 +76,12 @@
       <?php echo Template::sideMenu('', false); ?>
       <!--begin::App Main-->
       <main class="app-main">
-        <?php if (Template::popup_error('', false) || Template::popup_warning('', false) || Template::popup_info('', false) || Template::popup_success('', false)) { ?>
+        <?php if (Template::{Template::POPUP_ERROR}('', false) || Template::{Template::POPUP_WARNING}('', false) || Template::{Template::POPUP_INFO}('', false) || Template::{Template::POPUP_SUCCESS}('', false)) { ?>
           <section class="p-3">
-            <?php echo Template::popup_error('', false); ?>
-            <?php echo Template::popup_warning('', false); ?>
-            <?php echo Template::popup_info('', false); ?>
-            <?php echo Template::popup_success('', false); ?>
+            <?php echo Template::{Template::POPUP_ERROR}('', false); ?>
+            <?php echo Template::{Template::POPUP_WARNING}('', false); ?>
+            <?php echo Template::{Template::POPUP_INFO}('', false); ?>
+            <?php echo Template::{Template::POPUP_SUCCESS}('', false); ?>
           </section>
         <?php } ?>
 
@@ -113,7 +113,13 @@
     <?php echo Template::js('', false); ?>
 
     <?php if (Config::get('js/' . Config::get('current_page'))) { ?>
-      <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script>
+      <?php if (is_array(Config::get('js/' . Config::get('current_page')))) { ?>
+        <?php foreach (Config::get('js/' . Config::get('current_page')) as $script) { ?>
+          <script src="/admin/js/<?php echo $script ?>"></script>
+        <?php } ?>
+      <?php } else { ?>
+        <script src="/admin/js/<?php echo Config::get('js/' . Config::get('current_page')) ?>"></script>
+      <?php } ?>
     <?php } ?>
 
     <script src="/admin/js/selector_popup.js"></script>

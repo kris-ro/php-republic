@@ -83,4 +83,53 @@ class Dates {
 
     return $localTime;
   }
+
+  public static function timeAgoFormat(string|int $dateTime, ?string $timeZone = null) {
+    if (intval($dateTime) == $dateTime) {
+      $dateTime = '@' . $dateTime;
+    }
+
+    if (!$timeZone) {
+      $timeZone = Config::get('app/datetime/time_zone');
+    }
+
+    $time = (new \DateTime($dateTime))->setTimezone(new \DateTimeZone($timeZone));
+    $now = (new \DateTime('now'))->setTimezone(new \DateTimeZone($timeZone));
+
+    $seconds = $now->getTimestamp() - $time->getTimestamp();
+
+    if ($seconds < 60) {
+      return 'Just now';
+    }
+
+    if ($seconds < 120) {
+      return 'A minute ago';
+    }
+
+    if ($seconds < 600) {
+      return 'A few minutes ago';
+    }
+
+    for ($i = 11; $i < 61; $i += 5) {
+      if ($seconds < 60 * $i) {
+        return ($i - 1) . ' minutes ago';
+      }
+    }
+
+    if ($seconds < 7200) {
+      return 'One hour ago';
+    }
+
+    for ($i = 3; $i < 24; $i++) {
+      if ($seconds < 3600 * $i) {
+        return ($i -1) . ' hours ago';
+      }
+    }
+
+    if ($seconds < 48 * 3600) {
+      return 'One day ago';
+    }
+
+    return self::format($dateTime, Config::get('app/datetime/date_format'), $timeZone);
+  }
 }

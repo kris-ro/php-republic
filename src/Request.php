@@ -7,7 +7,6 @@ use KrisRo\PhpRepublic\Session;
 use KrisRo\PhpRepublic\Template;
 use KrisRo\PhpRepublic\Arrays;
 use KrisRo\PhpRepublic\Messages;
-use KrisRo\PhpRepublic\Debug;
 
 class Request {
 
@@ -145,19 +144,19 @@ class Request {
     $asArray = in_array(SECTION, Config::get('app/json_sections')) ? true : false;
 
     if (Messages::popup_error()) {
-      Template::popup_error(Template::load(APP_ROOT . DS . $templates . '/popup_error.php', $asArray ? Messages::popup_error() : implode(Template::BR, Messages::popup_error())));
+      Template::{Template::POPUP_ERROR}(Template::load(APP_ROOT . DS . $templates . '/popup_error.php', $asArray ? Messages::popup_error() : implode(Template::BR, Messages::popup_error())));
     }
 
     if (Messages::popup_warning()) {
-      Template::popup_warning(Template::load(APP_ROOT . DS . $templates . '/popup_warning.php', $asArray ? Messages::popup_warning() : implode(Template::BR, Messages::popup_warning())));
+      Template::{Template::POPUP_WARNING}(Template::load(APP_ROOT . DS . $templates . '/popup_warning.php', $asArray ? Messages::popup_warning() : implode(Template::BR, Messages::popup_warning())));
     }
 
     if (Messages::popup_info()) {
-      Template::popup_info(Template::load(APP_ROOT . DS . $templates . '/popup_info.php', $asArray ? Messages::popup_info() : implode(Template::BR, Messages::popup_info())));
+      Template::{Template::POPUP_INFO}(Template::load(APP_ROOT . DS . $templates . '/popup_info.php', $asArray ? Messages::popup_info() : implode(Template::BR, Messages::popup_info())));
     }
 
     if (Messages::popup_success()) {
-      Template::popup_success(Template::load(APP_ROOT . DS . $templates . '/popup_success.php', $asArray ? Messages::popup_success() : implode(Template::BR, Messages::popup_success())));
+      Template::{Template::POPUP_SUCCESS}(Template::load(APP_ROOT . DS . $templates . '/popup_success.php', $asArray ? Messages::popup_success() : implode(Template::BR, Messages::popup_success())));
     }
   }
 
@@ -401,13 +400,15 @@ class Request {
   private function getSessionMessages(): void {
     $messages = Session::get('request/messages', []);
 
-    foreach (($messages[Config::current_page()] ?? []) as $type => $messages) {
+    $key = str_replace('/', '_', Config::current_page());
+
+    foreach (($messages[$key] ?? []) as $type => $messages) {
       Messages::$type($messages);
     }
 
-    if (isset($messages[Config::current_page()])) {
+    if (isset($messages[$key])) {
       $messages[Config::current_page()] = [];
-      unset($messages[Config::current_page()]);
+      unset($messages[$key]);
     }
 
     Session::set('request/messages', $messages);

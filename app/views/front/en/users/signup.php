@@ -14,7 +14,7 @@
           <div class="col-12 text-start mb-3">
             <label for="username" class="form-label">Your name</label>
             <div class="input-group has-validation">
-              <span class="input-group-text">👤</span>
+              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
               <input type="text" value="<?php echo Request::post('username') ?>" class="form-control <?php echo (self::view('errors/username') ?? '') ? 'is-invalid' : '' ?>" id="username" name="username" placeholder="Your name">
               <div class="invalid-feedback">
                 <?php echo self::view('errors/username') ?? '' ?>
@@ -25,7 +25,7 @@
           <div class="col-12 text-start mb-3">
             <label for="email" class="form-label">Your email</label>
             <div class="input-group has-validation">
-              <span class="input-group-text">✉</span>
+              <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
               <input type="text" value="<?php echo Request::post('email') ?>" class="form-control <?php echo (self::view('errors/email') ?? '') ? 'is-invalid' : '' ?>" id="email" name="email" placeholder="Your email">
               <div class="invalid-feedback">
                 <?php echo self::view('errors/email') ?? '' ?>
@@ -36,7 +36,7 @@
           <div class="col-12 text-start mb-5">
             <label for="password" class="form-label">Password</label>
             <div class="input-group has-validation">
-              <span class="input-group-text">🗝</span>
+              <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
               <input type="password" value="<?php echo Request::post('password') ?>" class="form-control <?php echo (self::view('errors/password') ?? '') ? 'is-invalid' : '' ?>" name="password" id="password" placeholder="Your password">
               <input type="password" value="<?php echo Request::post('repeat') ?>" class="form-control <?php echo (self::view('errors/password') ?? '') ? 'is-invalid' : '' ?>" name="repeat" id="repeat" placeholder="Repeat password">
               <div class="invalid-feedback form-text">

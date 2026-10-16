@@ -137,6 +137,7 @@ class PostFile {
       case 'BINARY':
         return $this->buildBinaryValidationRule($field);
       case 'BLOB':
+      case 'MEDIUMBLOB':
       case 'LONGBLOB':
         return $this->buildLongBlobValidationRule($field);
     }
