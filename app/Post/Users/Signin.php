@@ -58,7 +58,7 @@ class Signin implements PostDataProcessor {
     }
 
     $userModel = new UserModel();
-\KrisRo\PhpRepublic\Debug::dump($userModel);
+
     $user = $userModel->getuser($post['email']);
 
     if (!$user) {
