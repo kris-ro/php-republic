@@ -11,6 +11,8 @@ use KrisRo\PhpRepublic\Authenticate;
 use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;
 use KrisRo\PhpRepublic\Traits\CSRF;
 
+use App\Models\User as UserModel;
+
 class Profile implements PostDataProcessor {
 
   use CSRF;
@@ -45,8 +47,8 @@ class Profile implements PostDataProcessor {
       return;
     }
 
-    if ((new \App\Models\User())->updateUser(['id' => Session::user()['id']] + Config::validator()->getPost())) {
-      Session::set('user', (new \App\Models\User())->getUser(Session::user()['id']));
+    if ((new UserModel())->updateUser(['id' => Session::user()['id']] + Config::validator()->getPost())) {
+      Session::set('user', (new UserModel())->getUser(Session::user()['id']));
       Session::set('request/messages/profile/popup_success', Translate::users('Your account was updated'));
     }
   }

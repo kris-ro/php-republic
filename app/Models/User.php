@@ -29,17 +29,31 @@ class User extends \KrisRo\PhpRepublic\Model {
   }
 
   public function updateUser(array $user) {
+    $updateData = [];
+
+    if ($user['email'] ?? null) {
+      $updateData['email'] = $user['email'];
+    }
+    if ($user['username'] ?? null) {
+      $updateData['username'] = $user['username'];
+    }
+    if ($user['phone'] ?? null) {
+      $updateData['phone'] = $user['phone'];
+    }
+    if ($user['is_active'] ?? null) {
+      $updateData['is_active'] = $user['is_active'];
+    }
+    if ($user['role'] ?? null) {
+      $updateData['role'] = $user['role'];
+    }
+    if ($user['email_confirmed'] ?? null) {
+      $updateData['email_confirmed'] = $user['email_confirmed'];
+    }
+
     $criteria = [
       'condition' => '`id` = :id',
       'params' => [':id' => $user['id']],
-      'values' => [
-        'email' => $user['email'],
-        'username' => $user['username'],
-        'phone' => $user['phone'] ?? '',
-        'is_active' => $user['is_active'] ?? 0,
-        'role' => $user['role'] ?? 'guest',
-        'email_confirmed' => $user['email_confirmed'] ?? 0,
-      ],
+      'values' => $updateData,
     ];
 
     if ($user['password'] ?? null) {
