@@ -58,7 +58,8 @@ class Authenticate {
       return;
     }
 
-    if (!Request::header('api-token') || !is_string(Request::header('api-token'))) {
+    $apiToken = Request::header('api-token') ?: Request::header('Api-Token');
+    if (!is_string($apiToken)) {
       return;
     }
 
@@ -68,7 +69,7 @@ class Authenticate {
 
     $apiTokens = (new ApiTokens())->setEncryptionKey(Config::get('crypto/key'));
 
-    if (!($token = $apiTokens->decryptToken(Request::header('api-token')))) {
+    if (!($token = $apiTokens->decryptToken($apiToken))) {
       Config::logger()->info('Invalid api token used');
       Messages::popup_error($message);
       return;
@@ -86,7 +87,7 @@ class Authenticate {
       return;
     }
 
-    if (!(new \App\Models\UserToken())->getTokenByFingerprint(Request::header('api-token'), $token['uid'])) {
+    if (!(new \App\Models\UserToken())->getTokenByFingerprint($apiToken, $token['uid'])) {
       Config::logger()->info('Invalid api token used');
       Messages::popup_error($message);
       return;

@@ -25,7 +25,8 @@
             "2ec010fa97fb816f7d7d27460c02f576": "The account details were sent to the provided email.",
             "602a321b9e85f8f0c8bb094c96b82c43": "Validate your account on __DOMAIN__",
             "4c93f5320592d8e8a817d41b9e6b9265": "Your account was created. Please follow the instructions set to your email",
-            "dbbef26ae50712aa776a0eec0f627da2": "Your email address is now validated. You can signin"
+            "dbbef26ae50712aa776a0eec0f627da2": "Your email address is now validated. You can signin",
+            "15e35f7c2b8897afd8b5b3b98bb571e2": "Failed to validate your email address"
         },
         "app": {
             "6b3eecca046c25c7e964bdd91a75f406": "User delete failed",
