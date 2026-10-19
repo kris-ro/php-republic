@@ -19,7 +19,12 @@
             "8446c2319e3c93484324c10c4e7cd02b": "Invalid Token ID",
             "b239f0180cd7d89783f0ac69f11d7e27": "You already have token with this label",
             "d4f618646cd8e4a3d265896442ecfdd6": "Invalid user",
-            "0188b23b00d2a2a0924e37c8ab6d6065": "Your account was updated"
+            "0188b23b00d2a2a0924e37c8ab6d6065": "Your account was updated",
+            "4402ddcbac0d7fa7d47fe73f24617d8e": "Invalid Role",
+            "c652769fdb16c23b42a0890fe8f21dda": "Invalid Phone",
+            "2ec010fa97fb816f7d7d27460c02f576": "The account details were sent to the provided email.",
+            "602a321b9e85f8f0c8bb094c96b82c43": "Validate your account on __DOMAIN__",
+            "4c93f5320592d8e8a817d41b9e6b9265": "Your account was created. Please follow the instructions set to your email"
         },
         "app": {
             "6b3eecca046c25c7e964bdd91a75f406": "User delete failed",
@@ -61,6 +66,12 @@
             "45ba9e79138f3ae26c139d3fcc978fa3": "Invalid created",
             "6254135d52ea9e424060fa770fcb9bb1": "Invalid updated",
             "4562e97c14c16eff53dcbdc226cc0335": "Todos was saved"
+        },
+        "user": {
+            "084e0343a0486ff05530df6c705c8bb4": "Guest",
+            "91ec1f9324753048c0096d036a694f86": "Customer",
+            "93c731f1c3a84ef05cd54d044c379eaa": "Company",
+            "d2a57dc1d883fd21fb9951699df71cc7": "App"
         }
     }
 }

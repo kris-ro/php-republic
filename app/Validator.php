@@ -27,5 +27,13 @@ class Validator extends \KrisRo\Validator\Validator {
     return true;
   }
 
+  public function validRole($value) {
+    if (in_array($value, \App\Models\User::getRoles([\App\Models\User::ROLE_GUEST]))) {
+      return true;
+    }
+
+    return false;
+  }
+
   // DO NOT DELETE THIS LINE //
 }

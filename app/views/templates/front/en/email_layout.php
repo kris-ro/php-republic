@@ -7,7 +7,7 @@ use KrisRo\PhpConfig\Config;
 
     <div style="text-align: center;"><!-- header -->
       <a href="/" style="text-decoration: none;">
-        <img style="width:116px; padding-bottom: 10px; border-bottom: 3px solid #1d3b53;" src="cid:awork-logo-cid">
+        <img style="width:116px; padding-bottom: 10px; border-bottom: 3px solid #1d3b53;" src="cid:republic-logo-cid">
       </a>
     </div><!-- / header -->
 

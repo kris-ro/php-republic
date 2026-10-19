@@ -32,7 +32,7 @@ class Signup implements PostDataProcessor {
                 'username' => ['notEmptyOneLineString'],
                 'role' => ['validRole'],
                 'email' => [['isValidEmail', 'mode' => \App\Validator::EMAIL_VALIDATOR_REGEXP], ['App\\Post\\Users\\Signup', 'isUnique']],
-                'phone' => ['notEmptyOneLineString', 'phone'],
+                'phone' => ['notEmptyOneLineString', 'phone', 'isOptional'],
                 'password' => [['minLength', 10], 'paranoiaStrongPassword', ['App\\Post\\Users\\Signup', 'confirmed']],
               ])
               ->processPost();

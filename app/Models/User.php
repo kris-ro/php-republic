@@ -9,6 +9,11 @@ use App\Models\UserToken;
 
 class User extends \KrisRo\PhpRepublic\Model {
 
+  const ROLE_GUEST = 'guest';
+  const ROLE_CUSTOMER = 'customer';
+  const ROLE_COMPANY = 'company';
+  const ROLE_APP = 'app';
+
   public function setUser(array $user): int {
     $hash = Authenticate::hashPassword($user['password']);
 
@@ -112,5 +117,23 @@ class User extends \KrisRo\PhpRepublic\Model {
     unset($user['password']);
 
     return $this->updateUser($user);
+  }
+
+  public static function getRoles(array|null $exclude = []): array {
+    $exclude = $exclude ? $exclude : ['dummy'];
+
+    return array_diff(array_keys(self::getRoleLabels($exclude)), $exclude);
+  }
+
+  public static function getRoleLabels(array|null $exclude = []): array {
+    $exclude = $exclude ? $exclude : ['dummy'];
+    $exclude = array_combine($exclude, $exclude);
+
+    return array_diff_key([
+      self::ROLE_GUEST => Translate::user('Guest'),
+      self::ROLE_CUSTOMER => Translate::user('Customer'),
+      self::ROLE_COMPANY => Translate::user('Company'),
+      self::ROLE_APP => Translate::user('App'),
+    ], $exclude);
   }
 }

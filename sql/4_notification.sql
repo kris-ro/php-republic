@@ -5,7 +5,7 @@ CREATE TABLE `notification` (
   `users_id` bigint UNSIGNED NOT NULL,
   `email` char(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `from` char(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `notifications`

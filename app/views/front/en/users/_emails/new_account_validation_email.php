@@ -23,7 +23,7 @@
          line-height: 1.7;
          text-align: center;
          ">
-      Welcome to aWork.ro. Before you begin exploring all that we have to offer, we need to verify your email address to ensure account security.
+      Welcome to PHP-Republic Framework. Before you begin exploring all that we have to offer, we need to verify your email address to ensure account security.
     </p>
 
     <div style="text-align: center; padding: 2em;"><!-- text-style-wrapper -->
