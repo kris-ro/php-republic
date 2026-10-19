@@ -19,8 +19,8 @@ CREATE TABLE `users` (
   -- Indexes
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_email` (`email`),
-  UNIQUE KEY `idx_phone` (`phone`),
-  UNIQUE KEY `idx_username` (`username`),
+  KEY `idx_phone` (`phone`),
+  KEY `idx_username` (`username`),
   KEY `idx_created` (`created`),
   KEY `idx_updated` (`updated`),
   KEY `idx_email_confirmed` (`email_confirmed`),
