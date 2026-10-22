@@ -16,9 +16,10 @@ class Signin implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'signin';
 
   public static function ValidatePostData(): void {
+    self::$formId = 'signin';
+    
     $self = new Signin();
     $result = Config::validator()
               ->addPostValidationMessages([

@@ -21,12 +21,9 @@ trait PostFileDelete {
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Delete implements PostDataProcessor {' . PHP_EOL . PHP_EOL
-
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
-
-                     . '  static protected $formId = \'delete' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
-
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
+                     . '    self::$formId = \'delete' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
                      . '                 self::INPUT_ELEMENT_NAME => Translate::csrf(\'Invalid Form\'),' . PHP_EOL

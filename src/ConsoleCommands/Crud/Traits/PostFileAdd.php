@@ -24,8 +24,8 @@ trait PostFileAdd {
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Add implements PostDataProcessor {' . PHP_EOL . PHP_EOL
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
-                     . '  static protected $formId = \'add' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
+                     . '    self::$formId = \'add' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
                      .                  $this->buildFieldsMessages(16, $this->autoIncrement) . PHP_EOL

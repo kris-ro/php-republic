@@ -24,12 +24,9 @@ trait PostFileUpdate {
                      . 'use KrisRo\PhpRepublic\Interfaces\PostDataProcessor;' . PHP_EOL
                      . 'use KrisRo\PhpRepublic\Traits\CSRF;' . PHP_EOL . PHP_EOL
                      . 'class Update implements PostDataProcessor {' . PHP_EOL . PHP_EOL
-
                      . '  use CSRF;' . PHP_EOL . PHP_EOL
-
-                     . '  static protected $formId = \'update' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
-
                      . '  public static function ValidatePostData(): void {' . PHP_EOL
+                     . '    self::$formId = \'update' . strtolower($this->modelName) . '\';' . PHP_EOL . PHP_EOL
                      . '    $result = Config::validator()' . PHP_EOL
                      . '              ->addPostValidationMessages([' . PHP_EOL
                      .                  $this->buildFieldsMessages(16) . PHP_EOL

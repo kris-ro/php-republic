@@ -12,6 +12,8 @@ trait CSRF {
 
   const INPUT_ELEMENT_NAME = 'csrf_token';
 
+  static protected $formId;
+
   public static function getFormToken(string $formId): string {
     return '<input type="hidden" name="' . self::INPUT_ELEMENT_NAME . '" value="' . self::setToken($formId) . '">';
   }

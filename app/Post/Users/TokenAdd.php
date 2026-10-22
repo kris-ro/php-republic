@@ -17,9 +17,9 @@ class TokenAdd implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'user-token-add';
-
   public static function ValidatePostData(): void {
+    self::$formId = 'user-token-add';
+
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),

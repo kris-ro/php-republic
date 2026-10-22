@@ -17,9 +17,9 @@ class Profile implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'profile';
-
   public static function ValidatePostData(): void {
+    self::$formId = 'profile';
+
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),

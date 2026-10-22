@@ -14,9 +14,9 @@ class ConfirmEmail implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'confirmemail';
-
   public static function ValidatePostData(): void {
+    self::$formId = 'confirmemail';
+
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),

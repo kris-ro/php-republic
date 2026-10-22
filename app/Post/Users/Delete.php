@@ -15,9 +15,9 @@ class Delete implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'user-delete';
-
   public static function ValidatePostData(): void {
+    self::$formId = 'user-delete';
+
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),

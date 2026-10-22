@@ -16,9 +16,9 @@ class TokenDelete implements PostDataProcessor {
 
   use CSRF;
 
-  static protected $formId = 'user-token-delete';
-
   public static function ValidatePostData(): void {
+    self::$formId = 'user-token-delete';
+
     $result = Config::validator()
               ->addPostValidationMessages([
                 self::INPUT_ELEMENT_NAME => Translate::csrf('Invalid Form'),
