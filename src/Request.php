@@ -227,7 +227,7 @@ class Request {
    * @param type $searchKey
    * @param type $searchParams
    * @param type $default
-   * @return null
+   * @return mixt
    */
   public static function param($searchKey = '', $searchParams = [], $default = null) {
     if (!$searchKey) {

@@ -40,7 +40,8 @@ class Template {
    */
   public static function __callStatic($key, $arguments) {
     if (isset($arguments[0]) && !isset($arguments[1])) {
-      return self::set($key, $arguments[0]);
+      self::set($key, $arguments[0]);
+      return;
     } else {
       return self::get($key, $arguments[0] ?? '', $arguments[1] ?? true, $arguments[2] ?? false);
     }
@@ -51,9 +52,9 @@ class Template {
    *
    * @param string $key
    * @param mixed $data
-   * @return null
+   * @return void
    */
-  public static function set(string $key, $data): null {
+  public static function set(string $key, $data): void {
     $key = explode('/', $key);
 
     if (empty($key)) {
@@ -299,9 +300,9 @@ class Template {
    * Removes messages sent via <code>$)GET</code>
    *
    * @param type $key
-   * @return null
+   * @return void
    */
-  private static function clearRequestMessages($key): null {
+  private static function clearRequestMessages($key): void {
     $request = Resources::globals('request');
     if (!$request) {
       return;
