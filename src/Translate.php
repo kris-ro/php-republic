@@ -81,7 +81,7 @@ class Translate {
 		if ($hash) {
 			$hash = (string) $hash;
 			if (!in_array($hash, $acceptedHash)) {
-				trigger_error('Invalid hash method.', E_USER_ERROR);
+				throw new \RuntimeException('Invalid hash method.');
 				return false;
 			}
 			$string = $hash($string);

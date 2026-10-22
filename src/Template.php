@@ -51,9 +51,9 @@ class Template {
    *
    * @param string $key
    * @param mixed $data
-   * @return void
+   * @return null
    */
-  public static function set(string $key, $data) {
+  public static function set(string $key, $data): null {
     $key = explode('/', $key);
 
     if (empty($key)) {
@@ -267,6 +267,8 @@ class Template {
     if ($format == self::$format) {
       return true;
     }
+
+    return false;
   }
 
   /**
@@ -297,9 +299,9 @@ class Template {
    * Removes messages sent via <code>$)GET</code>
    *
    * @param type $key
-   * @return type
+   * @return null
    */
-  private static function clearRequestMessages($key) {
+  private static function clearRequestMessages($key): null {
     $request = Resources::globals('request');
     if (!$request) {
       return;

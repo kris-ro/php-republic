@@ -51,7 +51,7 @@ class Authenticate {
   /**
    * Creates user session on API requests
    *
-   * @return type
+   * @return void
    */
   public static function createSessionFromApiToken() {
     if (SECTION !== 'api') {

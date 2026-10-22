@@ -59,7 +59,7 @@ class TokenAdd implements PostDataProcessor {
     ]);
 
     if (!$saved) {
-      trigger_error('Token add failed', E_USER_ERROR);
+      throw new \RuntimeException('Token add failed');
       Messages::popup_error(Translate::app('Token add failed'));
     }
 

@@ -657,7 +657,7 @@ class Listing {
    * @param string $field
    * @param string $filter
    * @param string $operator
-   * @return type
+   * @return void
    */
   private function filterDefault(string $table, string $field, string $filter, string $operator) {
     $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $this->listFilters[$filter][1], strtolower($operator), $table);
@@ -680,7 +680,7 @@ class Listing {
    * @param string $field
    * @param string $filter
    * @param string $operator
-   * @return type
+   * @return void
    */
   private function excludeDefault(string $table, string $field, string $filter, string $operator, ?string $join = 'OR') {
     $criteria = \KrisRo\PhpDatabaseModel\Model::simulateSqlIn($field, $this->listExclude[$filter] ?? [], strtolower($operator), $table, $join);

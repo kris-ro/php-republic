@@ -43,7 +43,7 @@ class TokenDelete implements PostDataProcessor {
     }
 
     if (!(new UserToken())->deleteToken(Config::validator()->getPost()['id'])) {
-      trigger_error('User delete failed', E_USER_ERROR);
+      throw new \RuntimeException('User delete failed');
       Messages::popup_error(Translate::app('User delete failed'));
       return;
     }

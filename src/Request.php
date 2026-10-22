@@ -103,7 +103,7 @@ class Request {
 
     $action = new $class();
     if (!($action instanceof \KrisRo\PhpRepublic\Controller)) {
-      trigger_error('Action must extend \KrisRo\PhpRepublic\Controller', E_USER_ERROR);
+      throw new \RuntimeException('Action must extend \KrisRo\PhpRepublic\Controller');
     }
 
     Template::page($action->run());

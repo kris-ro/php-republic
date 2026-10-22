@@ -61,7 +61,7 @@ class Messages {
     }
 
     if (!in_array($type, [self::SUCCESS, self::INFO, self::WARNING, self::ERROR])) {
-      throw new Exception('Invalid Message Type');
+      throw new \InvalidArgumentException('Invalid Message Type');
     }
 
     $typeMessages = [];

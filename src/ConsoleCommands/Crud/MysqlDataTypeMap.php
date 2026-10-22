@@ -338,5 +338,7 @@ class MysqlDataTypeMap {
       case 'null':
         return 'null';
     }
+
+    throw new \RuntimeException('Invalid default type');
   }
 }

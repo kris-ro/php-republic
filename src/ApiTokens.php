@@ -100,17 +100,19 @@ class ApiTokens {
    * @param string|null $code
    * @return array
    */
-  public static function expirationIntervals(string|null $type = 'code', ?string $code = null) {
+  public static function expirationIntervals(string|null $type = 'code', ?string $code = null): array|null|\DateTimeImmutable {
+    $types = [
+      '1H' => 'One hour',
+      '1D' => 'One day',
+      '1M' => 'One month',
+      '3M' => 'Three months',
+      '6M' => 'Six months',
+      '1Y' => 'One year',
+      '10Y' => 'Ten years',
+    ];
+    
     if ($type == 'code') {
-      return [
-        '1H' => 'One hour',
-        '1D' => 'One day',
-        '1M' => 'One month',
-        '3M' => 'Three months',
-        '6M' => 'Six months',
-        '1Y' => 'One year',
-        '10Y' => 'Ten years',
-      ];
+      return $types;
     }
 
     $date = new \DateTimeImmutable();
@@ -131,5 +133,7 @@ class ApiTokens {
       case '10Y':
         return ($date->modify('+10 year'));
     }
+
+    return null;
   }
 }

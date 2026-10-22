@@ -12,6 +12,8 @@ trait CSRF {
 
   const INPUT_ELEMENT_NAME = 'csrf_token';
 
+  static protected $formId;
+
   public static function getFormToken(string $formId): string {
     return '<input type="hidden" name="' . self::INPUT_ELEMENT_NAME . '" value="' . self::setToken($formId) . '">';
   }
@@ -26,7 +28,7 @@ trait CSRF {
 
   public static function validFormToken(): bool {
     if (empty(self::$formId)) {
-      trigger_error('CSRF Missing form ID', E_USER_ERROR);
+      throw new \RuntimeException('CSRF Missing form ID');
       return '';
     }
 

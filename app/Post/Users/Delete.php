@@ -40,7 +40,7 @@ class Delete implements PostDataProcessor {
     }
 
     if (!(new \App\Models\User())->deleteUser(Session::get('user/id'))) {
-      trigger_error('User delete failed', E_USER_ERROR);
+      throw new \RuntimeException('User delete failed');
       Messages::popup_error(Translate::app('User delete failed'));
       return;
     }

@@ -31,7 +31,7 @@ class Install {
     $this->sqlPath = APP_ROOT . DS . 'sql';
 
     if (!$this->loadConfig()) {
-      self::echoErro("Can not read config data at {$this->jsonLocalConfigPath}.");
+      self::echoError("Can not read config data at {$this->jsonLocalConfigPath}.");
     }
 
     if (!$this->configDatabase()) {
