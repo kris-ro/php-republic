@@ -11,7 +11,8 @@
         "kris-ro/php-dependency-injection": "^1.0",
         "kris-ro/php-database-model": "^1.0",
         "monolog/monolog": "^3.10",
-        "phpmailer/phpmailer": "^7.0"
+        "phpmailer/phpmailer": "^7.0",
+        "kris-ro/php-republic-core": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",

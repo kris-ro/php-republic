@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "027d220ecf061b0eaeacd75321b37761",
+    "content-hash": "1965c4a09ca407bf55a07ffefa97934f",
     "packages": [
         {
             "name": "kris-ro/php-config",
@@ -137,6 +137,52 @@
                 "source": "https://github.com/kris-ro/php-dependency-injection/tree/v1.0.0"
             },
             "time": "2024-09-14T19:07:02+00:00"
+        },
+        {
+            "name": "kris-ro/php-republic-core",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kris-ro/php-republic-core.git",
+                "reference": "16444372fd715d92b6ad87ee5b9678faa2cb048f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kris-ro/php-republic-core/zipball/16444372fd715d92b6ad87ee5b9678faa2cb048f",
+                "reference": "16444372fd715d92b6ad87ee5b9678faa2cb048f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-pdo_mysql": "*",
+                "kris-ro/php-config": "^1.0",
+                "kris-ro/php-database-model": "^1.0",
+                "kris-ro/php-dependency-injection": "^1.0",
+                "kris-ro/validator": "^1.0",
+                "monolog/monolog": "^3.10",
+                "php": "^8.3",
+                "phpmailer/phpmailer": "^7.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.3",
+                "phpunit/phpunit": "^12.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KrisRo\\PhpRepublic\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Core engine for PHP Republic MVC Framework",
+            "support": {
+                "issues": "https://github.com/kris-ro/php-republic-core/issues",
+                "source": "https://github.com/kris-ro/php-republic-core/tree/v1.0.0"
+            },
+            "time": "2026-10-24T14:33:48+00:00"
         },
         {
             "name": "kris-ro/validator",
