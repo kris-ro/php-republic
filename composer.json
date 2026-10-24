@@ -33,7 +33,6 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "KrisRo\\PhpRepublic\\": "src/",
             "App\\": "app/"
         }
     },
