@@ -143,16 +143,16 @@
         },
         {
             "name": "kris-ro/php-republic-core",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/php-republic-core.git",
-                "reference": "184583ed7c8174ccda296323923022e68fe9281f"
+                "reference": "2fa8b06cd97fb287e08aabc42d034e9d86a43b6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/php-republic-core/zipball/184583ed7c8174ccda296323923022e68fe9281f",
-                "reference": "184583ed7c8174ccda296323923022e68fe9281f",
+                "url": "https://api.github.com/repos/kris-ro/php-republic-core/zipball/2fa8b06cd97fb287e08aabc42d034e9d86a43b6c",
+                "reference": "2fa8b06cd97fb287e08aabc42d034e9d86a43b6c",
                 "shasum": ""
             },
             "require": {
@@ -183,9 +183,9 @@
             "description": "Core engine for PHP Republic MVC Framework",
             "support": {
                 "issues": "https://github.com/kris-ro/php-republic-core/issues",
-                "source": "https://github.com/kris-ro/php-republic-core/tree/v1.0.1"
+                "source": "https://github.com/kris-ro/php-republic-core/tree/v1.0.2"
             },
-            "time": "2026-10-29T16:38:12+00:00"
+            "time": "2026-10-29T16:56:35+00:00"
         },
         {
             "name": "kris-ro/validator",
