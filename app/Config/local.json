@@ -30,5 +30,8 @@
         "username" : "",
         "password" : "",
         "password_no_reply" : ""
+    },
+    "email_embeded_cids": {
+      "cid:republic-logo-cid" : ""
     }
 }
