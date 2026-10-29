@@ -8,7 +8,7 @@
       <div class="form-signup w-100 m-auto text-center">
         <form action="signin" method="POST">
           <?php echo self::getFormToken('signin') // self is instance of Template class ?>
-          <img class="mb-4" src="/assets/bootstrap-logo.svg" alt="" width="72" height="57">
+          <img class="mb-4" src="/assets/phprepublic.svg" alt="" width="120">
           <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
           <div class="form-floating mb-1 has-validation">

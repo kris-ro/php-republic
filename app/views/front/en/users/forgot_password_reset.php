@@ -8,7 +8,7 @@
       <div class="form-signup w-100 m-auto text-center">
         <form action="/forgot-password-reset/<?php echo self::view('token') ?>" method="POST">
           <?php echo self::getFormToken('forgotpasswordreset') ?>
-          <img class="mb-4" src="/assets/bootstrap-logo.svg" alt="" width="72" height="57">
+          <img class="mb-4" src="/assets/phprepublic.svg" alt="" width="120">
           <h1 class="h3 mb-5 fw-normal">Reset your password</h1>
 
           <input type="hidden" name="token" value="<?php echo self::view('token') ?>">

@@ -9,7 +9,7 @@
       <div class="form-signup w-100 m-auto text-center" style="max-width: 520px;">
         <form action="signup" method="POST">
           <?php echo self::getFormToken('signup') // self is instance of KrisRo\PhpRepublic\Template ?>
-          <img class="mb-4" src="/assets/bootstrap-logo.svg" alt="" width="72" height="57">
+          <img class="mb-4" src="/assets/phprepublic.svg" alt="" width="120">
           <h1 class="h3 mb-3 fw-normal">Nice to meet you !</h1>
 
           <div class="col-12 text-start mb-3">
