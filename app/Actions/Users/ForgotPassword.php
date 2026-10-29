@@ -14,7 +14,7 @@ class ForgotPassword extends UsersController {
     Config::set('css/forgot-password', 'signup.css');
 
     return Template::renderView('/front/' . Session::language() . '/users/forgot_password.php', [
-      'left_side' => Template::renderView('/front/' . Session::language() . '/users/_partials/side_prop.php'),
+      'left_side' => Template::renderView('/front/' . Session::language() . '/homepage/home.php'),
       'errors' => Messages::forgotpasswordform_error(),
     ]);
   }

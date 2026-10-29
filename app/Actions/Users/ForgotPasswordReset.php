@@ -24,7 +24,7 @@ class ForgotPasswordReset extends UsersController {
 //     }
 
     return Template::renderView('/front/' . Session::language() . '/users/forgot_password_reset.php', [
-      'left_side' => Template::renderView('/front/' . Session::language() . '/users/_partials/side_prop.php'),
+      'left_side' => Template::renderView('/front/' . Session::language() . '/homepage/home.php'),
       'token' => $encodedToken,
       'errors' => Messages::forgotpasswordresetform_error(),
     ]);

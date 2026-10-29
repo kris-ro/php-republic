@@ -8,7 +8,7 @@
       <div class="form-signup w-100 m-auto text-center">
         <form action="/users/confirm/email" method="POST">
           <?php echo self::getFormToken('confirmemail') // self is instance of Template class ?>
-          <img class="mb-4" src="/assets/awork-logo.svg" alt="" width="35">
+          <img class="mb-4" src="/assets/bootstrap-logo.svg" alt="" width="35">
           <h1 class="h3 mb-3 fw-normal">Resend validation code</h1>
 
           <div class="form-floating mb-3 has-validation">
