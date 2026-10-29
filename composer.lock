@@ -8,22 +8,23 @@
     "packages": [
         {
             "name": "kris-ro/php-config",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/php-config.git",
-                "reference": "e037ab55b8360b1e09c9dad966c3086044c29361"
+                "reference": "56203f7aca8c6f5332f06cedc2ab66e8471a6d76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/php-config/zipball/e037ab55b8360b1e09c9dad966c3086044c29361",
-                "reference": "e037ab55b8360b1e09c9dad966c3086044c29361",
+                "url": "https://api.github.com/repos/kris-ro/php-config/zipball/56203f7aca8c6f5332f06cedc2ab66e8471a6d76",
+                "reference": "56203f7aca8c6f5332f06cedc2ab66e8471a6d76",
                 "shasum": ""
             },
             "require": {
                 "php": "8.*"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.3",
                 "phpunit/phpunit": "^10.5"
             },
             "type": "library",
@@ -45,28 +46,29 @@
             "description": "Setup, getter and setter for configuration in PHP applications",
             "support": {
                 "issues": "https://github.com/kris-ro/php-config/issues",
-                "source": "https://github.com/kris-ro/php-config/tree/v1.0.4"
+                "source": "https://github.com/kris-ro/php-config/tree/v1.0.5"
             },
-            "time": "2026-06-01T15:46:38+00:00"
+            "time": "2026-10-22T12:45:53+00:00"
         },
         {
             "name": "kris-ro/php-database-model",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/php-database-model.git",
-                "reference": "93161dfe84d98e5acf5275afb06325d7ab02981b"
+                "reference": "f35224d7489ef492db82ae9bf723cc2e67aa8368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/php-database-model/zipball/93161dfe84d98e5acf5275afb06325d7ab02981b",
-                "reference": "93161dfe84d98e5acf5275afb06325d7ab02981b",
+                "url": "https://api.github.com/repos/kris-ro/php-database-model/zipball/f35224d7489ef492db82ae9bf723cc2e67aa8368",
+                "reference": "f35224d7489ef492db82ae9bf723cc2e67aa8368",
                 "shasum": ""
             },
             "require": {
                 "php": "8.*"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.3",
                 "phpunit/phpunit": "^10.5"
             },
             "type": "library",
@@ -88,22 +90,22 @@
             "description": "PHP Model for querying database",
             "support": {
                 "issues": "https://github.com/kris-ro/php-database-model/issues",
-                "source": "https://github.com/kris-ro/php-database-model/tree/v1.0.6"
+                "source": "https://github.com/kris-ro/php-database-model/tree/v1.0.7"
             },
-            "time": "2026-10-14T14:39:37+00:00"
+            "time": "2026-10-22T14:58:09+00:00"
         },
         {
             "name": "kris-ro/php-dependency-injection",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/php-dependency-injection.git",
-                "reference": "614f3f9a7ae5970439ca26abf5a76e297f73b69b"
+                "reference": "0aa81c2e53d3d7bc6812fbe97fff58f6742cc71c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/php-dependency-injection/zipball/614f3f9a7ae5970439ca26abf5a76e297f73b69b",
-                "reference": "614f3f9a7ae5970439ca26abf5a76e297f73b69b",
+                "url": "https://api.github.com/repos/kris-ro/php-dependency-injection/zipball/0aa81c2e53d3d7bc6812fbe97fff58f6742cc71c",
+                "reference": "0aa81c2e53d3d7bc6812fbe97fff58f6742cc71c",
                 "shasum": ""
             },
             "require": {
@@ -113,6 +115,7 @@
             "require-dev": {
                 "kris-ro/php-database-model": "^1.0",
                 "kris-ro/validator": "^1.0",
+                "phpstan/phpstan": "^2.3",
                 "phpunit/phpunit": "^10.5"
             },
             "type": "library",
@@ -134,22 +137,22 @@
             "description": "Dependency injection container for php",
             "support": {
                 "issues": "https://github.com/kris-ro/php-dependency-injection/issues",
-                "source": "https://github.com/kris-ro/php-dependency-injection/tree/v1.0.0"
+                "source": "https://github.com/kris-ro/php-dependency-injection/tree/v1.0.1"
             },
-            "time": "2024-09-14T19:07:02+00:00"
+            "time": "2026-10-22T13:40:53+00:00"
         },
         {
             "name": "kris-ro/php-republic-core",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/php-republic-core.git",
-                "reference": "16444372fd715d92b6ad87ee5b9678faa2cb048f"
+                "reference": "184583ed7c8174ccda296323923022e68fe9281f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/php-republic-core/zipball/16444372fd715d92b6ad87ee5b9678faa2cb048f",
-                "reference": "16444372fd715d92b6ad87ee5b9678faa2cb048f",
+                "url": "https://api.github.com/repos/kris-ro/php-republic-core/zipball/184583ed7c8174ccda296323923022e68fe9281f",
+                "reference": "184583ed7c8174ccda296323923022e68fe9281f",
                 "shasum": ""
             },
             "require": {
@@ -180,28 +183,29 @@
             "description": "Core engine for PHP Republic MVC Framework",
             "support": {
                 "issues": "https://github.com/kris-ro/php-republic-core/issues",
-                "source": "https://github.com/kris-ro/php-republic-core/tree/v1.0.0"
+                "source": "https://github.com/kris-ro/php-republic-core/tree/v1.0.1"
             },
-            "time": "2026-10-24T14:33:48+00:00"
+            "time": "2026-10-29T16:38:12+00:00"
         },
         {
             "name": "kris-ro/validator",
-            "version": "v1.1.3",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kris-ro/validator.git",
-                "reference": "eeb1f59c9a5f7d4bafb6c3322eae6196a7a1528a"
+                "reference": "84e3b532557ebd41a95c63fada144bc2d1ff4b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kris-ro/validator/zipball/eeb1f59c9a5f7d4bafb6c3322eae6196a7a1528a",
-                "reference": "eeb1f59c9a5f7d4bafb6c3322eae6196a7a1528a",
+                "url": "https://api.github.com/repos/kris-ro/validator/zipball/84e3b532557ebd41a95c63fada144bc2d1ff4b90",
+                "reference": "84e3b532557ebd41a95c63fada144bc2d1ff4b90",
                 "shasum": ""
             },
             "require": {
                 "php": "8.*"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.3",
                 "phpunit/phpunit": "^10.5"
             },
             "type": "library",
@@ -223,9 +227,9 @@
             "description": "PHP chainable multi-rule validator for data and POST forms",
             "support": {
                 "issues": "https://github.com/kris-ro/validator/issues",
-                "source": "https://github.com/kris-ro/validator/tree/v1.1.3"
+                "source": "https://github.com/kris-ro/validator/tree/v1.1.5"
             },
-            "time": "2026-10-16T13:50:45+00:00"
+            "time": "2026-10-22T13:06:08+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -703,11 +707,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.3.1",
+            "version": "2.3.4",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6155239b488e95d26d1ebd95c6b4bb294d7f09db",
-                "reference": "6155239b488e95d26d1ebd95c6b4bb294d7f09db",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f20ce6f3c82556cfcfc086b152445a12d1d64fff",
+                "reference": "f20ce6f3c82556cfcfc086b152445a12d1d64fff",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +767,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-08T21:09:11+00:00"
+            "time": "2026-10-28T22:38:53+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1124,16 +1128,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.40",
+            "version": "12.5.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "76bd3198f16aeb375a4d5f3626471445aed0966e"
+                "reference": "1d6dbe748c079e5d2b03bca1be69d0f4cc52a578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/76bd3198f16aeb375a4d5f3626471445aed0966e",
-                "reference": "76bd3198f16aeb375a4d5f3626471445aed0966e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1d6dbe748c079e5d2b03bca1be69d0f4cc52a578",
+                "reference": "1d6dbe748c079e5d2b03bca1be69d0f4cc52a578",
                 "shasum": ""
             },
             "require": {
@@ -1202,7 +1206,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.40"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.42"
             },
             "funding": [
                 {
@@ -1210,7 +1214,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-10-16T05:55:07+00:00"
+            "time": "2026-10-27T04:15:03+00:00"
         },
         {
             "name": "sebastian/cli-parser",
